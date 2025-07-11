@@ -9,8 +9,8 @@
             
             <div class="nk-header-brand d-xl-none">
                 <a href="{{ route('dashboard') }}" class="logo-link">
-                    <img class="logo-light logo-img logo-img-sm" src="{{ asset('images/logo.png') }}" alt="logo">
-                    <img class="logo-dark logo-img logo-img-sm" src="{{ asset('images/logo.png') }}" alt="logo-dark">
+                    <img class="logo-light logo-img logo-img-sm" src="{{ asset('images/logo-horizontal.png') }}" alt="STEFIA Logo">
+                    <img class="logo-dark logo-img logo-img-sm" src="{{ asset('images/logo-horizontal.png') }}" alt="STEFIA Logo">
                 </a>
             </div>
             

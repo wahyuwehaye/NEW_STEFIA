@@ -11,11 +11,56 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        // For now, return a simple view with sample data
+        // Sample data mahasiswa untuk STEFIA
         $students = [
-            ['id' => 1, 'name' => 'John Doe', 'email' => 'john@example.com', 'class' => 'X-A', 'status' => 'Active'],
-            ['id' => 2, 'name' => 'Jane Smith', 'email' => 'jane@example.com', 'class' => 'X-B', 'status' => 'Active'],
-            ['id' => 3, 'name' => 'Bob Johnson', 'email' => 'bob@example.com', 'class' => 'XI-A', 'status' => 'Inactive'],
+            [
+                'id' => 1,
+                'name' => 'Ahmad Fauzi',
+                'email' => 'ahmad.fauzi@student.ac.id',
+                'nim' => '2019001',
+                'class' => 'Teknik Informatika',
+                'angkatan' => '2019',
+                'semester' => 8,
+                'status' => 'Active',
+                'tunggakan' => 15000000,
+                'phone' => '+62 812-3456-7890'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Siti Nurhaliza',
+                'email' => 'siti.nurhaliza@student.ac.id',
+                'nim' => '2020002',
+                'class' => 'Sistem Informasi',
+                'angkatan' => '2020',
+                'semester' => 6,
+                'status' => 'Active',
+                'tunggakan' => 0,
+                'phone' => '+62 813-7890-1234'
+            ],
+            [
+                'id' => 3,
+                'name' => 'Budi Santoso',
+                'email' => 'budi.santoso@student.ac.id',
+                'nim' => '2018003',
+                'class' => 'Teknik Elektro',
+                'angkatan' => '2018',
+                'semester' => 9,
+                'status' => 'Active',
+                'tunggakan' => 7500000,
+                'phone' => '+62 814-5678-9012'
+            ],
+            [
+                'id' => 4,
+                'name' => 'Dewi Sartika',
+                'email' => 'dewi.sartika@student.ac.id',
+                'nim' => '2021004',
+                'class' => 'Teknik Mesin',
+                'angkatan' => '2021',
+                'semester' => 4,
+                'status' => 'Active',
+                'tunggakan' => 2500000,
+                'phone' => '+62 815-2345-6789'
+            ]
         ];
         
         return view('students.index', compact('students'));
@@ -35,7 +80,7 @@ class StudentsController extends Controller
     public function store(Request $request)
     {
         // TODO: Implement store logic
-        return redirect()->route('students.index')->with('success', 'Student created successfully');
+        return redirect()->route('students.index')->with('success', 'Data mahasiswa berhasil ditambahkan');
     }
 
     /**
@@ -71,6 +116,31 @@ class StudentsController extends Controller
     public function destroy(string $id)
     {
         // TODO: Implement destroy logic
-        return redirect()->route('students.index')->with('success', 'Student deleted successfully');
+        return redirect()->route('students.index')->with('success', 'Mahasiswa berhasil dihapus');
+    }
+    
+    /**
+     * Show import page for students data
+     */
+    public function import()
+    {
+        return view('students.import');
+    }
+    
+    /**
+     * Process import of students data
+     */
+    public function processImport(Request $request)
+    {
+        // Logic untuk import data dari Excel/CSV
+        return redirect()->route('students.index')->with('success', 'Data mahasiswa berhasil diimport');
+    }
+    
+    /**
+     * Show integration page with iGracias
+     */
+    public function integration()
+    {
+        return view('students.integration');
     }
 }

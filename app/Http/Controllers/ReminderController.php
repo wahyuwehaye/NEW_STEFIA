@@ -172,6 +172,113 @@ class ReminderController extends Controller
         return response()->json($stats);
     }
 
+public function email()
+    {
+        $emailReminders = [
+            'pending' => 45,
+            'sent_today' => 23,
+            'failed' => 2,
+            'scheduled' => 18,
+            'recent_sent' => [
+                [
+                    'student_name' => 'John Smith',
+                    'student_id' => 'ST001',
+                    'email' => 'john.smith@example.com',
+                    'subject' => 'Payment Reminder - Tuition Fee',
+                    'sent_at' => '2025-01-11 09:30:00',
+                    'status' => 'delivered'
+                ],
+                [
+                    'student_name' => 'Maria Anderson',
+                    'student_id' => 'ST002',
+                    'email' => 'maria.anderson@example.com',
+                    'subject' => 'Overdue Notice - Outstanding Balance',
+                    'sent_at' => '2025-01-11 08:15:00',
+                    'status' => 'opened'
+                ],
+                [
+                    'student_name' => 'David Lee',
+                    'student_id' => 'ST003',
+                    'email' => 'david.lee@example.com',
+                    'subject' => 'Payment Confirmation',
+                    'sent_at' => '2025-01-11 07:45:00',
+                    'status' => 'delivered'
+                ]
+            ]
+        ];
+        
+        return view('reminders.email', compact('emailReminders'));
+    }
+
+    public function whatsapp()
+    {
+        $whatsappReminders = [
+            'pending' => 32,
+            'sent_today' => 18,
+            'failed' => 1,
+            'scheduled' => 12,
+            'recent_sent' => [
+                [
+                    'student_name' => 'Ahmad Rizki',
+                    'student_id' => 'ST004',
+                    'phone' => '+62812345678',
+                    'message' => 'Reminder: Your tuition fee payment is due tomorrow.',
+                    'sent_at' => '2025-01-11 10:00:00',
+                    'status' => 'delivered'
+                ],
+                [
+                    'student_name' => 'Siti Nurhaliza',
+                    'student_id' => 'ST005',
+                    'phone' => '+62887654321',
+                    'message' => 'Urgent: Your payment is overdue. Please contact finance office.',
+                    'sent_at' => '2025-01-11 09:30:00',
+                    'status' => 'read'
+                ]
+            ]
+        ];
+        
+        return view('reminders.whatsapp', compact('whatsappReminders'));
+    }
+
+    public function schedule()
+    {
+        $scheduledReminders = [
+            'upcoming' => [
+                [
+                    'id' => 1,
+                    'type' => 'email',
+                    'title' => 'Monthly Payment Reminder',
+                    'recipient_count' => 156,
+                    'scheduled_date' => '2025-01-15 08:00:00',
+                    'template' => 'payment_reminder',
+                    'status' => 'scheduled'
+                ],
+                [
+                    'id' => 2,
+                    'type' => 'whatsapp',
+                    'title' => 'Overdue Notice Batch',
+                    'recipient_count' => 23,
+                    'scheduled_date' => '2025-01-12 14:00:00',
+                    'template' => 'overdue_notice',
+                    'status' => 'scheduled'
+                ]
+            ],
+            'recurring' => [
+                [
+                    'id' => 3,
+                    'type' => 'email',
+                    'title' => 'Weekly Payment Reminder',
+                    'frequency' => 'weekly',
+                    'next_run' => '2025-01-18 08:00:00',
+                    'template' => 'payment_reminder',
+                    'status' => 'active'
+                ]
+            ]
+        ];
+        
+        return view('reminders.schedule', compact('scheduledReminders'));
+    }
+
     public function templates()
     {
         $templates = [
@@ -207,6 +314,6 @@ class ReminderController extends Controller
             ]
         ];
 
-        return response()->json($templates);
+        return view('reminders.templates', compact('templates'));
     }
 }

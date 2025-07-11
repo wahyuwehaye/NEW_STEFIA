@@ -1,0 +1,160 @@
+@extends('layouts.admin')
+
+@section('title', 'Tambah Piutang')
+
+@section('content')
+<x-page-header 
+    title="Tambah Piutang Mahasiswa" 
+    subtitle="Formulir untuk menambah piutang mahasiswa">
+    <x-slot name="actions">
+        <ul class="nk-block-tools g-3">
+            <li><a href="{{ route('receivables.index') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-arrow-left"></em><span>Kembali</span></a></li>
+        </ul>
+    </x-slot>
+</x-page-header>
+
+<div class="nk-block">
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <form action="{{ route('receivables.store') }}" method="POST">
+                @csrf
+                <div class="row g-4">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="form-label" for="student_id">Mahasiswa <span class="text-danger">*</span></label>
+                            <div class="form-control-wrap">
+                                <select class="form-control js-select2" id="student_id" name="student_id" required>
+                                    <option value="">Pilih Mahasiswa</option>
+                                    <option value="1">Ahmad Fauzi [2019001] - Teknik Informatika</option>
+                                    <option value="2">Siti Nurhaliza [2020002] - Sistem Informasi</option>
+                                    <option value="3">Budi Santoso [2018003] - Teknik Elektro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="jenis_piutang">Jenis Piutang <span class="text-danger">*</span></label>
+                            <div class="form-control-wrap">
+                                <select class="form-control js-select2" id="jenis_piutang" name="jenis_piutang" required>
+                                    <option value="">Pilih Jenis Piutang</option>
+                                    <option value="SPP">SPP</option>
+                                    <option value="Praktikum">Praktikum</option>
+                                    <option value="Seminar">Seminar</option>
+                                    <option value="Skripsi">Skripsi</option>
+                                    <option value="Wisuda">Wisuda</option>
+                                    <option value="Lain-lain">Lain-lain</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="semester">Semester</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control js-select2" id="semester" name="semester">
+                                    <option value="">Pilih Semester</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="tahun_akademik">Tahun Akademik</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control js-select2" id="tahun_akademik" name="tahun_akademik">
+                                    <option value="">Pilih Tahun Akademik</option>
+                                    <option value="2024/2025">2024/2025</option>
+                                    <option value="2023/2024">2023/2024</option>
+                                    <option value="2022/2023">2022/2023</option>
+                                    <option value="2021/2022">2021/2022</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="jumlah">Jumlah Piutang <span class="text-danger">*</span></label>
+                            <div class="form-control-wrap">
+                                <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan jumlah" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="tanggal_tagihan">Tanggal Tagihan <span class="text-danger">*</span></label>
+                            <div class="form-control-wrap">
+                                <input type="date" class="form-control" id="tanggal_tagihan" name="tanggal_tagihan" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="tanggal_jatuh_tempo">Tanggal Jatuh Tempo <span class="text-danger">*</span></label>
+                            <div class="form-control-wrap">
+                                <input type="date" class="form-control" id="tanggal_jatuh_tempo" name="tanggal_jatuh_tempo" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="form-label" for="keterangan">Keterangan</label>
+                            <div class="form-control-wrap">
+                                <textarea class="form-control" id="keterangan" name="keterangan" rows="3" placeholder="Masukkan keterangan tambahan"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <em class="icon ni ni-save"></em>
+                                <span>Simpan Piutang</span>
+                            </button>
+                            <a href="{{ route('receivables.index') }}" class="btn btn-outline-light">
+                                <em class="icon ni ni-arrow-left"></em>
+                                <span>Batal</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // Initialize Select2
+    $('.js-select2').select2({
+        minimumResultsForSearch: Infinity
+    });
+    
+    // Auto set today's date for tanggal_tagihan
+    $('#tanggal_tagihan').val(new Date().toISOString().split('T')[0]);
+    
+    // Auto set due date 30 days from today
+    var dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 30);
+    $('#tanggal_jatuh_tempo').val(dueDate.toISOString().split('T')[0]);
+});
+</script>
+@endpush
+
