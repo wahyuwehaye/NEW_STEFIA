@@ -1,25 +1,29 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
+<x-auth-new title="Lupa Kata Sandi">
+    <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
         @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <div class="auth-content">
+            <div class="auth-header">
+                <h1 class="auth-title text-2xl">Lupa Kata Sandi</h1>
+                <p class="auth-description">Masukkan alamat email Anda dan kami akan mengirimkan link reset kata sandi ke email Anda.</p>
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+            <!-- Session Status -->
+            <x-auth-session-status class="mb-4" :status="session('status')" />
+
+            <!-- Email -->
+            <div class="input-group">
+                <label for="email" class="input-label">Email</label>
+                <span class="input-icon ni ni-mail"></span>
+                <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus placeholder="Masukkan alamat email Anda" class="input-field">
+                <x-input-error :messages="$errors->get('email')" class="input-error" />
+            </div>
+
+            <button type="submit" class="btn btn-red w-full">Kirim Link Reset</button>
+
+            <div class="text-center text-sm">
+                <a href="{{ route('login') }}" class="link">Kembali ke Masuk</a>
+            </div>
         </div>
     </form>
-</x-guest-layout>
+</x-auth-new>

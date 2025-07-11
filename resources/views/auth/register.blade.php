@@ -1,70 +1,52 @@
-<x-auth-layout title="Create an Account">
-    <form method="POST" action="{{ route('register') }}">
+<x-auth-new title="Buat Akun">
+    <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf
 
-        <div class="nk-block-head">
-            <div class="nk-block-head-content">
-                <h5 class="nk-block-title">Register</h5>
-                <div class="nk-block-des">
-                    <p>Create your STEFIA account to access the platform.</p>
-                </div>
+        <div class="auth-content">
+            <div class="auth-header">
+                <h1 class="auth-title text-2xl">Daftar</h1>
+                <p class="auth-description">Buat akun STEFIA Anda untuk mengakses platform.</p>
             </div>
-        </div>
 
-        <!-- Name -->
-        <div class="form-group">
-            <div class="form-label-group">
-                <label class="form-label" for="name">Name</label>
+            <!-- Nama -->
+            <div class="input-group">
+                <label for="name" class="input-label">Nama</label>
+                <span class="input-icon ni ni-user"></span>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus placeholder="Masukkan nama Anda" class="input-field">
+                <x-input-error :messages="$errors->get('name')" class="input-error" />
             </div>
-            <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" placeholder="Enter your name">
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
 
-        <!-- Email Address -->
-        <div class="form-group">
-            <div class="form-label-group">
-                <label class="form-label" for="email">Email</label>
+            <!-- Email -->
+            <div class="input-group">
+                <label for="email" class="input-label">Email</label>
+                <span class="input-icon ni ni-mail"></span>
+                <input type="email" id="email" name="email" value="{{ old('email') }}" required placeholder="Masukkan alamat email Anda" class="input-field">
+                <x-input-error :messages="$errors->get('email')" class="input-error" />
             </div>
-            <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ old('email') }}" required autocomplete="username" placeholder="Enter your email address">
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
 
-        <!-- Password -->
-        <div class="form-group">
-            <div class="form-label-group">
-                <label class="form-label" for="password">Password</label>
+            <!-- Password -->
+            <div class="input-group">
+                <label for="password" class="input-label">Kata Sandi</label>
+                <span class="input-icon ni ni-lock"></span>
+                <input type="password" id="password" name="password" required placeholder="Masukkan kata sandi" class="input-field">
+                <a href="#" class="toggle-password" data-target="password"><i class="ni ni-eye"></i></a>
+                <x-input-error :messages="$errors->get('password')" class="input-error" />
             </div>
-            <div class="form-control-wrap">
-                <a href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password">
-                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                </a>
-                <input type="password" class="form-control form-control-lg" id="password" name="password" required autocomplete="new-password" placeholder="Enter your password">
-            </div>
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
 
-        <!-- Confirm Password -->
-        <div class="form-group">
-            <div class="form-label-group">
-                <label class="form-label" for="password_confirmation">Confirm Password</label>
+            <!-- Konfirmasi Password -->
+            <div class="input-group">
+                <label for="password_confirmation" class="input-label">Konfirmasi Kata Sandi</label>
+                <span class="input-icon ni ni-lock"></span>
+                <input type="password" id="password_confirmation" name="password_confirmation" required placeholder="Konfirmasi kata sandi" class="input-field">
+                <a href="#" class="toggle-password" data-target="password_confirmation"><i class="ni ni-eye"></i></a>
+                <x-input-error :messages="$errors->get('password_confirmation')" class="input-error" />
             </div>
-            <div class="form-control-wrap">
-                <a href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password_confirmation">
-                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                </a>
-                <input type="password" class="form-control form-control-lg" id="password_confirmation" name="password_confirmation" required autocomplete="new-password" placeholder="Confirm your password">
-            </div>
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
 
-        <div class="form-group">
-            <button class="btn btn-lg btn-primary btn-block">Register</button>
+            <button type="submit" class="btn btn-red w-full">Daftar</button>
+
+            <div class="text-center text-sm">
+                <a href="{{ route('login') }}" class="link">Sudah punya akun? Masuk</a>
+            </div>
         </div>
     </form>
-
-    <div class="form-note-s2 text-center pt-4">
-        <a href="{{ route('login') }}">Already registered? Sign in</a>
-    </div>
-</x-auth-layout>
+</x-auth-new>
