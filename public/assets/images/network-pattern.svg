@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#ef4444;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#f87171;stop-opacity:0.4" />
+    </linearGradient>
+    
+    <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background polygons -->
+  <polygon points="0,0 400,200 200,400 0,300" fill="url(#lineGradient)" opacity="0.1">
+    <animateTransform 
+      attributeName="transform" 
+      type="translate" 
+      values="0,0; 50,30; 0,0" 
+      dur="20s" 
+      repeatCount="indefinite"/>
+  </polygon>
+  
+  <polygon points="1920,0 1520,150 1700,300 1920,200" fill="url(#lineGradient)" opacity="0.15">
+    <animateTransform 
+      attributeName="transform" 
+      type="translate" 
+      values="0,0; -30,40; 0,0" 
+      dur="25s" 
+      repeatCount="indefinite"/>
+  </polygon>
+  
+  <polygon points="1600,1080 1800,900 1920,1080" fill="url(#lineGradient)" opacity="0.2">
+    <animateTransform 
+      attributeName="transform" 
+      type="translate" 
+      values="0,0; -40,-20; 0,0" 
+      dur="18s" 
+      repeatCount="indefinite"/>
+  </polygon>
+  
+  <!-- Network Lines -->
+  <g stroke="url(#lineGradient)" stroke-width="2" fill="none" filter="url(#glow)">
+    <!-- Top right network cluster -->
+    <line x1="1200" y1="100" x2="1500" y2="200">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1500" y1="200" x2="1700" y2="150">
+      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1700" y1="150" x2="1800" y2="300">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1800" y1="300" x2="1600" y2="400">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1600" y1="400" x2="1400" y2="350">
+      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="4.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1400" y1="350" x2="1200" y2="100">
+      <animate attributeName="opacity" values="0.3;0.6;0.3" dur="6s" repeatCount="indefinite"/>
+    </line>
+    
+    <!-- Center network -->
+    <line x1="800" y1="300" x2="1000" y2="250">
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1000" y1="250" x2="1200" y2="400">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1200" y1="400" x2="900" y2="500">
+      <animate attributeName="opacity" values="0.5;0.9;0.5" dur="3s" repeatCount="indefinite"/>
+    </line>
+    <line x1="900" y1="500" x2="700" y2="450">
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="4.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="700" y1="450" x2="800" y2="300">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3.5s" repeatCount="indefinite"/>
+    </line>
+    
+    <!-- Bottom left network -->
+    <line x1="100" y1="800" x2="300" y2="750">
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="300" y1="750" x2="500" y2="900">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="500" y1="900" x2="200" y2="950">
+      <animate attributeName="opacity" values="0.5;0.9;0.5" dur="3s" repeatCount="indefinite"/>
+    </line>
+    <line x1="200" y1="950" x2="100" y2="800">
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="4.5s" repeatCount="indefinite"/>
+    </line>
+    
+    <!-- Connecting lines between clusters -->
+    <line x1="500" y1="600" x2="800" y2="300">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="8s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1000" y1="250" x2="1200" y2="100">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="7s" repeatCount="indefinite"/>
+    </line>
+    <line x1="700" y1="450" x2="300" y2="750">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="9s" repeatCount="indefinite"/>
+    </line>
+    
+    <!-- Additional connecting lines -->
+    <line x1="1400" y1="350" x2="900" y2="500">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="6s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1600" y1="400" x2="1000" y2="600">
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="7s" repeatCount="indefinite"/>
+    </line>
+    <line x1="600" y1="200" x2="1200" y2="400">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="8s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <!-- Network Nodes -->
+  <g fill="url(#nodeGradient)" filter="url(#glow)">
+    <!-- Top right cluster nodes -->
+    <circle cx="1200" cy="100" r="8">
+      <animate attributeName="r" values="6;12;6" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1500" cy="200" r="6">
+      <animate attributeName="r" values="4;10;4" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1700" cy="150" r="7">
+      <animate attributeName="r" values="5;11;5" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1800" cy="300" r="5">
+      <animate attributeName="r" values="3;9;3" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1600" cy="400" r="6">
+      <animate attributeName="r" values="4;10;4" dur="3.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1400" cy="350" r="9">
+      <animate attributeName="r" values="7;13;7" dur="4.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Center cluster nodes -->
+    <circle cx="800" cy="300" r="7">
+      <animate attributeName="r" values="5;11;5" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1000" cy="250" r="8">
+      <animate attributeName="r" values="6;12;6" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1200" cy="400" r="6">
+      <animate attributeName="r" values="4;10;4" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="900" cy="500" r="5">
+      <animate attributeName="r" values="3;9;3" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="700" cy="450" r="7">
+      <animate attributeName="r" values="5;11;5" dur="3.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Bottom left cluster nodes -->
+    <circle cx="100" cy="800" r="6">
+      <animate attributeName="r" values="4;10;4" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="750" r="8">
+      <animate attributeName="r" values="6;12;6" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="500" cy="900" r="5">
+      <animate attributeName="r" values="3;9;3" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="200" cy="950" r="7">
+      <animate attributeName="r" values="5;11;5" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Additional scattered nodes -->
+    <circle cx="600" cy="200" r="4">
+      <animate attributeName="r" values="2;8;2" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1000" cy="600" r="5">
+      <animate attributeName="r" values="3;9;3" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1850" cy="500" r="6">
+      <animate attributeName="r" values="4;10;4" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Floating particles -->
+  <g fill="#dc2626" opacity="0.4">
+    <circle cx="400" cy="300" r="2">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 30,-20; 0,0" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.8;0.2" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1300" cy="600" r="3">
+      <animateTransform attributeName="transform" type="translate" values="0,0; -40,30; 0,0" dur="10s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="10s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="800" cy="800" r="2">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 20,40; 0,0" dur="12s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="12s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1600" cy="700" r="2">
+      <animateTransform attributeName="transform" type="translate" values="0,0; -30,-30; 0,0" dur="9s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="9s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

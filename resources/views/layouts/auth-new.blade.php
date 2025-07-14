@@ -103,6 +103,27 @@
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
         }
+        
+        .network-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ asset('assets/images/network-pattern.svg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.4;
+            z-index: -1;
+            animation: networkFloat 25s ease-in-out infinite;
+        }
+        
+        @keyframes networkFloat {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+            33% { transform: translateY(-10px) scale(1.02) rotate(1deg); }
+            66% { transform: translateY(5px) scale(0.98) rotate(-1deg); }
+        }
 
         .auth-container {
             background: rgba(31, 41, 55, 0.85);
@@ -369,6 +390,8 @@
         <div class="network-line" style="left: 25%; bottom: 15%; transform: rotate(60deg);"></div>
         <div class="network-line" style="right: 30%; bottom: 25%; transform: rotate(-45deg);"></div>
     </div>
+    
+    <div class="network-bg"></div>
 
     <div class="auth-container">
         <div class="auth-logo">

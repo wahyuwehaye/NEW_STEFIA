@@ -14,8 +14,8 @@
     lineTension: 0.15,
     datasets: [{
       label: "Total Received",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .3),
+      color: "#dc3545",
+      background: NioApp.hexRGB('#dc3545', .3),
       data: [111, 80, 125, 75, 95, 75, 90, 111, 80, 125, 75, 95, 75, 90, 111, 80, 125, 75, 95, 75, 90, 111, 80, 125, 75, 95, 75, 90, 75, 90]
     }]
   };
@@ -466,7 +466,7 @@
     stacked: true,
     datasets: [{
       label: "Sales Revenue",
-      color: [NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), "#854fff"],
+      color: [NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), "#dc3545"],
       data: [11000, 8000, 12500, 5500, 9500, 14299, 11000, 8000, 12500, 5500, 9500, 14299]
     }]
   };
@@ -476,7 +476,7 @@
     stacked: true,
     datasets: [{
       label: "Active User",
-      color: [NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), NioApp.hexRGB("#854fff", .2), "#854fff"],
+      color: [NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), NioApp.hexRGB("#dc3545", .2), "#dc3545"],
       data: [8200, 7800, 9500, 5500, 9200, 9690]
     }]
   };
@@ -588,8 +588,8 @@
     lineTension: 0.1,
     datasets: [{
       label: "Sales Overview",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .3),
+      color: "#dc3545",
+      background: NioApp.hexRGB('#dc3545', .3),
       data: [8200, 7800, 9500, 5500, 9200, 9690, 8200, 7800, 9500, 5500, 9200, 9690, 8200, 7800, 9500, 5500, 9200, 9690, 8200, 7800, 9500, 5500, 9200, 9690, 8200, 7800, 9500, 5500, 9200, 9690]
     }]
   };

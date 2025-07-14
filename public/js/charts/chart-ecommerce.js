@@ -9,8 +9,8 @@
     lineTension: .3,
     datasets: [{
       label: "Sales",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .25),
+      color: "#dc3545",
+      background: NioApp.hexRGB('#dc3545', .25),
       data: [130, 105, 125, 115, 110, 95, 131, 110, 115, 120, 111, 97, 113, 107, 122, 100, 85, 110, 130, 107, 90, 105, 123, 115, 100, 117, 125, 95, 137, 101]
     }]
   };
@@ -154,7 +154,7 @@
     lineTension: .1,
     datasets: [{
       label: "Current Month",
-      color: "#9d72ff",
+      color: "#dc3545",
       dash: 0,
       background: "transparent",
       data: [4110, 4220, 4810, 5480, 4600, 5670, 6660, 4830, 5590, 5730, 4790, 4950, 5100, 5800, 5950, 5850, 5950, 4450, 4900, 8000, 7200, 7250, 7900, 8950, 6300, 7200, 7250, 7650, 6950, 4750]
@@ -281,7 +281,7 @@
     lineTension: .3,
     datasets: [{
       label: "Orders",
-      color: "#854fff",
+      color: "#dc3545",
       background: "transparent",
       data: [92, 105, 125, 85, 110, 106, 131, 105, 110, 131, 105, 110]
     }]
@@ -437,9 +437,9 @@
     lineTension: .4,
     datasets: [{
       label: "Total orders",
-      color: "#9d72ff",
+      color: "#dc3545",
       dash: 0,
-      background: NioApp.hexRGB('#9d72ff', .15),
+      background: NioApp.hexRGB('#dc3545', .15),
       data: [3710, 4820, 4810, 5480, 5300, 5670, 6660, 4830, 5590, 5730, 4790, 4950, 5100, 5800, 5950, 5850, 5950, 4450, 4900, 8000, 7200, 7250, 7900, 8950, 6300, 7200, 7250, 7650, 6950, 4750]
     }, {
       label: "Canceled orders",

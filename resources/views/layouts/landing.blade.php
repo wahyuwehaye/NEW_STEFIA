@@ -55,6 +55,26 @@
             animation: gradientShift 15s ease infinite;
             z-index: -2;
         }
+        
+        .network-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ asset('assets/images/network-pattern.svg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+            z-index: -1;
+            animation: networkFloat 30s ease-in-out infinite;
+        }
+        
+        @keyframes networkFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
 
         .animated-bg::before {
             content: '';

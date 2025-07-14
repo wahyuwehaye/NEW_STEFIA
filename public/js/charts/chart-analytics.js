@@ -212,8 +212,8 @@
           hoverColor: '#b695ff',
           hoverOpacity: null,
           normalizeFunction: 'linear',
-          scaleColors: ['#ccd7e2', '#9d72ff'],
-          selectedColor: '#854fff',
+          scaleColors: ['#ccd7e2', '#dc3545'],
+          selectedColor: '#dc3545',
           showTooltip: true,
           values: map_data.data,
           onLabelShow: function onLabelShow(event, label, code) {
@@ -246,7 +246,7 @@
     legend: false,
     datasets: [{
       borderColor: "#fff",
-      background: ["#9d72ff", "#b8acff", "#ffa9ce", "#f9db7b"],
+      background: ["#dc3545", "#b8acff", "#ffa9ce", "#f9db7b"],
       data: [4305, 859, 482, 138]
     }]
   };
@@ -328,8 +328,8 @@
     lineTension: .1,
     datasets: [{
       label: "Organic Search",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .25),
+      color: "#dc3545",
+      background: NioApp.hexRGB('#dc3545', .25),
       data: [110, 80, 125, 65, 95, 75, 90, 110, 80, 125, 70, 95]
     }]
   };
@@ -372,8 +372,8 @@
     lineTension: .1,
     datasets: [{
       label: "Bounce Rate",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .25),
+      color: "#dc3545",
+      background: NioApp.hexRGB('#dc3545', .25),
       data: [110, 80, 125, 65, 95, 75, 90, 110, 80, 125, 70, 95]
     }]
   };
@@ -394,8 +394,8 @@
     lineTension: .1,
     datasets: [{
       label: "New Users",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .25),
+      color: "#dc3545",
+      background: NioApp.hexRGB('#dc3545', .25),
       data: [110, 80, 125, 65, 95, 75, 90, 110, 80, 125, 70, 95]
     }]
   };
@@ -653,9 +653,9 @@
       data: [3910, 4420, 4110, 5180, 4400, 5170, 6460, 8830, 5290, 5430, 4690, 4350, 4600, 5200, 5650, 6850, 6950, 4150, 4300, 6000, 6800, 2250, 6900, 7950, 6900, 4200, 6250, 7650, 8950, 9750]
     }, {
       label: "Current Month",
-      color: "#9d72ff",
+      color: "#dc3545",
       dash: 0,
-      background: NioApp.hexRGB('#9d72ff', .15),
+      background: NioApp.hexRGB('#dc3545', .15),
       data: [4110, 4220, 4810, 5480, 4600, 5670, 6660, 4830, 5590, 5730, 4790, 4950, 5100, 5800, 5950, 5850, 5950, 4450, 4900, 8000, 7200, 7250, 7900, 8950, 6300, 7200, 7250, 7650, 6950, 4750]
     }]
   };

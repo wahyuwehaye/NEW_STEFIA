@@ -173,7 +173,7 @@
       data: [110, 80, 125, 55, 95, 75, 90, 110, 80, 125, 55, 95]
     }, {
       label: "Total Send",
-      color: "#9d72ff",
+      color: "#dc3545",
       background: 'transparent',
       data: [80, 54, 105, 120, 82, 85, 60, 80, 54, 105, 120, 82]
     }]
@@ -184,8 +184,8 @@
     lineTension: .4,
     datasets: [{
       label: "Total Received",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .4),
+      color: "#dc3545",
+      background: NioApp.hexRGB('#dc3545', .4),
       data: [110, 80, 125, 65, 95, 75, 90, 110, 80, 125, 70, 95]
     }]
   };
@@ -195,8 +195,8 @@
     lineTension: 0,
     datasets: [{
       label: "Total Received",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .3),
+      color: "#dc3545",
+      background: NioApp.hexRGB('#dc3545', .3),
       data: [110, 80, 125, 55, 95, 75, 90, 110, 80, 125, 55, 95]
     }]
   };

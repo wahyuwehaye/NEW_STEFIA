@@ -5,6 +5,7 @@
 @section('content')
 <!-- Animated Background -->
 <div class="animated-bg"></div>
+<div class="network-bg"></div>
 <div class="particle"></div>
 <div class="particle"></div>
 <div class="particle"></div>

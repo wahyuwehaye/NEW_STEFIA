@@ -1,95 +1,298 @@
+
 @extends('layouts.admin')
 
 @section('title', 'Dashboard')
 
 @section('content')
-<x-page-header 
-    title="STEFIA Dashboard" 
-    subtitle="Comprehensive Financial Management Overview"
-    class="fade-in">
-    <x-slot name="actions">
-        <ul class="nk-block-tools g-3">
-            <li><a href="{{ route('reports.export') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export Report</span></a></li>
-            <li><a href="{{ route('students.create') }}" class="btn btn-success"><em class="icon ni ni-user-add"></em><span>Add Student</span></a></li>
-            <li class="nk-block-tools-opt"><a href="{{ route('payments.create') }}" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Record Payment</span></a></li>
-        </ul>
-    </x-slot>
-</x-page-header>
+<div class="nk-block-head nk-block-head-sm">
+    <div class="nk-block-between">
+        <div class="nk-block-head-content">
+            <h3 class="nk-block-title page-title text-gradient">STEFIA Dashboard</h3>
+            <div class="nk-block-des text-soft">
+                <p>Comprehensive Financial Management Overview</p>
+            </div>
+        </div>
+        <div class="nk-block-head-content">
+            <div class="toggle-wrap nk-block-tools-toggle">
+                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
+                <div class="toggle-expand-content" data-content="pageMenu">
+                    <ul class="nk-block-tools g-3">
+                        <li><a href="#" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export Report</span></a></li>
+                        <li><a href="#" class="btn btn-success"><em class="icon ni ni-user-add"></em><span>Add Student</span></a></li>
+                        <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Record Payment</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Statistics Cards -->
-<div class="nk-block fade-in">
+<div class="nk-block">
     <div class="row g-gs">
-        <x-stats-card 
-            title="Total Mahasiswa" 
-            value="1,245" 
-            change="4.63%" 
-            changeType="up" 
-            tooltip="Total mahasiswa terdaftar dalam sistem" 
-            chartId="totalStudents" />
-            
-        <x-stats-card 
-            title="Piutang Aktif" 
-            value="Rp 2.847.950.000" 
-            change="12.38%" 
-            changeType="up" 
-            tooltip="Total piutang yang masih aktif" 
-            chartId="activeReceivables" />
-            
-        <x-stats-card 
-            title="Piutang Lunas" 
-            value="Rp 1.456.780.000" 
-            change="8.45%" 
-            changeType="up" 
-            tooltip="Total piutang yang sudah lunas" 
-            chartId="paidReceivables" />
-            
-        <x-stats-card 
-            title="Tunggakan Kritis" 
-            value="23" 
-            change="2.45%" 
-            changeType="down" 
-            tooltip="Mahasiswa dengan tunggakan >10 juta" 
-            chartId="highDebtors" />
-            
-        <x-stats-card 
-            title="Pembayaran Hari Ini" 
-            value="Rp 89.240.000" 
-            change="7.28%" 
-            changeType="up" 
-            tooltip="Pembayaran yang diterima hari ini" 
-            chartId="todayPayments" />
-            
-        <x-stats-card 
-            title="Piutang Semester Ini" 
-            value="Rp 456.780.000" 
-            change="15.67%" 
-            changeType="up" 
-            tooltip="Piutang semester tahun akademik berjalan" 
-            chartId="semesterReceivables" />
-            
-        <x-stats-card 
-            title="Piutang Tahun Ini" 
-            value="Rp 1.234.567.000" 
-            change="18.23%" 
-            changeType="up" 
-            tooltip="Total piutang tahun 2025" 
-            chartId="yearlyReceivables" />
-            
-        <x-stats-card 
-            title="Collection Rate" 
-            value="94.2%" 
-            change="2.1%" 
-            changeType="up" 
-            tooltip="Tingkat keberhasilan penagihan" 
-            chartId="collectionRate" />
+        <!-- Total Mahasiswa -->
+        <div class="col-xxl-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="card glass-card stats-card">
+                <div class="nk-ecwg nk-ecwg6">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Total Mahasiswa</h6>
+                            </div>
+                            <div class="card-tools">
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total mahasiswa terdaftar dalam sistem"></em>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="data-group">
+                                <div class="amount">1,245</div>
+                                <div class="nk-ecwg6-ck">
+                                    <canvas class="ecommerce-line-chart-s3" id="totalStudents"></canvas>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <span class="change up text-success">
+                                    <em class="icon ni ni-arrow-long-up"></em>4.63%
+                                </span>
+                                <span class="sub">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Piutang Aktif -->
+        <div class="col-xxl-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="card glass-card stats-card">
+                <div class="nk-ecwg nk-ecwg6">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Piutang Aktif</h6>
+                            </div>
+                            <div class="card-tools">
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total piutang yang masih aktif"></em>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="data-group">
+                                <div class="amount">Rp 2.847.950.000</div>
+                                <div class="nk-ecwg6-ck">
+                                    <canvas class="ecommerce-line-chart-s3" id="activeReceivables"></canvas>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <span class="change up text-success">
+                                    <em class="icon ni ni-arrow-long-up"></em>12.38%
+                                </span>
+                                <span class="sub">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Piutang Lunas -->
+        <div class="col-xxl-3 col-md-6">
+            <div class="card glass-card stats-card">
+                <div class="nk-ecwg nk-ecwg6">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Piutang Lunas</h6>
+                            </div>
+                            <div class="card-tools">
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total piutang yang sudah lunas"></em>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="data-group">
+                                <div class="amount">Rp 1.456.780.000</div>
+                                <div class="nk-ecwg6-ck">
+                                    <canvas class="ecommerce-line-chart-s3" id="paidReceivables"></canvas>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <span class="change up text-success">
+                                    <em class="icon ni ni-arrow-long-up"></em>8.45%
+                                </span>
+                                <span class="sub">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tunggakan Kritis -->
+        <div class="col-xxl-3 col-md-6">
+            <div class="card glass-card stats-card">
+                <div class="nk-ecwg nk-ecwg6">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Tunggakan Kritis</h6>
+                            </div>
+                            <div class="card-tools">
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Mahasiswa dengan tunggakan >10 juta"></em>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="data-group">
+                                <div class="amount">23</div>
+                                <div class="nk-ecwg6-ck">
+                                    <canvas class="ecommerce-line-chart-s3" id="highDebtors"></canvas>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <span class="change down text-warning">
+                                    <em class="icon ni ni-arrow-long-down"></em>2.45%
+                                </span>
+                                <span class="sub">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pembayaran Hari Ini -->
+        <div class="col-xxl-3 col-md-6">
+            <div class="card glass-card stats-card">
+                <div class="nk-ecwg nk-ecwg6">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Pembayaran Hari Ini</h6>
+                            </div>
+                            <div class="card-tools">
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Pembayaran yang diterima hari ini"></em>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="data-group">
+                                <div class="amount">Rp 89.240.000</div>
+                                <div class="nk-ecwg6-ck">
+                                    <canvas class="ecommerce-line-chart-s3" id="todayPayments"></canvas>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <span class="change up text-success">
+                                    <em class="icon ni ni-arrow-long-up"></em>7.28%
+                                </span>
+                                <span class="sub">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Piutang Semester Ini -->
+        <div class="col-xxl-3 col-md-6">
+            <div class="card glass-card stats-card">
+                <div class="nk-ecwg nk-ecwg6">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Piutang Semester Ini</h6>
+                            </div>
+                            <div class="card-tools">
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Piutang semester tahun akademik berjalan"></em>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="data-group">
+                                <div class="amount">Rp 456.780.000</div>
+                                <div class="nk-ecwg6-ck">
+                                    <canvas class="ecommerce-line-chart-s3" id="semesterReceivables"></canvas>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <span class="change up text-success">
+                                    <em class="icon ni ni-arrow-long-up"></em>15.67%
+                                </span>
+                                <span class="sub">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Piutang Tahun Ini -->
+        <div class="col-xxl-3 col-md-6">
+            <div class="card glass-card stats-card">
+                <div class="nk-ecwg nk-ecwg6">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Piutang Tahun Ini</h6>
+                            </div>
+                            <div class="card-tools">
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total piutang tahun 2025"></em>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="data-group">
+                                <div class="amount">Rp 1.234.567.000</div>
+                                <div class="nk-ecwg6-ck">
+                                    <canvas class="ecommerce-line-chart-s3" id="yearlyReceivables"></canvas>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <span class="change up text-success">
+                                    <em class="icon ni ni-arrow-long-up"></em>18.23%
+                                </span>
+                                <span class="sub">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Collection Rate -->
+        <div class="col-xxl-3 col-md-6">
+            <div class="card glass-card stats-card">
+                <div class="nk-ecwg nk-ecwg6">
+                    <div class="card-inner">
+                        <div class="card-title-group">
+                            <div class="card-title">
+                                <h6 class="title">Collection Rate</h6>
+                            </div>
+                            <div class="card-tools">
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Tingkat keberhasilan penagihan"></em>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <div class="data-group">
+                                <div class="amount">94.2%</div>
+                                <div class="nk-ecwg6-ck">
+                                    <canvas class="ecommerce-line-chart-s3" id="collectionRate"></canvas>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <span class="change up text-success">
+                                    <em class="icon ni ni-arrow-long-up"></em>2.1%
+                                </span>
+                                <span class="sub">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Chart Section -->
-<div class="nk-block fade-in">
+<div class="nk-block">
     <div class="row g-gs">
         <div class="col-xxl-8">
-            <div class="card card-bordered h-100">
+            <div class="card card-bordered glass-card h-100">
                 <div class="card-inner">
                     <div class="card-title-group align-start mb-2">
                         <div class="card-title">
@@ -118,7 +321,7 @@
             </div>
         </div>
         <div class="col-xxl-4">
-            <div class="card card-bordered h-100">
+            <div class="card card-bordered glass-card h-100">
                 <div class="card-inner">
                     <div class="card-title-group align-start mb-2">
                         <div class="card-title">
@@ -163,10 +366,10 @@
 </div>
 
 <!-- High Debtors and Payment Trends -->
-<div class="nk-block fade-in">
+<div class="nk-block">
     <div class="row g-gs">
         <div class="col-xxl-6">
-            <div class="card card-bordered h-100">
+            <div class="card card-bordered glass-card h-100">
                 <div class="card-inner">
                     <div class="card-title-group">
                         <div class="card-title">
@@ -258,7 +461,7 @@
             </div>
         </div>
         <div class="col-xxl-6">
-            <div class="card card-bordered h-100">
+            <div class="card card-bordered glass-card h-100">
                 <div class="card-inner">
                     <div class="card-title-group align-start mb-2">
                         <div class="card-title">
@@ -289,10 +492,10 @@
 </div>
 
 <!-- Recent Activities -->
-<div class="nk-block fade-in">
+<div class="nk-block">
     <div class="row g-gs">
         <div class="col-xxl-8">
-            <div class="card card-bordered">
+            <div class="card card-bordered glass-card">
                 <div class="card-inner">
                     <div class="card-title-group">
                         <div class="card-title">
@@ -316,7 +519,7 @@
                         <div class="nk-tb-item">
                             <div class="nk-tb-col">
                                 <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-purple">
+                                    <div class="user-avatar user-avatar-sm bg-danger">
                                         <span>JS</span>
                                     </div>
                                     <div class="user-name">
@@ -338,7 +541,7 @@
                         <div class="nk-tb-item">
                             <div class="nk-tb-col">
                                 <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-pink">
+                                    <div class="user-avatar user-avatar-sm bg-danger">
                                         <span>MA</span>
                                     </div>
                                     <div class="user-name">
@@ -360,7 +563,7 @@
                         <div class="nk-tb-item">
                             <div class="nk-tb-col">
                                 <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-blue">
+                                    <div class="user-avatar user-avatar-sm bg-danger">
                                         <span>DL</span>
                                     </div>
                                     <div class="user-name">
@@ -384,7 +587,7 @@
             </div>
         </div>
         <div class="col-xxl-4">
-            <div class="card card-bordered">
+            <div class="card card-bordered glass-card">
                 <div class="card-inner">
                     <div class="card-title-group mb-2">
                         <div class="card-title">
@@ -450,59 +653,124 @@
 @endsection
 
 @push('scripts')
-<!-- Highcharts -->
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
-<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+<!-- Charts will be initialized by the main app.js -->
+<script>
+// Dashboard-specific initialization
+$(document).ready(function() {
+    // Any dashboard-specific code can go here
+    console.log('Dashboard page loaded');
+});
+</script>
 
 <script>
     // Initialize Charts when document is ready
     $(document).ready(function() {
         
-        // Set Highcharts global options
+        // Set Highcharts global options with modern styling
         Highcharts.setOptions({
-            colors: ['#6576ff', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'],
+            colors: ['#e11d48', '#f43f5e', '#fb7185', '#22c55e', '#f59e0b', '#06b6d4', '#f97316', '#84cc16'],
             chart: {
                 backgroundColor: 'transparent',
                 style: {
-                    fontFamily: 'Inter, sans-serif'
-                }
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '13px'
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutBounce'
+                },
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
             },
             title: {
                 style: {
-                    color: '#ffffff'
+                    color: '#374151',
+                    fontSize: '16px',
+                    fontWeight: '600'
+                }
+            },
+            subtitle: {
+                style: {
+                    color: '#6b7280',
+                    fontSize: '12px'
                 }
             },
             legend: {
                 itemStyle: {
-                    color: '#ffffff'
+                    color: '#374151',
+                    fontSize: '12px',
+                    fontWeight: '500'
+                },
+                itemHoverStyle: {
+                    color: '#dc2626'
                 }
             },
             xAxis: {
                 labels: {
                     style: {
-                        color: '#ffffff'
+                        color: '#6b7280',
+                        fontSize: '11px'
                     }
                 },
                 title: {
                     style: {
-                        color: '#ffffff'
+                        color: '#374151',
+                        fontSize: '12px',
+                        fontWeight: '500'
                     }
-                }
+                },
+                lineColor: '#e5e7eb',
+                tickColor: '#e5e7eb'
             },
             yAxis: {
                 labels: {
                     style: {
-                        color: '#ffffff'
+                        color: '#6b7280',
+                        fontSize: '11px'
                     }
                 },
                 title: {
                     style: {
-                        color: '#ffffff'
+                        color: '#374151',
+                        fontSize: '12px',
+                        fontWeight: '500'
+                    }
+                },
+                gridLineColor: '#f3f4f6',
+                lineColor: '#e5e7eb'
+            },
+            tooltip: {
+                backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                borderColor: '#e5e7eb',
+                borderRadius: 8,
+                borderWidth: 1,
+                shadow: {
+                    color: 'rgba(0, 0, 0, 0.1)',
+                    offsetX: 0,
+                    offsetY: 2,
+                    opacity: 0.5,
+                    width: 3
+                },
+                style: {
+                    color: '#374151',
+                    fontSize: '12px'
+                }
+            },
+            plotOptions: {
+                series: {
+                    animation: {
+                        duration: 1200
+                    },
+                    states: {
+                        hover: {
+                            brightness: 0.1
+                        }
                     }
                 }
+            },
+            credits: {
+                enabled: false
             }
         });
         
@@ -569,11 +837,11 @@
                             y2: 1
                         },
                         stops: [
-                            [0, 'rgba(101, 118, 255, 0.8)'],
-                            [1, 'rgba(101, 118, 255, 0.1)']
+                            [0, 'rgba(225, 29, 72, 0.8)'],
+                            [1, 'rgba(225, 29, 72, 0.1)']
                         ]
                     },
-                    color: '#6576ff'
+                    color: '#e11d48'
                 }, {
                     name: 'Target Revenue',
                     data: [2500000000, 2500000000, 2500000000, 2500000000, 2500000000, 2500000000, 2500000000, 2500000000, 2500000000, 2500000000, 2500000000, 2500000000],
@@ -715,202 +983,242 @@
             });
         }
         
-        // Small line charts for statistics cards
+        // Modern Highcharts small sparkline charts for statistics cards
         if ($('#totalStudents').length) {
-            var ctx = document.getElementById('totalStudents').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        data: [1100, 1150, 1200, 1180, 1220, 1245],
-                        borderColor: '#6576ff',
-                        backgroundColor: 'rgba(101, 118, 255, 0.1)',
-                        borderWidth: 2,
-                        fill: true
-                    }]
+            Highcharts.chart('totalStudents', {
+                chart: {
+                    type: 'areaspline',
+                    height: 60,
+                    margin: [2, 0, 2, 0],
+                    width: 120,
+                    backgroundColor: null,
+                    borderWidth: 0,
+                    style: {
+                        overflow: 'visible'
+                    },
+                    skipClone: true
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
-                    },
-                    elements: {
-                        point: { radius: 0 }
-                    }
-                }
-            });
-        }
-        
-        if ($('#totalRevenue').length) {
-            var ctx = document.getElementById('totalRevenue').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        data: [2500000, 2600000, 2750000, 2680000, 2800000, 2847950],
-                        borderColor: '#22c55e',
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        borderWidth: 2,
-                        fill: true
-                    }]
+                title: {
+                    text: ''
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
-                    },
-                    elements: {
-                        point: { radius: 0 }
-                    }
-                }
-            });
-        }
-        
-        if ($('#pendingPayments').length) {
-            var ctx = document.getElementById('pendingPayments').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        data: [95000, 88000, 92000, 85000, 91000, 89240],
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                        borderWidth: 2,
-                        fill: true
-                    }]
+                credits: {
+                    enabled: false
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
+                xAxis: {
+                    labels: {
+                        enabled: false
                     },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
+                    title: {
+                        text: null
                     },
-                    elements: {
-                        point: { radius: 0 }
-                    }
-                }
-            });
-        }
-        
-        if ($('#activeScholarships').length) {
-            var ctx = document.getElementById('activeScholarships').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        data: [75, 78, 82, 80, 85, 87],
-                        borderColor: '#14b8a6',
-                        backgroundColor: 'rgba(20, 184, 166, 0.1)',
-                        borderWidth: 2,
-                        fill: true
-                    }]
+                    startOnTick: false,
+                    endOnTick: false,
+                    tickPositions: []
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
+                yAxis: {
+                    endOnTick: false,
+                    startOnTick: false,
+                    labels: {
+                        enabled: false
                     },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
+                    title: {
+                        text: null
                     },
-                    elements: {
-                        point: { radius: 0 }
-                    }
-                }
-            });
-        }
-        
-        // Monthly Revenue Chart
-        if ($('#monthlyRevenue').length) {
-            var ctx = document.getElementById('monthlyRevenue').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{
-                        label: 'Revenue',
-                        data: [2200000, 2350000, 2180000, 2450000, 2600000, 2750000, 2680000, 2800000, 2920000, 2850000, 2780000, 2847950],
-                        borderColor: '#6576ff',
-                        backgroundColor: 'rgba(101, 118, 255, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
+                    tickPositions: [0]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: {
-                            display: true,
-                            grid: { display: false }
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    hideDelay: 0,
+                    outside: true,
+                    shared: true
+                },
+                plotOptions: {
+                    series: {
+                        animation: false,
+                        lineWidth: 2,
+                        shadow: false,
+                        states: {
+                            hover: {
+                                lineWidth: 2
+                            }
                         },
-                        y: {
-                            display: true,
-                            grid: { color: 'rgba(0,0,0,0.05)' },
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + (value / 1000000).toFixed(1) + 'M';
+                        marker: {
+                            radius: 1,
+                            states: {
+                                hover: {
+                                    radius: 2
                                 }
                             }
+                        },
+                        fillOpacity: 0.25
+                    },
+                    column: {
+                        negativeColor: '#910000',
+                        borderColor: 'silver'
+                    }
+                },
+                series: [{
+                    data: [1100, 1150, 1200, 1180, 1220, 1245],
+                    color: '#e11d48',
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, 'rgba(225, 29, 72, 0.4)'],
+                            [1, 'rgba(225, 29, 72, 0.1)']
+                        ]
+                    }
+                }]
+            });
+        }
+        
+        if ($('#activeReceivables').length) {
+            Highcharts.chart('activeReceivables', {
+                chart: {
+                    type: 'areaspline',
+                    height: 60,
+                    margin: [2, 0, 2, 0],
+                    width: 120,
+                    backgroundColor: null,
+                    borderWidth: 0,
+                    style: {
+                        overflow: 'visible'
+                    },
+                    skipClone: true
+                },
+                title: { text: '' },
+                credits: { enabled: false },
+                xAxis: {
+                    labels: { enabled: false },
+                    title: { text: null },
+                    startOnTick: false,
+                    endOnTick: false,
+                    tickPositions: []
+                },
+                yAxis: {
+                    endOnTick: false,
+                    startOnTick: false,
+                    labels: { enabled: false },
+                    title: { text: null },
+                    tickPositions: [0]
+                },
+                legend: { enabled: false },
+                tooltip: {
+                    hideDelay: 0,
+                    outside: true,
+                    shared: true,
+                    formatter: function() {
+                        return 'Rp ' + (this.y / 1000000).toFixed(1) + 'M';
+                    }
+                },
+                plotOptions: {
+                    series: {
+                        animation: false,
+                        lineWidth: 2,
+                        shadow: false,
+                        marker: {
+                            radius: 1,
+                            states: { hover: { radius: 2 } }
+                        },
+                        fillOpacity: 0.25
+                    }
+                },
+                series: [{
+                    data: [2500000, 2600000, 2750000, 2680000, 2800000, 2847950],
+                    color: '#22c55e',
+                    fillColor: {
+                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                        stops: [
+                            [0, 'rgba(34, 197, 94, 0.4)'],
+                            [1, 'rgba(34, 197, 94, 0.1)']
+                        ]
+                    }
+                }]
+            });
+        }
+        
+        // Create sparkline charts for each stats card
+        function createSparklineChart(elementId, data, color, fillStops) {
+            if ($('#' + elementId).length) {
+                Highcharts.chart(elementId, {
+                    chart: {
+                        type: 'areaspline',
+                        height: 60,
+                        margin: [2, 0, 2, 0],
+                        width: 120,
+                        backgroundColor: null,
+                        borderWidth: 0,
+                        style: { overflow: 'visible' },
+                        skipClone: true
+                    },
+                    title: { text: '' },
+                    credits: { enabled: false },
+                    xAxis: {
+                        labels: { enabled: false },
+                        title: { text: null },
+                        startOnTick: false,
+                        endOnTick: false,
+                        tickPositions: []
+                    },
+                    yAxis: {
+                        endOnTick: false,
+                        startOnTick: false,
+                        labels: { enabled: false },
+                        title: { text: null },
+                        tickPositions: [0]
+                    },
+                    legend: { enabled: false },
+                    tooltip: {
+                        hideDelay: 0,
+                        outside: true,
+                        shared: true
+                    },
+                    plotOptions: {
+                        series: {
+                            animation: false,
+                            lineWidth: 2,
+                            shadow: false,
+                            marker: {
+                                radius: 1,
+                                states: { hover: { radius: 2 } }
+                            },
+                            fillOpacity: 0.25
                         }
                     },
-                    elements: {
-                        point: { radius: 4, hoverRadius: 6 }
-                    }
-                }
-            });
-        }
-        
-        // Student Categories Doughnut Chart
-        if ($('#studentCategories').length) {
-            var ctx = document.getElementById('studentCategories').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Undergraduate', 'Graduate', 'PhD'],
-                    datasets: [{
-                        data: [65.5, 23.8, 10.7],
-                        backgroundColor: ['#6576ff', '#eb6459', '#f4bd0e'],
-                        borderWidth: 0
+                    series: [{
+                        data: data,
+                        color: color,
+                        fillColor: {
+                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                            stops: fillStops
+                        }
                     }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '65%',
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
+                });
+            }
         }
         
-        // Initialize tooltips
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        // Create all sparkline charts
+        createSparklineChart('paidReceivables', [1400000, 1420000, 1380000, 1450000, 1440000, 1456780], '#22c55e', [[0, 'rgba(34, 197, 94, 0.4)'], [1, 'rgba(34, 197, 94, 0.1)']]);
+        createSparklineChart('highDebtors', [28, 25, 30, 27, 26, 23], '#ef4444', [[0, 'rgba(239, 68, 68, 0.4)'], [1, 'rgba(239, 68, 68, 0.1)']]);
+        createSparklineChart('todayPayments', [85000, 88000, 92000, 85000, 91000, 89240], '#f59e0b', [[0, 'rgba(245, 158, 11, 0.4)'], [1, 'rgba(245, 158, 11, 0.1)']]);
+        createSparklineChart('semesterReceivables', [420000, 435000, 440000, 445000, 450000, 456780], '#8b5cf6', [[0, 'rgba(139, 92, 246, 0.4)'], [1, 'rgba(139, 92, 246, 0.1)']]);
+        createSparklineChart('yearlyReceivables', [1100000, 1150000, 1180000, 1200000, 1220000, 1234567], '#06b6d4', [[0, 'rgba(6, 182, 212, 0.4)'], [1, 'rgba(6, 182, 212, 0.1)']]);
+        createSparklineChart('collectionRate', [92.1, 93.5, 92.8, 93.2, 94.0, 94.2], '#14b8a6', [[0, 'rgba(20, 184, 166, 0.4)'], [1, 'rgba(20, 184, 166, 0.1)']]);
+        
+        
+        // Initialize tooltips (Bootstrap 5 compatible)
+        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
         
         // Auto-refresh data every 30 seconds (in production, this would make AJAX calls)
         setInterval(function() {

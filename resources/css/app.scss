@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Custom SCSS Variables
+$main-bg-color: #f3f4f6;
+$primary-color: #e11d48;
+$secondary-color: #f43f5e;
+$success-color: #22c55e;
+$warning-color: #f59e0b;
+$info-color: #06b6d4;
+
+// Body Styling
+body {
+    @apply bg-main-bg-color text-gray-800;
+}
+
+// Glassmorphism Card Styling
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Sidebar Styling
+.nk-sidebar {
+    @apply bg-secondary-color text-white;
+    .nk-menu-item {
+        &:hover {
+            @apply bg-red-600;
+        }
+        
+        &.active {
+            @apply bg-red-700;
+        }
+    }
+}
+
+// Button Styling
+.btn {
+    @apply inline-flex items-center justify-center rounded-md shadow-sm transition;
+    &:hover {
+        @apply bg-opacity-90;
+    }
+    
+    &-primary {
+        @apply bg-primary-color text-white;
+    }
+    &-secondary {
+        @apply bg-secondary-color text-white;
+    }
+    &-success {
+        @apply bg-success-color text-white;
+    }
+}
+
+// Notification Styling
+.toast {
+    @apply p-4 rounded-md shadow-lg;
+}
+
+// Additional Styling Overrides
+

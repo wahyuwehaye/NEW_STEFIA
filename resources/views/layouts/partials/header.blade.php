@@ -1,4 +1,4 @@
-<div class="nk-header nk-header-fixed is-light">
+<div class="nk-header nk-header-fixed">
     <div class="container-fluid">
         <div class="nk-header-wrap">
             <div class="nk-menu-trigger d-xl-none ml-n1">
@@ -140,7 +140,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dark-switch" href="#">
+                                        <a class="dark-switch" href="#" id="theme-toggle">
                                             <em class="icon ni ni-moon"></em>
                                             <span>Dark Mode</span>
                                         </a>
