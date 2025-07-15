@@ -32,30 +32,31 @@
     <div class="row g-gs">
         <!-- Total Mahasiswa -->
         <div class="col-xxl-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="card glass-card stats-card">
-                <div class="nk-ecwg nk-ecwg6">
-                    <div class="card-inner">
-                        <div class="card-title-group">
-                            <div class="card-title">
-                                <h6 class="title">Total Mahasiswa</h6>
+            <div class="card glass-card stats-card modern-card">
+                <div class="card-inner">
+                    <div class="card-title-group">
+                        <div class="card-title">
+                            <div class="stats-icon bg-primary">
+                                <em class="icon ni ni-users"></em>
                             </div>
-                            <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total mahasiswa terdaftar dalam sistem"></em>
+                            <h6 class="title text-gradient">Total Mahasiswa</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total mahasiswa terdaftar dalam sistem"></em>
+                        </div>
+                    </div>
+                    <div class="data">
+                        <div class="data-group">
+                            <div class="amount gradient-text">1,245</div>
+                            <div class="nk-ecwg6-ck">
+                                <canvas class="ecommerce-line-chart-s3" id="totalStudents"></canvas>
                             </div>
                         </div>
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">1,245</div>
-                                <div class="nk-ecwg6-ck">
-                                    <canvas class="ecommerce-line-chart-s3" id="totalStudents"></canvas>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <span class="change up text-success">
-                                    <em class="icon ni ni-arrow-long-up"></em>4.63%
-                                </span>
-                                <span class="sub">vs last month</span>
-                            </div>
+                        <div class="info">
+                            <span class="change up text-success">
+                                <em class="icon ni ni-arrow-long-up"></em>4.63%
+                            </span>
+                            <span class="sub">vs last month</span>
                         </div>
                     </div>
                 </div>
