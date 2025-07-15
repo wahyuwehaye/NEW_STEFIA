@@ -96,24 +96,29 @@
 
 
   NioApp.CurrentLink = function () {
-    var _link = '.nk-menu-link, .menu-link, .nav-link',
+    var _link = '.nk-menu-link',
         _currentURL = window.location.href,
         fileName = _currentURL.substring(0, _currentURL.indexOf("#") == -1 ? _currentURL.length : _currentURL.indexOf("#")),
         fileName = fileName.substring(0, fileName.indexOf("?") == -1 ? fileName.length : fileName.indexOf("?"));
+
+    // Remove all active classes first
+    $('.nk-menu-item').removeClass('active current-page');
+    $('.nk-menu-sub').css('display', 'none');
 
     $(_link).each(function () {
       var self = $(this),
           _self_link = self.attr('href');
 
-      if (fileName.match(_self_link)) {
-        self.closest("li").addClass('active current-page').parents().closest("li").addClass("active current-page");
-        self.closest("li").children('.nk-menu-sub').css('display', 'block');
-        self.parents().closest("li").children('.nk-menu-sub').css('display', 'block');
-      } else {
-        self.closest("li").removeClass('active current-page').parents().closest("li:not(.current-page)").removeClass("active");
+      // Only activate if exact match
+      if (fileName === _self_link) {
+        self.closest("li").addClass('active current-page');
+        // Show parent submenu if this is a submenu item
+        self.closest('.nk-menu-sub').css('display', 'block');
+        // Add active class to parent menu item
+        self.closest('.nk-menu-sub').closest('.nk-menu-item').addClass('active');
       }
     });
-  }; // PasswordSwitch @v1.0
+  };
 
 
   NioApp.PassSwitch = function () {
