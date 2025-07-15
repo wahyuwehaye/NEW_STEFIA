@@ -25,7 +25,7 @@
                 @enderror
             </div>
 
-            <button type="submit" class="btn btn-red w-full" style="display: block !important; visibility: visible !important;">Kirim Link Reset</button>
+            <button type="submit" class="btn btn-red w-full">Kirim Link Reset</button>
 
             <div class="text-center text-sm">
                 <a href="{{ route('login') }}" class="link">Kembali ke Masuk</a>

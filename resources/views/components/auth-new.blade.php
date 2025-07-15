@@ -41,7 +41,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1f2937 0%, #374151 25%, #4b5563 50%, #6b7280 75%, #9ca3af 100%);
             background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            animation: gradientShift 8s ease infinite;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -392,6 +392,46 @@
         .btn-red:hover {
             box-shadow: 0 8px 25px rgba(220, 38, 38, 0.5);
         }
+        
+        /* CRITICAL FIX: Ensure buttons are always visible */
+        .btn, .btn-red {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 1000 !important;
+            position: relative !important;
+            margin: 1rem 0 !important;
+            min-height: 50px !important;
+            line-height: 50px !important;
+            text-align: center !important;
+        }
+        
+        /* Force button to be visible on all forms */
+        button[type="submit"], .btn[type="submit"] {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 1001 !important;
+            background: var(--stefia-gradient) !important;
+            color: white !important;
+            border: none !important;
+            width: 100% !important;
+        }
+        
+        /* Simplify animations to improve performance */
+        .auth-container {
+            animation: none !important;
+            transition: none !important;
+        }
+        
+        /* Reduce particle count for better performance */
+        .particle {
+            animation-duration: 4s !important;
+        }
+        
+        .network-line {
+            animation-duration: 3s !important;
+        }
 
         @media (max-width: 768px) {
             .form-grid {
@@ -504,29 +544,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     
     <script>
-        // Show container immediately
+        // Performance optimization flags
+        let animationsInitialized = false;
+        
+        // Show container immediately and ensure buttons are visible
         document.addEventListener('DOMContentLoaded', function() {
             const authContainer = document.querySelector('.auth-container');
             if (authContainer) {
                 authContainer.classList.add('loaded');
             }
             
-            // Initialize animations with delay for better performance
+            // Force buttons to be visible immediately
+            const buttons = document.querySelectorAll('button, .btn');
+            buttons.forEach(btn => {
+                btn.style.display = 'block';
+                btn.style.visibility = 'visible';
+                btn.style.opacity = '1';
+                btn.style.zIndex = '1000';
+            });
+            
+            // Initialize lightweight animations only
             setTimeout(() => {
-                // Initialize only one heavy animation at a time
-                initParticles();
-                
-                setTimeout(() => {
-                    initThreeBackground();
-                }, 500);
-                
-                setTimeout(() => {
-                    initNetworkAnimation();
-                }, 1000);
-                
-                // Initialize GSAP Animations
-                initGSAPAnimations();
-            }, 100);
+                if (!animationsInitialized) {
+                    initLightweightAnimations();
+                    animationsInitialized = true;
+                }
+            }, 200);
             
             // Password toggle functionality
             const toggleButtons = document.querySelectorAll('.toggle-password');
@@ -756,6 +799,50 @@
                 },
                 retina_detect: true
             });
+        }
+        
+        // Lightweight animations for better performance
+        function initLightweightAnimations() {
+            // Only initialize particles with reduced count
+            if (typeof particlesJS !== 'undefined') {
+                const particlesContainer = document.getElementById('floating-particles');
+                if (particlesContainer) {
+                    particlesJS('floating-particles', {
+                        particles: {
+                            number: { value: 15, density: { enable: true, value_area: 1000 } },
+                            color: { value: '#dc2626' },
+                            shape: { type: 'circle' },
+                            opacity: { value: 0.2, random: false },
+                            size: { value: 1, random: true },
+                            line_linked: {
+                                enable: true,
+                                distance: 80,
+                                color: '#dc2626',
+                                opacity: 0.15,
+                                width: 0.5
+                            },
+                            move: {
+                                enable: true,
+                                speed: 1,
+                                direction: 'none',
+                                random: false,
+                                straight: false,
+                                out_mode: 'out',
+                                bounce: false
+                            }
+                        },
+                        interactivity: {
+                            detect_on: 'canvas',
+                            events: {
+                                onhover: { enable: false },
+                                onclick: { enable: false },
+                                resize: true
+                            }
+                        },
+                        retina_detect: false
+                    });
+                }
+            }
         }
         
         // GSAP Animations
