@@ -105,17 +105,33 @@
         }
 
         .auth-container {
-            background: rgba(31, 41, 55, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            background: rgba(31, 41, 55, 0.92);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(220, 38, 38, 0.1);
             padding: 3rem;
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             position: relative;
-            z-index: 1;
-            animation: slideInUp 0.8s ease-out;
+            z-index: 10;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .auth-container.wide {
+            max-width: 800px;
+        }
+        
+        .auth-container.loading {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+        
+        .auth-container.loaded {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         @keyframes slideInUp {
@@ -304,6 +320,91 @@
             margin-top: 0.5rem;
         }
 
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-check-input {
+            margin-right: 0.5rem;
+            accent-color: var(--stefia-primary);
+        }
+
+        .form-check-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .alert {
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            color: #fca5a5;
+            font-size: 0.9rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        /* Two-column layout for register form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-grid .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-grid .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Enhanced visibility */
+        .input-field {
+            background: rgba(255, 255, 255, 0.12);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: var(--stefia-accent);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15), 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-red {
+            background: var(--stefia-gradient);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-red:hover {
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-options {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+        }
+
         .footer-links {
             text-align: center;
             margin-top: 2rem;
@@ -360,6 +461,15 @@
         <div class="network-line" style="left: 25%; bottom: 15%; transform: rotate(60deg);"></div>
         <div class="network-line" style="right: 30%; bottom: 25%; transform: rotate(-45deg);"></div>
     </div>
+    
+    <!-- Three.js 3D Background -->
+    <div class="three-background" id="three-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; pointer-events: none;"></div>
+    
+    <!-- Network Animation -->
+    <div class="network-animation" id="network-animation" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;"></div>
+    
+    <!-- Floating Particles -->
+    <div class="floating-particles" id="floating-particles" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;"></div>
 
     <div class="auth-container">
         <div class="auth-logo">
@@ -388,10 +498,37 @@
     <!-- Scripts -->
     <script src="{{ asset('js/bundle.js') }}"></script>
     <script src="{{ asset('js/scripts.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     
     <script>
-        // Password toggle functionality
+        // Show container immediately
         document.addEventListener('DOMContentLoaded', function() {
+            const authContainer = document.querySelector('.auth-container');
+            if (authContainer) {
+                authContainer.classList.add('loaded');
+            }
+            
+            // Initialize animations with delay for better performance
+            setTimeout(() => {
+                // Initialize only one heavy animation at a time
+                initParticles();
+                
+                setTimeout(() => {
+                    initThreeBackground();
+                }, 500);
+                
+                setTimeout(() => {
+                    initNetworkAnimation();
+                }, 1000);
+                
+                // Initialize GSAP Animations
+                initGSAPAnimations();
+            }, 100);
+            
+            // Password toggle functionality
             const toggleButtons = document.querySelectorAll('.toggle-password');
             
             toggleButtons.forEach(button => {
@@ -402,18 +539,295 @@
                     const targetInput = document.getElementById(targetId);
                     const icon = this.querySelector('i');
                     
-                    if (targetInput.type === 'password') {
-                        targetInput.type = 'text';
-                        icon.classList.remove('ni-eye');
-                        icon.classList.add('ni-eye-off');
-                    } else {
-                        targetInput.type = 'password';
-                        icon.classList.remove('ni-eye-off');
-                        icon.classList.add('ni-eye');
+                    if (targetInput && icon) {
+                        if (targetInput.type === 'password') {
+                            targetInput.type = 'text';
+                            icon.classList.remove('ni-eye');
+                            icon.classList.add('ni-eye-off');
+                        } else {
+                            targetInput.type = 'password';
+                            icon.classList.remove('ni-eye-off');
+                            icon.classList.add('ni-eye');
+                        }
                     }
                 });
             });
         });
+        
+        // Three.js 3D Background
+        function initThreeBackground() {
+            const canvas = document.getElementById('three-canvas');
+            if (!canvas) return;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.domElement.style.position = 'fixed';
+            renderer.domElement.style.top = '0';
+            renderer.domElement.style.left = '0';
+            renderer.domElement.style.zIndex = '-3';
+            renderer.domElement.style.pointerEvents = 'none';
+            canvas.appendChild(renderer.domElement);
+            
+            // Create geometric shapes
+            const geometries = [
+                new THREE.BoxGeometry(1, 1, 1),
+                new THREE.ConeGeometry(0.5, 1, 8),
+                new THREE.SphereGeometry(0.5, 32, 32),
+                new THREE.OctahedronGeometry(0.5)
+            ];
+            
+            const materials = [
+                new THREE.MeshBasicMaterial({ color: 0xdc2626, wireframe: true }),
+                new THREE.MeshBasicMaterial({ color: 0xef4444, wireframe: true }),
+                new THREE.MeshBasicMaterial({ color: 0xf87171, wireframe: true }),
+                new THREE.MeshBasicMaterial({ color: 0xfca5a5, wireframe: true })
+            ];
+            
+            const meshes = [];
+            for (let i = 0; i < 12; i++) {
+                const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+                const material = materials[Math.floor(Math.random() * materials.length)];
+                const mesh = new THREE.Mesh(geometry, material);
+                
+                mesh.position.x = (Math.random() - 0.5) * 20;
+                mesh.position.y = (Math.random() - 0.5) * 20;
+                mesh.position.z = (Math.random() - 0.5) * 20;
+                
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.rotation.y = Math.random() * Math.PI;
+                
+                scene.add(mesh);
+                meshes.push(mesh);
+            }
+            
+            camera.position.z = 5;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                meshes.forEach(mesh => {
+                    mesh.rotation.x += 0.008;
+                    mesh.rotation.y += 0.008;
+                    mesh.position.y += Math.sin(Date.now() * 0.001) * 0.008;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Resize handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        // Network Animation
+        function initNetworkAnimation() {
+            const networkContainer = document.getElementById('network-animation');
+            if (!networkContainer) return;
+            
+            const nodes = [];
+            
+            // Create nodes
+            for (let i = 0; i < 15; i++) {
+                const node = document.createElement('div');
+                node.className = 'network-node';
+                node.style.position = 'absolute';
+                node.style.width = '4px';
+                node.style.height = '4px';
+                node.style.background = '#dc2626';
+                node.style.borderRadius = '50%';
+                node.style.boxShadow = '0 0 8px rgba(220, 38, 38, 0.6)';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                networkContainer.appendChild(node);
+                nodes.push({
+                    element: node,
+                    x: Math.random() * 100,
+                    y: Math.random() * 100,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3
+                });
+            }
+            
+            // Create connections (SVG lines)
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.style.position = 'absolute';
+            svg.style.top = '0';
+            svg.style.left = '0';
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+            svg.style.pointerEvents = 'none';
+            networkContainer.appendChild(svg);
+            
+            function animateNetwork() {
+                // Clear existing connections
+                svg.innerHTML = '';
+                
+                // Update node positions
+                nodes.forEach(node => {
+                    node.x += node.vx;
+                    node.y += node.vy;
+                    
+                    // Bounce off edges
+                    if (node.x <= 0 || node.x >= 100) node.vx *= -1;
+                    if (node.y <= 0 || node.y >= 100) node.vy *= -1;
+                    
+                    node.element.style.left = node.x + '%';
+                    node.element.style.top = node.y + '%';
+                });
+                
+                // Draw connections
+                nodes.forEach((node1, i) => {
+                    nodes.slice(i + 1).forEach(node2 => {
+                        const distance = Math.sqrt(
+                            Math.pow(node1.x - node2.x, 2) + Math.pow(node1.y - node2.y, 2)
+                        );
+                        
+                        if (distance < 25) {
+                            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line.setAttribute('x1', node1.x + '%');
+                            line.setAttribute('y1', node1.y + '%');
+                            line.setAttribute('x2', node2.x + '%');
+                            line.setAttribute('y2', node2.y + '%');
+                            line.setAttribute('stroke', '#dc2626');
+                            line.setAttribute('stroke-width', '0.5');
+                            line.setAttribute('opacity', Math.max(0.1, 1 - distance / 25));
+                            svg.appendChild(line);
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(animateNetwork);
+            }
+            
+            animateNetwork();
+        }
+        
+        // Particles.js initialization
+        function initParticles() {
+            const particlesContainer = document.getElementById('floating-particles');
+            if (!particlesContainer) return;
+            
+            particlesJS('floating-particles', {
+                particles: {
+                    number: { value: 30, density: { enable: true, value_area: 800 } },
+                    color: { value: '#dc2626' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.3, random: false },
+                    size: { value: 2, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 100,
+                        color: '#dc2626',
+                        opacity: 0.2,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: 'none',
+                        random: false,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: true, mode: 'repulse' },
+                        onclick: { enable: true, mode: 'push' },
+                        resize: true
+                    },
+                    modes: {
+                        grab: { distance: 200, line_linked: { opacity: 1 } },
+                        bubble: { distance: 200, size: 20, duration: 2, opacity: 6, speed: 2 },
+                        repulse: { distance: 100, duration: 0.3 },
+                        push: { particles_nb: 2 },
+                        remove: { particles_nb: 1 }
+                    }
+                },
+                retina_detect: true
+            });
+        }
+        
+        // GSAP Animations
+        function initGSAPAnimations() {
+            // Auth container animation
+            gsap.from('.auth-container', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                ease: 'power3.out',
+                delay: 0.3
+            });
+            
+            // Logo animation
+            gsap.from('.auth-logo img', {
+                duration: 1.2,
+                scale: 0.8,
+                opacity: 0,
+                ease: 'back.out(1.7)',
+                delay: 0.5
+            });
+            
+            // Title animation
+            gsap.from('.auth-title', {
+                duration: 1,
+                y: 30,
+                opacity: 0,
+                ease: 'power2.out',
+                delay: 0.7
+            });
+            
+            // Input fields animation
+            gsap.from('.input-group', {
+                duration: 0.8,
+                y: 20,
+                opacity: 0,
+                stagger: 0.1,
+                ease: 'power2.out',
+                delay: 0.9
+            });
+            
+            // Button animation
+            gsap.from('.btn', {
+                duration: 0.8,
+                scale: 0.9,
+                opacity: 0,
+                ease: 'back.out(1.7)',
+                delay: 1.2
+            });
+            
+            // Input focus animations
+            document.querySelectorAll('.input-field').forEach(input => {
+                input.addEventListener('focus', () => {
+                    gsap.to(input, { duration: 0.3, scale: 1.02, ease: 'power2.out' });
+                });
+                
+                input.addEventListener('blur', () => {
+                    gsap.to(input, { duration: 0.3, scale: 1, ease: 'power2.out' });
+                });
+            });
+            
+            // Button hover animations
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseenter', () => {
+                    gsap.to(btn, { duration: 0.3, y: -2, ease: 'power2.out' });
+                });
+                
+                btn.addEventListener('mouseleave', () => {
+                    gsap.to(btn, { duration: 0.3, y: 0, ease: 'power2.out' });
+                });
+            });
+        }
     </script>
     
     @stack('scripts')

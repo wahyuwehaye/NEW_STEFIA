@@ -9,17 +9,23 @@
             </div>
 
             <!-- Session Status -->
-            <x-auth-session-status class="mb-4" :status="session('status')" />
+            @if (session('status'))
+                <div class="alert mb-4">
+                    {{ session('status') }}
+                </div>
+            @endif
 
             <!-- Email -->
             <div class="input-group">
                 <label for="email" class="input-label">Email</label>
                 <span class="input-icon ni ni-mail"></span>
                 <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus placeholder="Masukkan alamat email Anda" class="input-field">
-                <x-input-error :messages="$errors->get('email')" class="input-error" />
+                @error('email')
+                    <div class="input-error">{{ $message }}</div>
+                @enderror
             </div>
 
-            <button type="submit" class="btn btn-red w-full">Kirim Link Reset</button>
+            <button type="submit" class="btn btn-red w-full" style="display: block !important; visibility: visible !important;">Kirim Link Reset</button>
 
             <div class="text-center text-sm">
                 <a href="{{ route('login') }}" class="link">Kembali ke Masuk</a>

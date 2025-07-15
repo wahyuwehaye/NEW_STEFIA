@@ -43,6 +43,9 @@
     <!-- Custom Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- Custom Select Dropdown Styles -->
+    <link rel="stylesheet" href="{{ asset('css/custom-select.css') }}">
+    
     @stack('styles')
     
     <style>
@@ -394,6 +397,9 @@
     
     <!-- Modern Dashboard Scripts -->
     @vite(['resources/js/app.js'])
+    
+    <!-- Custom Select JavaScript -->
+    <script src="{{ asset('js/custom-select.js') }}"></script>
     
     @stack('scripts')
 </body>

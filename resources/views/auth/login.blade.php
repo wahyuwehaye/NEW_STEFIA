@@ -1,82 +1,62 @@
-@extends('layouts.auth-new')
-
-@section('title', 'Sign-In')
-
-@section('content')
-    <div class="auth-title">Sign-In</div>
-    <div class="auth-subtitle">Akses panel STEFIA menggunakan email dan password Anda.</div>
-
-    <!-- Session Status -->
-    @if (session('status'))
-        <div class="alert">
-            {{ session('status') }}
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('login') }}">
+<x-auth-new title="Sign-In">
+    <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
-        <!-- Email Address -->
-        <div class="form-group">
-            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="Email atau Username">
-            <div class="input-icon">
-                <em class="icon ni ni-mail"></em>
+        <div class="auth-content">
+            <div class="auth-header">
+                <h1 class="auth-title text-2xl">Sign-In</h1>
+                <p class="auth-description">Akses panel STEFIA menggunakan email dan password Anda.</p>
             </div>
-            @error('email')
-                <div class="alert mt-2">{{ $message }}</div>
-            @enderror
-        </div>
 
-        <!-- Password -->
-        <div class="form-group">
-            <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password" placeholder="Password">
-            <div class="input-icon" onclick="togglePassword()">
-                <em class="icon ni ni-eye" id="toggleIcon"></em>
+            <!-- Session Status -->
+            @if (session('status'))
+                <div class="alert mb-4">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            <!-- Email Address -->
+            <div class="input-group">
+                <label for="email" class="input-label">Email atau Username</label>
+                <span class="input-icon ni ni-mail"></span>
+                <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="Masukkan email atau username Anda" class="input-field">
+                @error('email')
+                    <div class="input-error">{{ $message }}</div>
+                @enderror
             </div>
-            @error('password')
-                <div class="alert mt-2">{{ $message }}</div>
-            @enderror
-        </div>
 
-        <!-- Remember Me and Forgot Password -->
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="remember_me" name="remember">
-            <label class="form-check-label" for="remember_me">Ingat saya</label>
-        </div>
-        
-        @if (Route::has('password.request'))
-            <a class="forgot-link" href="{{ route('password.request') }}">Lupa Password?</a>
-        @endif
+            <!-- Password -->
+            <div class="input-group">
+                <label for="password" class="input-label">Password</label>
+                <span class="input-icon ni ni-lock"></span>
+                <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Masukkan password Anda" class="input-field">
+                <a href="#" class="toggle-password" data-target="password"><i class="ni ni-eye"></i></a>
+                @error('password')
+                    <div class="input-error">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <button type="submit" class="btn-auth">
-            <em class="icon ni ni-signin"></em>
-            Sign In
-        </button>
+            <!-- Remember Me and Forgot Password -->
+            <div class="form-options">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="remember_me" name="remember">
+                    <label class="form-check-label" for="remember_me">Ingat saya</label>
+                </div>
+                
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="link">Lupa Password?</a>
+                @endif
+            </div>
+
+            <button type="submit" class="btn btn-red w-full">
+                <em class="icon ni ni-signin"></em>
+                Sign In
+            </button>
+
+            <div class="text-center text-sm">
+                Baru di platform kami? 
+                <a href="{{ route('register') }}" class="link">Buat akun</a>
+            </div>
+        </div>
     </form>
-
-    <div class="divider">
-        <span>ATAU</span>
-    </div>
-
-    <div class="auth-footer">
-        Baru di platform kami? 
-        <a href="{{ route('register') }}">Buat akun</a>
-    </div>
-@endsection
-
-@push('scripts')
-<script>
-    function togglePassword() {
-        const passwordInput = document.getElementById('password');
-        const toggleIcon = document.getElementById('toggleIcon');
-        
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            toggleIcon.className = 'icon ni ni-eye-off';
-        } else {
-            passwordInput.type = 'password';
-            toggleIcon.className = 'icon ni ni-eye';
-        }
-    }
-</script>
-@endpush
+</x-auth-new>

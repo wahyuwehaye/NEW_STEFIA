@@ -4,26 +4,21 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="section section-hero bg-primary" id="home">
+<section class="section section-hero bg-primary min-vh-75" id="home">
     <div class="container">
-        <div class="row align-items-center justify-content-between">
-            <div class="col-lg-6">
-                <div class="hero-content">
-                    <h1 class="hero-title">
-                        Welcome to <span class="text-primary">STEFIA</span>
-                    </h1>
-                    <p class="hero-text">
-                        Student Financial Information & Administration System - Your complete solution for managing student finances, scholarships, and administrative tasks.
-                    </p>
-                    <div class="hero-action">
-                        <a href="{{ route('register') }}" class="btn btn-lg btn-primary">Get Started</a>
-                        <a href="#features" class="btn btn-lg btn-outline-primary">Learn More</a>
-                    </div>
+        <div class="row align-items-center justify-content-center text-center">
+            <div class="col-lg-8">
+                <div class="logo-container">
+                    <img src="{{ asset('images/logo.png') }}" alt="STEFIA Logo" class="hero-logo">
                 </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="hero-image">
-                    <img src="{{ asset('assets/images/slides/slide-a.jpg') }}" alt="STEFIA Dashboard" class="img-fluid">
+                <h1 class="hero-title">STEFIA</h1>
+                <p class="hero-subtitle">Student Financial Information & Administration</p>
+                <p class="hero-text mb-4">
+                    Sistem manajemen piutang mahasiswa yang terintegrasi dengan iGracias untuk mempermudah pengelolaan dan pelaporan keuangan mahasiswa serta pemantauan status penagihan secara sistematis.
+                </p>
+                <div class="hero-actions">
+                    <a href="{{ route('register') }}" class="btn btn-lg btn-white me-3">Mulai Sekarang</a>
+                    <a href="#features" class="btn btn-lg btn-outline-white">Pelajari Lebih Lanjut</a>
                 </div>
             </div>
         </div>
@@ -31,83 +26,71 @@
 </section>
 
 <!-- Features Section -->
-<section class="section section-features" id="features">
+<section class="section fade-in" id="features">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="section-head text-center">
-                    <h2 class="title">Why Choose STEFIA?</h2>
-                    <p class="text">
-                        Discover the powerful features that make STEFIA the perfect choice for managing student financial information.
+                <div class="text-center mb-5">
+                    <h2 class="section-title">Fitur Unggulan STEFIA</h2>
+                    <p class="section-subtitle">
+                        Kelola piutang mahasiswa dengan mudah dan efisien melalui integrasi sistem yang canggih
                     </p>
                 </div>
             </div>
         </div>
-        <div class="row g-gs">
+        <div class="row g-4">
             <div class="col-lg-4 col-md-6">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <em class="icon ni ni-user-list"></em>
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-users text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="feature-content">
-                        <h4>Student Management</h4>
-                        <p>Comprehensive student database with detailed profiles, enrollment tracking, and academic progress monitoring.</p>
-                    </div>
+                    <h4 class="feature-title text-gradient">Manajemen Mahasiswa</h4>
+                    <p class="feature-text">Kelola data mahasiswa lengkap dengan import dari Excel/CSV dan integrasi iGracias. Pencarian berdasarkan nama, NIM, jurusan, angkatan, dan range piutang.</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <em class="icon ni ni-wallet"></em>
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-wallet text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="feature-content">
-                        <h4>Financial Management</h4>
-                        <p>Complete financial tracking with payment processing, invoice generation, and comprehensive reporting.</p>
-                    </div>
+                    <h4 class="feature-title text-gradient">Manajemen Piutang</h4>
+                    <p class="feature-text">Input dan update status piutang (lunas/sebagian/tunggakan) dengan integrasi otomatis dari API iGracias. Riwayat piutang per mahasiswa tersedia lengkap.</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <em class="icon ni ni-award"></em>
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-credit-card text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="feature-content">
-                        <h4>Scholarship Management</h4>
-                        <p>Streamlined scholarship application process with automated eligibility checking and disbursement tracking.</p>
-                    </div>
+                    <h4 class="feature-title text-gradient">Manajemen Pembayaran</h4>
+                    <p class="feature-text">Input pembayaran manual dan integrasi dengan iGracias. Auto-update status piutang setelah verifikasi pembayaran dengan sinkronisasi real-time.</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <em class="icon ni ni-coin"></em>
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-bar-chart text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="feature-content">
-                        <h4>Fee Management</h4>
-                        <p>Automated fee calculation, payment reminders, and flexible payment plans for all student fees.</p>
-                    </div>
+                    <h4 class="feature-title text-gradient">Dashboard & Statistik</h4>
+                    <p class="feature-text">Statistik piutang aktif, lunas, dan tunggakan. Daftar mahasiswa dengan tunggakan >10 juta. Grafik tren pembayaran per semester dan tahun.</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <em class="icon ni ni-bar-chart"></em>
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-file-text text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="feature-content">
-                        <h4>Advanced Reporting</h4>
-                        <p>Detailed analytics and reports for financial insights, student performance, and institutional metrics.</p>
-                    </div>
+                    <h4 class="feature-title text-gradient">Laporan & Ekspor</h4>
+                    <p class="feature-text">Laporan bulanan dengan filter lengkap (tanggal, jurusan, angkatan, status). Ekspor ke PDF/Excel. Filter berdasarkan semester menunggak dan jumlah piutang.</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <em class="icon ni ni-shield-check"></em>
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-shield-check text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="feature-content">
-                        <h4>Secure & Reliable</h4>
-                        <p>Enterprise-grade security with data encryption, backup systems, and role-based access control.</p>
-                    </div>
+                    <h4 class="feature-title text-gradient">Keamanan & Akses</h4>
+                    <p class="feature-text">Role-based access untuk Admin Keuangan dan Super Admin. Log aktivitas pengguna lengkap. Approval system untuk registrasi user baru.</p>
                 </div>
             </div>
         </div>
@@ -115,50 +98,60 @@
 </section>
 
 <!-- Stats Section -->
-<section class="section section-stats bg-light">
+<section class="section fade-in">
     <div class="container">
-        <div class="row g-gs">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h2 class="section-title">STEFIA dalam Angka</h2>
+                    <p class="section-subtitle">
+                        Sistem yang telah dipercaya untuk mengelola keuangan mahasiswa
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4">
             <div class="col-lg-3 col-sm-6">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <em class="icon ni ni-user"></em>
+                <div class="portal-card bg-success-soft">
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-users text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="stat-content">
-                        <h3 class="stat-number">2,568</h3>
-                        <p class="stat-text">Active Students</p>
+                    <div class="text-center">
+                        <h3 class="text-gradient" style="font-size: 2.5rem; font-weight: 700;">25,000+</h3>
+                        <p class="feature-text">Data Mahasiswa</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-6">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <em class="icon ni ni-building"></em>
+                <div class="portal-card bg-info-soft">
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-wallet text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="stat-content">
-                        <h3 class="stat-number">150</h3>
-                        <p class="stat-text">Institutions</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <em class="icon ni ni-award"></em>
-                    </div>
-                    <div class="stat-content">
-                        <h3 class="stat-number">486</h3>
-                        <p class="stat-text">Scholarships</p>
+                    <div class="text-center">
+                        <h3 class="text-gradient" style="font-size: 2.5rem; font-weight: 700;">15 Milyar</h3>
+                        <p class="feature-text">Total Piutang Dikelola</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-6">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <em class="icon ni ni-wallet"></em>
+                <div class="portal-card bg-primary-soft">
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-bar-chart text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="stat-content">
-                        <h3 class="stat-number">$2.5M</h3>
-                        <p class="stat-text">Managed Funds</p>
+                    <div class="text-center">
+                        <h3 class="text-gradient" style="font-size: 2.5rem; font-weight: 700;">95%</h3>
+                        <p class="feature-text">Akurasi Laporan</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="portal-card bg-success-soft">
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-shield-check text-white" style="font-size: 2rem;"></em>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-gradient" style="font-size: 2.5rem; font-weight: 700;">99.9%</h3>
+                        <p class="feature-text">Uptime Sistem</p>
                     </div>
                 </div>
             </div>
@@ -167,38 +160,46 @@
 </section>
 
 <!-- About Section -->
-<section class="section section-about" id="about">
+<section class="section fade-in" id="about">
     <div class="container">
         <div class="row align-items-center justify-content-between">
             <div class="col-lg-6">
                 <div class="about-content">
-                    <h2 class="title">About STEFIA</h2>
-                    <p>
-                        STEFIA is a comprehensive Student Financial Information & Administration System designed to streamline educational financial management. Our platform brings together all aspects of student finance management into one unified solution.
+                    <h2 class="section-title">Tentang STEFIA</h2>
+                    <p class="feature-text mb-4">
+                        STEFIA (Student Financial Information & Administration) adalah sistem manajemen piutang mahasiswa yang terintegrasi dengan iGracias. Dirancang khusus untuk mempermudah pengelolaan dan pelaporan keuangan mahasiswa serta pemantauan status penagihan secara sistematis.
                     </p>
                     <div class="about-features">
                         <div class="feature-item">
-                            <em class="icon ni ni-check-circle"></em>
-                            <span>Complete student financial tracking</span>
+                            <em class="icon ni ni-check-circle text-gradient"></em>
+                            <span class="feature-text">Integrasi penuh dengan sistem iGracias</span>
                         </div>
                         <div class="feature-item">
-                            <em class="icon ni ni-check-circle"></em>
-                            <span>Automated scholarship management</span>
+                            <em class="icon ni ni-check-circle text-gradient"></em>
+                            <span class="feature-text">Pemantauan piutang mahasiswa real-time</span>
                         </div>
                         <div class="feature-item">
-                            <em class="icon ni ni-check-circle"></em>
-                            <span>Real-time financial reporting</span>
+                            <em class="icon ni ni-check-circle text-gradient"></em>
+                            <span class="feature-text">Laporan penagihan tunggakan >10 juta</span>
                         </div>
                         <div class="feature-item">
-                            <em class="icon ni ni-check-circle"></em>
-                            <span>Secure payment processing</span>
+                            <em class="icon ni ni-check-circle text-gradient"></em>
+                            <span class="feature-text">Reminder otomatis email/WhatsApp</span>
+                        </div>
+                        <div class="feature-item">
+                            <em class="icon ni ni-check-circle text-gradient"></em>
+                            <span class="feature-text">Tracking tindakan penagihan (NDE, Dosen Wali, Surat, Home Visit)</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-5">
-                <div class="about-image">
-                    <img src="{{ asset('assets/images/slides/slide-b.jpg') }}" alt="About STEFIA" class="img-fluid">
+                <div class="portal-card bg-primary-soft">
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-building text-white" style="font-size: 2rem;"></em>
+                    </div>
+                    <h4 class="feature-title text-gradient">Portal Admin Keuangan</h4>
+                    <p class="feature-text">Akses lengkap untuk mengelola data piutang, input pembayaran, dan generate laporan keuangan mahasiswa.</p>
                 </div>
             </div>
         </div>
@@ -206,18 +207,18 @@
 </section>
 
 <!-- CTA Section -->
-<section class="section section-cta bg-primary">
+<section class="section section-hero bg-primary">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="cta-content text-center">
-                    <h2 class="title text-white">Ready to Get Started?</h2>
-                    <p class="text text-white">
-                        Join thousands of institutions already using STEFIA to manage their student financial operations efficiently.
+                <div class="text-center">
+                    <h2 class="section-title text-white">Siap Memulai dengan STEFIA?</h2>
+                    <p class="section-subtitle text-white mb-4">
+                        Bergabunglah dengan Telkom University dalam mengelola piutang mahasiswa secara efisien dan terintegrasi.
                     </p>
-                    <div class="cta-action">
-                        <a href="{{ route('register') }}" class="btn btn-lg btn-white">Start Your Journey</a>
-                        <a href="{{ route('login') }}" class="btn btn-lg btn-outline-white">Sign In</a>
+                    <div class="hero-actions">
+                        <a href="{{ route('register') }}" class="btn btn-lg btn-white me-3">Daftar Sekarang</a>
+                        <a href="{{ route('login') }}" class="btn btn-lg btn-outline-white">Masuk</a>
                     </div>
                 </div>
             </div>
@@ -226,50 +227,44 @@
 </section>
 
 <!-- Contact Section -->
-<section class="section section-contact" id="contact">
+<section class="section fade-in" id="contact">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="section-head text-center">
-                    <h2 class="title">Get in Touch</h2>
-                    <p class="text">
-                        Have questions about STEFIA? We're here to help you get started with our platform.
+                <div class="text-center mb-5">
+                    <h2 class="section-title">Hubungi Kami</h2>
+                    <p class="section-subtitle">
+                        Ada pertanyaan tentang STEFIA? Tim kami siap membantu Anda.
                     </p>
                 </div>
             </div>
         </div>
-        <div class="row g-gs">
+        <div class="row g-4">
             <div class="col-lg-4">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <em class="icon ni ni-mail"></em>
+                <div class="contact-card">
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-mail text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="contact-content">
-                        <h4>Email Support</h4>
-                        <p>support@stefia.com</p>
-                    </div>
+                    <h4 class="contact-title text-gradient">Email</h4>
+                    <p class="contact-text">finance@telkomuniversity.ac.id</p>
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <em class="icon ni ni-call"></em>
+                <div class="contact-card">
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-call text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="contact-content">
-                        <h4>Phone Support</h4>
-                        <p>+1 (555) 123-4567</p>
-                    </div>
+                    <h4 class="contact-title text-gradient">Telepon</h4>
+                    <p class="contact-text">+62 22 7566456</p>
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <em class="icon ni ni-map-pin"></em>
+                <div class="contact-card">
+                    <div class="icon-circle mb-3">
+                        <em class="icon ni ni-map-pin text-white" style="font-size: 2rem;"></em>
                     </div>
-                    <div class="contact-content">
-                        <h4>Office Location</h4>
-                        <p>123 Education St, Learning City</p>
-                    </div>
+                    <h4 class="contact-title text-gradient">Alamat</h4>
+                    <p class="contact-text">Jl. Telekomunikasi No. 1, Terusan Buah Batu, Bandung 40257</p>
                 </div>
             </div>
         </div>

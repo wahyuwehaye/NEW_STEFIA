@@ -62,3 +62,258 @@ body {
 
 // Additional Styling Overrides
 
+// Modern Select Dropdown Styling
+.form-control,
+.custom-select,
+select.form-control {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: calc(2.125rem + 2px);
+    padding: 0.4375rem 2.5rem 0.4375rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    color: #3c4d62;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%23526484' d='M6 8L2 4h8l-4 4z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 12px 12px;
+    border: 1px solid #dbdfea;
+    border-radius: 6px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    &:focus {
+        color: #3c4d62;
+        background-color: #fff;
+        border-color: #e14954;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(225, 73, 84, 0.15);
+        transform: translateY(-1px);
+    }
+
+    &:hover {
+        border-color: #c8d1dc;
+        background-color: #fafbfc;
+    }
+
+    &:disabled {
+        color: #6c757d;
+        background-color: #e9ecef;
+        border-color: #e9ecef;
+        opacity: 1;
+        cursor: not-allowed;
+    }
+
+    &.is-invalid,
+    &.error {
+        border-color: #e85347;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%23e85347' d='M6 8L2 4h8l-4 4z'/%3e%3c/svg%3e");
+        
+        &:focus {
+            border-color: #e85347;
+            box-shadow: 0 0 0 0.2rem rgba(232, 83, 71, 0.15);
+        }
+    }
+
+    &.is-valid {
+        border-color: #1ee0ac;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%231ee0ac' d='M6 8L2 4h8l-4 4z'/%3e%3c/svg%3e");
+        
+        &:focus {
+            border-color: #1ee0ac;
+            box-shadow: 0 0 0 0.2rem rgba(30, 224, 172, 0.15);
+        }
+    }
+}
+
+// Select sizes
+.form-control-sm,
+.custom-select-sm,
+select.form-control-sm {
+    height: calc(1.75rem + 2px);
+    padding: 0.25rem 2rem 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    background-position: right 0.5rem center;
+    background-size: 10px 10px;
+}
+
+.form-control-lg,
+.custom-select-lg,
+select.form-control-lg {
+    height: calc(2.625rem + 2px);
+    padding: 0.6875rem 3rem 0.6875rem 1.25rem;
+    font-size: 0.9375rem;
+    background-position: right 1rem center;
+    background-size: 14px 14px;
+}
+
+// Option styling
+.form-control option,
+.custom-select option,
+select.form-control option {
+    padding: 0.5rem 1rem;
+    color: #3c4d62;
+    background-color: #fff;
+    border: none;
+    border-radius: 0;
+    font-size: inherit;
+    font-weight: 400;
+    line-height: 1.25rem;
+
+    &:hover {
+        background-color: #f8f9fa;
+        color: #e14954;
+    }
+
+    &:checked {
+        background-color: #e14954;
+        color: #fff;
+    }
+
+    &:disabled {
+        color: #6c757d;
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+}
+
+// Multiple select
+.form-control[multiple],
+.custom-select[multiple],
+select.form-control[multiple] {
+    height: auto;
+    padding: 0.5rem 1rem;
+    background-image: none;
+    background-position: none;
+    background-size: auto;
+
+    option {
+        padding: 0.375rem 0.75rem;
+        margin: 0.125rem 0;
+        border-radius: 3px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #f1f3f4;
+        }
+
+        &:checked {
+            background-color: #e14954;
+            color: #fff;
+        }
+    }
+}
+
+// Select2 integration
+.select2-container--default .select2-selection--single {
+    height: calc(2.125rem + 2px) !important;
+    border: 1px solid #dbdfea !important;
+    border-radius: 6px !important;
+    background-color: #fff !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+
+    &:hover {
+        border-color: #c8d1dc !important;
+        background-color: #fafbfc !important;
+    }
+
+    .select2-selection__rendered {
+        color: #3c4d62 !important;
+        line-height: calc(2.125rem) !important;
+        padding-left: 1rem !important;
+        padding-right: 2.5rem !important;
+        font-size: 0.8125rem !important;
+    }
+
+    .select2-selection__arrow {
+        height: calc(2.125rem) !important;
+        right: 0.75rem !important;
+        width: 12px !important;
+
+        b {
+            border-color: #526484 transparent transparent transparent !important;
+            border-width: 6px 6px 0 6px !important;
+        }
+    }
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #e14954 !important;
+    box-shadow: 0 0 0 0.2rem rgba(225, 73, 84, 0.15) !important;
+}
+
+.select2-dropdown {
+    border: 1px solid #dbdfea !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.select2-container--default .select2-results__option {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.8125rem !important;
+    color: #3c4d62 !important;
+
+    &--highlighted {
+        background-color: #e14954 !important;
+        color: #fff !important;
+    }
+
+    &:hover {
+        background-color: #f8f9fa !important;
+        color: #e14954 !important;
+    }
+
+    &--selected {
+        background-color: #e14954 !important;
+        color: #fff !important;
+    }
+}
+
+// Dark theme support
+.is-dark {
+    .form-control,
+    .custom-select,
+    select.form-control {
+        color: #fff;
+        background-color: #364a63;
+        border-color: #526484;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%23fff' d='M6 8L2 4h8l-4 4z'/%3e%3c/svg%3e");
+
+        &:focus {
+            background-color: #364a63;
+            border-color: #e14954;
+            color: #fff;
+        }
+
+        option {
+            background-color: #364a63;
+            color: #fff;
+
+            &:hover {
+                background-color: #526484;
+            }
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 575.98px) {
+    .form-control,
+    .custom-select,
+    select.form-control {
+        font-size: 0.875rem;
+        padding: 0.5rem 2.5rem 0.5rem 1rem;
+    }
+    
+    .form-control-sm,
+    .custom-select-sm,
+    select.form-control-sm {
+        font-size: 0.8125rem;
+        padding: 0.375rem 2rem 0.375rem 0.75rem;
+    }
+}

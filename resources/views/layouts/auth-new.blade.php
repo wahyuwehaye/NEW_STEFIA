@@ -392,6 +392,15 @@
     </div>
     
     <div class="network-bg"></div>
+    
+    <!-- Three.js 3D Background -->
+    <div class="three-background" id="three-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; pointer-events: none;"></div>
+    
+    <!-- Network Animation -->
+    <div class="network-animation" id="network-animation" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;"></div>
+    
+    <!-- Floating Particles -->
+    <div class="floating-particles" id="floating-particles" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;"></div>
 
     <div class="auth-container">
         <div class="auth-logo">
