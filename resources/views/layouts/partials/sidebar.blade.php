@@ -47,8 +47,8 @@
                                     <span class="nk-menu-text">Tambah Mahasiswa</span>
                                 </a>
                             </li>
-                            <li class="nk-menu-item {{ Route::currentRouteName() === 'students.import' ? 'active' : '' }}">
-                                <a href="{{ route('students.import') }}" class="nk-menu-link">
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'students.import-form' ? 'active' : '' }}">
+                                <a href="{{ route('students.import-form') }}" class="nk-menu-link">
                                     <span class="nk-menu-text">Import Data</span>
                                 </a>
                             </li>
@@ -57,9 +57,14 @@
                                     <span class="nk-menu-text">Integrasi iGracias</span>
                                 </a>
                             </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'students.analytics' ? 'active' : '' }}">
+                                <a href="{{ route('students.analytics') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Analytics</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                    
+
                     <!-- Manajemen Piutang -->
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
@@ -208,7 +213,8 @@
                         </ul>
                     </li>
                     
-                    <!-- Manajemen Pengguna -->
+                    <!-- Manajemen Pengguna (Only for Admin) -->
+                    @if(auth()->user()->canManageUsers())
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon">
@@ -227,11 +233,13 @@
                                     <span class="nk-menu-text">Tambah Pengguna</span>
                                 </a>
                             </li>
+                            @if(auth()->user()->isSuperAdmin())
                             <li class="nk-menu-item {{ Route::currentRouteName() === 'users.roles' ? 'active' : '' }}">
                                 <a href="{{ route('users.roles') }}" class="nk-menu-link">
                                     <span class="nk-menu-text">Role & Hak Akses</span>
                                 </a>
                             </li>
+                            @endif
                             <li class="nk-menu-item {{ Route::currentRouteName() === 'users.approval' ? 'active' : '' }}">
                                 <a href="{{ route('users.approval') }}" class="nk-menu-link">
                                     <span class="nk-menu-text">Approval User Baru</span>
@@ -244,6 +252,7 @@
                             </li>
                         </ul>
                     </li>
+                    @endif
                     
                     <!-- Pengaturan Sistem -->
                     <li class="nk-menu-item has-sub">

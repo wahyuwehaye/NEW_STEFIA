@@ -149,4 +149,36 @@ class NotificationController extends Controller
 
         return response()->json($notifications);
     }
+
+    /**
+     * Email reminder management
+     */
+    public function email()
+    {
+        return view('reminders.email');
+    }
+
+    /**
+     * WhatsApp reminder management
+     */
+    public function whatsapp()
+    {
+        return view('reminders.whatsapp');
+    }
+
+    /**
+     * Schedule reminder management
+     */
+    public function schedule()
+    {
+        return view('reminders.schedule');
+    }
+
+    /**
+     * Message templates management
+     */
+    public function templates()
+    {
+        return view('reminders.templates');
+    }
 }

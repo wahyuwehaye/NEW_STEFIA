@@ -9,7 +9,7 @@
     <div class="row gy-4">
         <div class="col-md-6">
             <div class="form-group">
-                <label class="form-label" for="name">{{ __('Full Name') }}</label>
+                <label class="form-label" for="name">{{ __('Full Name') }} <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
                     @error('name')
@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label class="form-label" for="email">{{ __('Email Address') }}</label>
+                <label class="form-label" for="email">{{ __('Email Address') }} <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required autocomplete="username">
                     @error('email')
@@ -41,6 +41,61 @@
                         @endif
                     </div>
                 @endif
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-label" for="phone">{{ __('Phone Number') }}</label>
+                <div class="form-control-wrap">
+                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" autocomplete="tel">
+                    @error('phone')
+                        <span class="invalid text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-label" for="employee_id">{{ __('Employee ID') }}</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="employee_id" name="employee_id" value="{{ old('employee_id', $user->employee_id) }}" autocomplete="organization">
+                    @error('employee_id')
+                        <span class="invalid text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-label" for="department">{{ __('Department') }}</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="department" name="department" value="{{ old('department', $user->department) }}" autocomplete="organization">
+                    @error('department')
+                        <span class="invalid text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-label" for="position">{{ __('Position') }}</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="position" name="position" value="{{ old('position', $user->position) }}" autocomplete="organization-title">
+                    @error('position')
+                        <span class="invalid text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label class="form-label" for="address">{{ __('Address') }}</label>
+                <div class="form-control-wrap">
+                    <textarea class="form-control" id="address" name="address" rows="3" autocomplete="street-address">{{ old('address', $user->address) }}</textarea>
+                    @error('address')
+                        <span class="invalid text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
         </div>
     </div>

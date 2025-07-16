@@ -24,18 +24,24 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password123'),
             'email_verified_at' => now(),
             'is_active' => true,
+            'is_approved' => true,
+            'approved_at' => now(),
+            'approved_by' => 1,
         ]);
 
         // Create Admin
         User::create([
             'name' => 'Admin User',
             'email' => 'admin@stefia.com',
-            'role' => 'admin',
+            'role' => 'super_admin',
             'phone' => '+1234567891',
             'address' => 'STEFIA Office',
             'password' => Hash::make('password123'),
             'email_verified_at' => now(),
             'is_active' => true,
+            'is_approved' => true,
+            'approved_at' => now(),
+            'approved_by' => 1,
         ]);
 
         // Create Finance Officer

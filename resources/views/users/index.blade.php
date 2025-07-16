@@ -8,8 +8,8 @@
     subtitle="Kelola user dan hak akses sistem">
     <x-slot name="actions">
         <ul class="nk-block-tools g-3">
-            <li><a href="{{ route('users.pending') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-clock"></em><span>Pending Approval</span></a></li>
-            <li><a href="{{ route('users.logs') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-file-text"></em><span>Activity Logs</span></a></li>
+            <li><a href="{{ route('users.approval') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-clock"></em><span>Pending Approval</span></a></li>
+            <li><a href="{{ route('users.audit') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-file-text"></em><span>Activity Logs</span></a></li>
             <li class="nk-block-tools-opt"><a href="{{ route('users.create') }}" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Tambah User</span></a></li>
         </ul>
     </x-slot>
@@ -52,49 +52,52 @@
 <div class="nk-block">
     <div class="card card-bordered">
         <div class="card-inner">
-            <div class="row g-3 align-center">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="form-control-wrap">
-                            <select class="form-control js-select2">
-                                <option value="">Semua Status</option>
-                                <option value="active">Aktif</option>
-                                <option value="inactive">Tidak Aktif</option>
-                                <option value="pending">Pending</option>
-                            </select>
+            <form method="GET" action="{{ route('users.index') }}">
+                <div class="row g-3 align-center">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <div class="form-control-wrap">
+                                <select name="status" class="form-control js-select2">
+                                    <option value="all" {{ ($filters['status'] ?? 'all') == 'all' ? 'selected' : '' }}>Semua Status</option>
+                                    <option value="active" {{ ($filters['status'] ?? '') == 'active' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="inactive" {{ ($filters['status'] ?? '') == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">Role</label>
+                            <div class="form-control-wrap">
+                                <select name="role" class="form-control js-select2">
+                                    <option value="all" {{ ($filters['role'] ?? 'all') == 'all' ? 'selected' : '' }}>Semua Role</option>
+                                    @foreach($roles as $key => $role)
+                                        <option value="{{ $key }}" {{ ($filters['role'] ?? '') == $key ? 'selected' : '' }}>{{ $role }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">Cari</label>
+                            <div class="form-control-wrap">
+                                <input type="text" name="search" class="form-control" placeholder="Nama atau email..." value="{{ $filters['search'] ?? '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="form-control-wrap">
+                                <button type="submit" class="btn btn-primary"><em class="icon ni ni-search"></em><span>Filter</span></button>
+                                <a href="{{ route('users.index') }}" class="btn btn-light">Reset</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label class="form-label">Role</label>
-                        <div class="form-control-wrap">
-                            <select class="form-control js-select2">
-                                <option value="">Semua Role</option>
-                                <option value="super_admin">Super Admin</option>
-                                <option value="admin_keuangan">Admin Keuangan</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label class="form-label">Tanggal Bergabung</label>
-                        <div class="form-control-wrap">
-                            <input type="date" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label class="form-label">&nbsp;</label>
-                        <div class="form-control-wrap">
-                            <button class="btn btn-primary"><em class="icon ni ni-search"></em><span>Filter</span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -133,187 +136,110 @@
                     <div class="nk-tb-col nk-tb-col-tools"><span>&nbsp;</span></div>
                 </div>
                 
-                <!-- Sample User Data -->
-                <div class="nk-tb-item">
-                    <div class="nk-tb-col nk-tb-col-check">
-                        <div class="custom-control custom-control-sm custom-checkbox notext">
-                            <input type="checkbox" class="custom-control-input" id="user1">
-                            <label class="custom-control-label" for="user1"></label>
-                        </div>
-                    </div>
-                    <div class="nk-tb-col">
-                        <div class="user-card">
-                            <div class="user-avatar user-avatar-sm bg-primary">
-                                <span>SA</span>
-                            </div>
-                            <div class="user-name">
-                                <span class="tb-lead">Super Admin</span>
-                                <span class="tb-sub">Administrator</span>
+                @forelse($users as $user)
+                    <div class="nk-tb-item">
+                        <div class="nk-tb-col nk-tb-col-check">
+                            <div class="custom-control custom-control-sm custom-checkbox notext">
+                                <input type="checkbox" class="custom-control-input" id="user{{ $user->id }}">
+                                <label class="custom-control-label" for="user{{ $user->id }}"></label>
                             </div>
                         </div>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="badge badge-dot badge-danger">Super Admin</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">admin@stefia.com</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="badge badge-dot badge-success">Aktif</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">15 Jan 2025</span>
-                        <span class="tb-sub">10:30 AM</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">01 Jan 2024</span>
-                    </div>
-                    <div class="nk-tb-col nk-tb-col-tools">
-                        <ul class="nk-tb-actions gx-1 my-n1">
-                            <li>
-                                <a href="#" class="btn btn-icon btn-trigger" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Detail">
-                                    <em class="icon ni ni-eye"></em>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn btn-icon btn-trigger" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                    <em class="icon ni ni-edit"></em>
-                                </a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <ul class="link-list-opt no-bdr">
-                                        <li><a href="#"><em class="icon ni ni-shield"></em><span>Reset Password</span></a></li>
-                                        <li><a href="#"><em class="icon ni ni-activity"></em><span>Activity Log</span></a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" class="text-danger"><em class="icon ni ni-na"></em><span>Suspend</span></a></li>
-                                    </ul>
+                        <div class="nk-tb-col">
+                            <div class="user-card">
+                                <div class="user-avatar user-avatar-sm bg-{{ $user->is_active ? 'primary' : 'warning' }}">
+                                    <span>{{ strtoupper(substr($user->name, 0, 2)) }}</span>
                                 </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="nk-tb-item">
-                    <div class="nk-tb-col nk-tb-col-check">
-                        <div class="custom-control custom-control-sm custom-checkbox notext">
-                            <input type="checkbox" class="custom-control-input" id="user2">
-                            <label class="custom-control-label" for="user2"></label>
-                        </div>
-                    </div>
-                    <div class="nk-tb-col">
-                        <div class="user-card">
-                            <div class="user-avatar user-avatar-sm bg-success">
-                                <span>AK</span>
-                            </div>
-                            <div class="user-name">
-                                <span class="tb-lead">Admin Keuangan 1</span>
-                                <span class="tb-sub">Keuangan</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="badge badge-dot badge-success">Admin Keuangan</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">keuangan1@stefia.com</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="badge badge-dot badge-success">Aktif</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">15 Jan 2025</span>
-                        <span class="tb-sub">09:15 AM</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">15 Mar 2024</span>
-                    </div>
-                    <div class="nk-tb-col nk-tb-col-tools">
-                        <ul class="nk-tb-actions gx-1 my-n1">
-                            <li>
-                                <a href="#" class="btn btn-icon btn-trigger" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Detail">
-                                    <em class="icon ni ni-eye"></em>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn btn-icon btn-trigger" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                    <em class="icon ni ni-edit"></em>
-                                </a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <ul class="link-list-opt no-bdr">
-                                        <li><a href="#"><em class="icon ni ni-shield"></em><span>Reset Password</span></a></li>
-                                        <li><a href="#"><em class="icon ni ni-activity"></em><span>Activity Log</span></a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" class="text-danger"><em class="icon ni ni-na"></em><span>Suspend</span></a></li>
-                                    </ul>
+                                <div class="user-name">
+                                    <span class="tb-lead">{{ $user->name }}</span>
+                                    <span class="tb-sub">{{ $user->role_name }}</span>
                                 </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="nk-tb-item">
-                    <div class="nk-tb-col nk-tb-col-check">
-                        <div class="custom-control custom-control-sm custom-checkbox notext">
-                            <input type="checkbox" class="custom-control-input" id="user3">
-                            <label class="custom-control-label" for="user3"></label>
-                        </div>
-                    </div>
-                    <div class="nk-tb-col">
-                        <div class="user-card">
-                            <div class="user-avatar user-avatar-sm bg-warning">
-                                <span>PA</span>
-                            </div>
-                            <div class="user-name">
-                                <span class="tb-lead">Pending Admin</span>
-                                <span class="tb-sub">Menunggu Approval</span>
                             </div>
                         </div>
+                        <div class="nk-tb-col">
+                            @php
+                                $badgeColor = match($user->role) {
+                                    'super_admin' => 'danger',
+                                    'admin' => 'primary',
+                                    'finance' => 'success',
+                                    'staff' => 'info',
+                                    default => 'secondary'
+                                };
+                            @endphp
+                            <span class="badge badge-dot badge-{{ $badgeColor }}">{{ $user->role_name }}</span>
+                        </div>
+                        <div class="nk-tb-col">
+                            <span class="tb-sub">{{ $user->email }}</span>
+                        </div>
+                        <div class="nk-tb-col">
+                            <span class="badge badge-dot badge-{{ $user->is_active ? 'success' : 'warning' }}">
+                                {{ $user->is_active ? 'Aktif' : 'Tidak Aktif' }}
+                            </span>
+                        </div>
+                        <div class="nk-tb-col">
+                            @if($user->last_login_at)
+                                <span class="tb-sub">{{ $user->last_login_at->format('d M Y') }}</span>
+                                <span class="tb-sub">{{ $user->last_login_at->format('H:i') }}</span>
+                            @else
+                                <span class="tb-sub">-</span>
+                            @endif
+                        </div>
+                        <div class="nk-tb-col">
+                            <span class="tb-sub">{{ $user->created_at->format('d M Y') }}</span>
+                        </div>
+                        <div class="nk-tb-col nk-tb-col-tools">
+                            <ul class="nk-tb-actions gx-1 my-n1">
+                                <li>
+                                    <a href="{{ route('users.show', $user) }}" class="btn btn-icon btn-trigger" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Detail">
+                                        <em class="icon ni ni-eye"></em>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('users.edit', $user) }}" class="btn btn-icon btn-trigger" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                        <em class="icon ni ni-edit"></em>
+                                    </a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <ul class="link-list-opt no-bdr">
+                                            <li>
+                                                <form method="POST" action="{{ route('users.toggle-status', $user) }}" class="d-inline">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-link text-{{ $user->is_active ? 'warning' : 'success' }}">
+                                                        <em class="icon ni ni-{{ $user->is_active ? 'na' : 'check' }}"></em>
+                                                        <span>{{ $user->is_active ? 'Nonaktifkan' : 'Aktifkan' }}</span>
+                                                    </button>
+                                                </form>
+                                            </li>
+                                            <li><a href="{{ route('users.show', $user) }}"><em class="icon ni ni-activity"></em><span>Activity Log</span></a></li>
+                                            @if(auth()->user()->isSuperAdmin() && $user->id !== auth()->id())
+                                                <li class="divider"></li>
+                                                <li>
+                                                    <form method="POST" action="{{ route('users.destroy', $user) }}" class="d-inline delete-user-form">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-sm btn-link text-danger delete-user-btn" data-user-id="{{ $user->id }}" data-user-name="{{ $user->name }}">
+                                                            <em class="icon ni ni-trash"></em><span>Hapus</span>
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="nk-tb-col">
-                        <span class="badge badge-dot badge-warning">Admin Keuangan</span>
+                @empty
+                    <div class="nk-tb-item">
+                        <div class="nk-tb-col" colspan="7">
+                            <div class="text-center py-4">
+                                <em class="icon ni ni-users" style="font-size: 3rem; opacity: 0.3;"></em>
+                                <p class="text-muted">Tidak ada user yang ditemukan</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">pending@stefia.com</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="badge badge-dot badge-warning">Pending</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">-</span>
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub">12 Jan 2025</span>
-                    </div>
-                    <div class="nk-tb-col nk-tb-col-tools">
-                        <ul class="nk-tb-actions gx-1 my-n1">
-                            <li>
-                                <a href="#" class="btn btn-icon btn-trigger btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Approve">
-                                    <em class="icon ni ni-check"></em>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="btn btn-icon btn-trigger btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Reject">
-                                    <em class="icon ni ni-cross"></em>
-                                </a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <ul class="link-list-opt no-bdr">
-                                        <li><a href="#"><em class="icon ni ni-check"></em><span>Approve</span></a></li>
-                                        <li><a href="#"><em class="icon ni ni-cross"></em><span>Reject</span></a></li>
-                                        <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </div>

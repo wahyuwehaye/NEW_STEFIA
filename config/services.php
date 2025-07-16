@@ -22,6 +22,16 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+    'igracias' => [
+        'base_url' => env('IGRACIAS_API_BASE_URL'),
+        'client_id' => env('IGRACIAS_CLIENT_ID'),
+        'client_secret' => env('IGRACIAS_CLIENT_SECRET'),
+        'username' => env('IGRACIAS_USERNAME'),
+        'password' => env('IGRACIAS_PASSWORD'),
+        'timeout' => env('IGRACIAS_TIMEOUT', 30),
+        'retry_attempts' => env('IGRACIAS_RETRY_ATTEMPTS', 3),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),

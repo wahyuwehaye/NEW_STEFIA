@@ -829,6 +829,161 @@
         });
     </script>
     
+    <!-- Toast Notification Functions -->
+    <script>
+        // Toast notification functions using SweetAlert2
+        function showSuccessToast(message, title = 'Success!') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                customClass: {
+                    popup: 'colored-toast-success'
+                }
+            });
+            
+            Toast.fire({
+                icon: 'success',
+                title: title,
+                text: message
+            });
+        }
+        
+        function showErrorToast(message, title = 'Error!') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                customClass: {
+                    popup: 'colored-toast-error'
+                }
+            });
+            
+            Toast.fire({
+                icon: 'error',
+                title: title,
+                text: message
+            });
+        }
+        
+        function showWarningToast(message, title = 'Warning!') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                customClass: {
+                    popup: 'colored-toast-warning'
+                }
+            });
+            
+            Toast.fire({
+                icon: 'warning',
+                title: title,
+                text: message
+            });
+        }
+        
+        function showInfoToast(message, title = 'Info') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3500,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                customClass: {
+                    popup: 'colored-toast-info'
+                }
+            });
+            
+            Toast.fire({
+                icon: 'info',
+                title: title,
+                text: message
+            });
+        }
+        
+        // Check for flash messages from Laravel session
+        $(document).ready(function() {
+            @if(session('success'))
+                showSuccessToast('{{ session('success') }}');
+            @endif
+            
+            @if(session('error'))
+                showErrorToast('{{ session('error') }}');
+            @endif
+            
+            @if(session('warning'))
+                showWarningToast('{{ session('warning') }}');
+            @endif
+            
+            @if(session('info'))
+                showInfoToast('{{ session('info') }}');
+            @endif
+        });
+    </script>
+    
+    <!-- Custom Toast Styles -->
+    <style>
+        .colored-toast-success {
+            background-color: #22c55e !important;
+            color: white !important;
+        }
+        
+        .colored-toast-error {
+            background-color: #ef4444 !important;
+            color: white !important;
+        }
+        
+        .colored-toast-warning {
+            background-color: #f59e0b !important;
+            color: white !important;
+        }
+        
+        .colored-toast-info {
+            background-color: #06b6d4 !important;
+            color: white !important;
+        }
+        
+        .swal2-toast .swal2-title {
+            color: white !important;
+            font-weight: 600;
+        }
+        
+        .swal2-toast .swal2-html-container {
+            color: white !important;
+        }
+        
+        .swal2-toast .swal2-icon {
+            color: white !important;
+        }
+        
+        .swal2-toast .swal2-timer-progress-bar {
+            background: rgba(255, 255, 255, 0.4) !important;
+        }
+    </style>
+    
     @stack('scripts')
 </body>
 </html>

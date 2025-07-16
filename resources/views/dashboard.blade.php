@@ -47,14 +47,14 @@
                     </div>
                     <div class="data">
                         <div class="data-group">
-                            <div class="amount gradient-text">1,245</div>
+                            <div class="amount gradient-text">{{ number_format($stats['total_students']) }}</div>
                             <div class="nk-ecwg6-ck">
                                 <canvas class="ecommerce-line-chart-s3" id="totalStudents"></canvas>
                             </div>
                         </div>
                         <div class="info">
-                            <span class="change up text-success">
-                                <em class="icon ni ni-arrow-long-up"></em>4.63%
+                            <span class="change {{ $stats['students_growth'] >= 0 ? 'up text-success' : 'down text-danger' }}">
+                                <em class="icon ni ni-arrow-long-{{ $stats['students_growth'] >= 0 ? 'up' : 'down' }}"></em>{{ abs($stats['students_growth']) }}%
                             </span>
                             <span class="sub">vs last month</span>
                         </div>
@@ -78,14 +78,14 @@
                         </div>
                         <div class="data">
                             <div class="data-group">
-                                <div class="amount">Rp 2.847.950.000</div>
+                                <div class="amount">Rp {{ number_format($stats['active_receivables']) }}</div>
                                 <div class="nk-ecwg6-ck">
                                     <canvas class="ecommerce-line-chart-s3" id="activeReceivables"></canvas>
                                 </div>
                             </div>
                             <div class="info">
-                                <span class="change up text-success">
-                                    <em class="icon ni ni-arrow-long-up"></em>12.38%
+                                <span class="change {{ $stats['receivables_growth'] >= 0 ? 'up text-success' : 'down text-danger' }}">
+                                    <em class="icon ni ni-arrow-long-{{ $stats['receivables_growth'] >= 0 ? 'up' : 'down' }}"></em>{{ abs($stats['receivables_growth']) }}%
                                 </span>
                                 <span class="sub">vs last month</span>
                             </div>
