@@ -164,6 +164,47 @@
                         </div>
                     </div>
                     
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="tempat_lahir">Tempat Lahir</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" placeholder="Masukkan tempat lahir">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="tanggal_lahir">Tanggal Lahir</label>
+                            <div class="form-control-wrap">
+                                <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="gender">Jenis Kelamin</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control js-select2" id="gender" name="gender">
+                                    <option value="">Pilih Jenis Kelamin</option>
+                                    <option value="male">Laki-laki</option>
+                                    <option value="female">Perempuan</option>
+                                    <option value="other">Lainnya</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="class">Kelas (Opsional)</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="class" name="class" placeholder="Masukkan kelas">
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label class="form-label" for="alamat">Alamat</label>
@@ -218,18 +259,36 @@
                     
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="form-label" for="telepon_ortu">Telepon Orang Tua</label>
+                            <label class="form-label" for="telepon_ayah">Telepon Ayah</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="telepon_ortu" name="telepon_ortu" placeholder="Masukkan nomor telepon orang tua">
+                                <input type="text" class="form-control" id="telepon_ayah" name="telepon_ayah" placeholder="Masukkan nomor telepon ayah">
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="form-label" for="alamat_ortu">Alamat Orang Tua</label>
+                            <label class="form-label" for="telepon_ibu">Telepon Ibu</label>
                             <div class="form-control-wrap">
-                                <textarea class="form-control" id="alamat_ortu" name="alamat_ortu" rows="3" placeholder="Masukkan alamat orang tua"></textarea>
+                                <input type="text" class="form-control" id="telepon_ibu" name="telepon_ibu" placeholder="Masukkan nomor telepon ibu">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="alamat_ayah">Alamat Ayah</label>
+                            <div class="form-control-wrap">
+                                <textarea class="form-control" id="alamat_ayah" name="alamat_ayah" rows="3" placeholder="Masukkan alamat ayah"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="alamat_ibu">Alamat Ibu</label>
+                            <div class="form-control-wrap">
+                                <textarea class="form-control" id="alamat_ibu" name="alamat_ibu" rows="3" placeholder="Masukkan alamat ibu"></textarea>
                             </div>
                         </div>
                     </div>
@@ -277,7 +336,17 @@ $(document).ready(function() {
         
         if (!isValid) {
             e.preventDefault();
-            alert('Mohon lengkapi semua field yang wajib diisi!');
+            Swal.fire({
+                title: 'Form Tidak Lengkap',
+                text: 'Mohon lengkapi semua field yang wajib diisi!',
+                icon: 'warning',
+                confirmButtonText: 'OK, Mengerti',
+                customClass: {
+                    popup: 'modern-swal-popup',
+                    confirmButton: 'modern-swal-confirm'
+                },
+                buttonsStyling: false
+            });
         }
     });
 });
