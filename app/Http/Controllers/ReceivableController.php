@@ -39,14 +39,23 @@ class ReceivableController extends Controller
         ];
 
         // Recent receivables
-        $recentReceivables = Receivable::with(['student', 'fee'])
+        $recent_receivables = Receivable::with(['student', 'fee'])
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
 
         // Overdue receivables
-        $overdueReceivables = Receivable::with(['student', 'fee'])
+        $overdue_receivables = Receivable::with(['student', 'fee'])
             ->where('due_date', '<', now())
+            ->where('status', '!=', 'paid')
+            ->orderBy('due_date', 'asc')
+            ->limit(10)
+            ->get();
+
+        // Due this week
+        $due_this_week = Receivable::with(['student', 'fee'])
+            ->where('due_date', '>=', now()->startOfWeek())
+            ->where('due_date', '<=', now()->endOfWeek())
             ->where('status', '!=', 'paid')
             ->orderBy('due_date', 'asc')
             ->limit(10)
@@ -59,7 +68,7 @@ class ReceivableController extends Controller
             ->orderBy('month')
             ->get();
 
-        return view('receivables.dashboard', compact('stats', 'recentReceivables', 'overdueReceivables', 'monthlyData'));
+        return view('receivables.dashboard', compact('stats', 'recent_receivables', 'overdue_receivables', 'due_this_week', 'monthlyData'));
     }
 
     /**

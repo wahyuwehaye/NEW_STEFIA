@@ -48,4 +48,43 @@ class Receivable extends Model
     {
         return $query->where('due_date', '<', now())->where('status', '!=', 'paid');
     }
+
+    // Accessors for dashboard view
+    public function getReceivableCodeAttribute()
+    {
+        return 'RCV-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    }
+
+    public function getStatusBadgeClassAttribute()
+    {
+        switch ($this->status) {
+            case 'paid':
+                return 'success';
+            case 'overdue':
+                return 'danger';
+            case 'pending':
+                return 'warning';
+            default:
+                return 'secondary';
+        }
+    }
+
+    public function getFormattedStatusAttribute()
+    {
+        switch ($this->status) {
+            case 'paid':
+                return 'Lunas';
+            case 'overdue':
+                return 'Terlambat';
+            case 'pending':
+                return 'Pending';
+            default:
+                return ucfirst($this->status);
+        }
+    }
+
+    public function getOutstandingAmountAttribute()
+    {
+        return $this->amount - ($this->paid_amount ?? 0);
+    }
 }

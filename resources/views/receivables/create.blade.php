@@ -25,9 +25,9 @@
                             <div class="form-control-wrap">
                                 <select class="form-control js-select2" id="student_id" name="student_id" required>
                                     <option value="">Pilih Mahasiswa</option>
-                                    <option value="1">Ahmad Fauzi [2019001] - Teknik Informatika</option>
-                                    <option value="2">Siti Nurhaliza [2020002] - Sistem Informasi</option>
-                                    <option value="3">Budi Santoso [2018003] - Teknik Elektro</option>
+                                    @foreach($students as $student)
+                                        <option value="{{ $student->id }}">{{ $student->name }} [{{ $student->nim }}] - {{ $student->program ?? 'N/A' }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -35,16 +35,13 @@
                     
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="form-label" for="jenis_piutang">Jenis Piutang <span class="text-danger">*</span></label>
+                            <label class="form-label" for="fee_id">Jenis Biaya <span class="text-danger">*</span></label>
                             <div class="form-control-wrap">
-                                <select class="form-control js-select2" id="jenis_piutang" name="jenis_piutang" required>
-                                    <option value="">Pilih Jenis Piutang</option>
-                                    <option value="SPP">SPP</option>
-                                    <option value="Praktikum">Praktikum</option>
-                                    <option value="Seminar">Seminar</option>
-                                    <option value="Skripsi">Skripsi</option>
-                                    <option value="Wisuda">Wisuda</option>
-                                    <option value="Lain-lain">Lain-lain</option>
+                                <select class="form-control js-select2" id="fee_id" name="fee_id" required>
+                                    <option value="">Pilih Jenis Biaya</option>
+                                    @foreach($fees as $fee)
+                                        <option value="{{ $fee->id }}">{{ $fee->name }} - Rp {{ number_format($fee->amount, 0, ',', '.') }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -86,9 +83,9 @@
                     
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="form-label" for="jumlah">Jumlah Piutang <span class="text-danger">*</span></label>
+                            <label class="form-label" for="amount">Jumlah Piutang <span class="text-danger">*</span></label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan jumlah" required>
+                                <input type="number" class="form-control" id="amount" name="amount" placeholder="Masukkan jumlah" required>
                             </div>
                         </div>
                     </div>
@@ -104,21 +101,24 @@
                     
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="form-label" for="tanggal_jatuh_tempo">Tanggal Jatuh Tempo <span class="text-danger">*</span></label>
+                            <label class="form-label" for="due_date">Tanggal Jatuh Tempo <span class="text-danger">*</span></label>
                             <div class="form-control-wrap">
-                                <input type="date" class="form-control" id="tanggal_jatuh_tempo" name="tanggal_jatuh_tempo" required>
+                                <input type="date" class="form-control" id="due_date" name="due_date" required>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label class="form-label" for="keterangan">Keterangan</label>
+                            <label class="form-label" for="description">Keterangan</label>
                             <div class="form-control-wrap">
-                                <textarea class="form-control" id="keterangan" name="keterangan" rows="3" placeholder="Masukkan keterangan tambahan"></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Masukkan keterangan tambahan"></textarea>
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Hidden status field -->
+                    <input type="hidden" name="status" value="pending">
                     
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -147,13 +147,10 @@ $(document).ready(function() {
         minimumResultsForSearch: Infinity
     });
     
-    // Auto set today's date for tanggal_tagihan
-    $('#tanggal_tagihan').val(new Date().toISOString().split('T')[0]);
-    
     // Auto set due date 30 days from today
     var dueDate = new Date();
     dueDate.setDate(dueDate.getDate() + 30);
-    $('#tanggal_jatuh_tempo').val(dueDate.toISOString().split('T')[0]);
+    $('#due_date').val(dueDate.toISOString().split('T')[0]);
 });
 </script>
 @endpush

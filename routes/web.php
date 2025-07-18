@@ -102,7 +102,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/receivables/history-data', [ReceivableController::class, 'getHistoryData'])->name('api.receivables.history-data');
 });
 
-Route::middleware(['auth', 'user.permission:receivables.create'])->group(function () {
+// Create and store routes for receivables
+Route::middleware(['auth'])->group(function () {
     Route::get('/receivables/create', [ReceivableController::class, 'create'])->name('receivables.create');
     Route::post('/receivables', [ReceivableController::class, 'store'])->name('receivables.store');
 });
