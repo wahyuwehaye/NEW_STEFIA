@@ -28,13 +28,14 @@ class ReceivableController extends Controller
         $stats = [
             'total_receivables' => Receivable::count(),
             'total_amount' => Receivable::sum('amount'),
-            'outstanding_amount' => Receivable::where('status', '!=', 'paid')->sum('amount'),
-            'paid_amount' => Receivable::where('status', 'paid')->sum('amount'),
+            'total_outstanding' => Receivable::where('status', '!=', 'paid')->sum('amount'),
+            'total_paid' => Receivable::where('status', 'paid')->sum('amount'),
             'overdue_count' => Receivable::where('due_date', '<', now())
                 ->where('status', '!=', 'paid')
                 ->count(),
             'pending_count' => Receivable::where('status', 'pending')->count(),
             'paid_count' => Receivable::where('status', 'paid')->count(),
+            'partial_count' => 0, // For now, set to 0 since we don't have partial status
         ];
 
         // Recent receivables
