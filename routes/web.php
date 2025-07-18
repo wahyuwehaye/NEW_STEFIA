@@ -85,12 +85,21 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Receivables management
-Route::middleware(['auth', 'user.permission:receivables.view'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/receivables', [ReceivableController::class, 'index'])->name('receivables.index');
     Route::get('/receivables/{receivable}', [ReceivableController::class, 'show'])->name('receivables.show');
     Route::get('/receivables-dashboard', [ReceivableController::class, 'dashboard'])->name('receivables.dashboard');
     Route::get('/receivables-outstanding', [ReceivableController::class, 'outstanding'])->name('receivables.outstanding');
     Route::get('/receivables-history', [ReceivableController::class, 'history'])->name('receivables.history');
+    Route::get('/receivables-bulk-operations', [ReceivableController::class, 'bulkOperations'])->name('receivables.bulk-operations');
+    Route::get('/receivables-export', [ReceivableController::class, 'export'])->name('receivables.export');
+    Route::get('/receivables-sync-igracias', [ReceivableController::class, 'syncIgracias'])->name('receivables.sync-igracias');
+    Route::get('/receivables-by-student/{studentId?}', [ReceivableController::class, 'byStudent'])->name('receivables.by-student');
+    
+    // API routes for DataTables
+    Route::get('/api/receivables/data', [ReceivableController::class, 'getData'])->name('api.receivables.data');
+    Route::get('/api/receivables/outstanding-data', [ReceivableController::class, 'getOutstandingData'])->name('api.receivables.outstanding-data');
+    Route::get('/api/receivables/history-data', [ReceivableController::class, 'getHistoryData'])->name('api.receivables.history-data');
 });
 
 Route::middleware(['auth', 'user.permission:receivables.create'])->group(function () {

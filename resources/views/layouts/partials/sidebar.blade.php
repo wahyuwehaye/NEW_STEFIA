@@ -74,6 +74,11 @@
                             <span class="nk-menu-text">Manajemen Piutang</span>
                         </a>
                         <ul class="nk-menu-sub">
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'receivables.dashboard' ? 'active' : '' }}">
+                                <a href="{{ route('receivables.dashboard') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Dashboard</span>
+                                </a>
+                            </li>
                             <li class="nk-menu-item {{ Route::currentRouteName() === 'receivables.index' ? 'active' : '' }}">
                                 <a href="{{ route('receivables.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-text">Semua Piutang</span>
@@ -92,6 +97,26 @@
                             <li class="nk-menu-item {{ Route::currentRouteName() === 'receivables.history' ? 'active' : '' }}">
                                 <a href="{{ route('receivables.history') }}" class="nk-menu-link">
                                     <span class="nk-menu-text">Riwayat Piutang</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'receivables.by-student' ? 'active' : '' }}">
+                                <a href="{{ route('receivables.by-student') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Per Mahasiswa</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'receivables.bulk-operations' ? 'active' : '' }}">
+                                <a href="{{ route('receivables.bulk-operations') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Operasi Massal</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'receivables.export' ? 'active' : '' }}">
+                                <a href="{{ route('receivables.export') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Export Data</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'receivables.sync-igracias' ? 'active' : '' }}">
+                                <a href="{{ route('receivables.sync-igracias') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Sync iGracias</span>
                                 </a>
                             </li>
                         </ul>

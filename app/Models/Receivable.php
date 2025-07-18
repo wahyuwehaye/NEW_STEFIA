@@ -12,6 +12,7 @@ class Receivable extends Model
 
     protected $fillable = [
         'student_id',
+        'fee_id',
         'amount',
         'due_date',
         'status',
@@ -31,6 +32,11 @@ class Receivable extends Model
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function fee(): BelongsTo
+    {
+        return $this->belongsTo(Fee::class);
     }
 
     public function scopeActive($query)
