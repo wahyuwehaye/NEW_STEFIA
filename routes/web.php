@@ -87,7 +87,15 @@ Route::middleware(['auth'])->group(function () {
 // Receivables management
 Route::middleware(['auth'])->group(function () {
     Route::get('/receivables', [ReceivableController::class, 'index'])->name('receivables.index');
+    
+    // Specific routes must come before dynamic routes
+    Route::get('/receivables/create', [ReceivableController::class, 'create'])->name('receivables.create');
+    Route::post('/receivables', [ReceivableController::class, 'store'])->name('receivables.store');
+    
+    // Dynamic routes
     Route::get('/receivables/{receivable}', [ReceivableController::class, 'show'])->name('receivables.show');
+    
+    // Dashboard and other specific routes
     Route::get('/receivables-dashboard', [ReceivableController::class, 'dashboard'])->name('receivables.dashboard');
     Route::get('/receivables-outstanding', [ReceivableController::class, 'outstanding'])->name('receivables.outstanding');
     Route::get('/receivables-history', [ReceivableController::class, 'history'])->name('receivables.history');
@@ -100,12 +108,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/receivables/data', [ReceivableController::class, 'getData'])->name('api.receivables.data');
     Route::get('/api/receivables/outstanding-data', [ReceivableController::class, 'getOutstandingData'])->name('api.receivables.outstanding-data');
     Route::get('/api/receivables/history-data', [ReceivableController::class, 'getHistoryData'])->name('api.receivables.history-data');
-});
-
-// Create and store routes for receivables
-Route::middleware(['auth'])->group(function () {
-    Route::get('/receivables/create', [ReceivableController::class, 'create'])->name('receivables.create');
-    Route::post('/receivables', [ReceivableController::class, 'store'])->name('receivables.store');
 });
 
 Route::middleware(['auth', 'user.permission:receivables.edit'])->group(function () {
