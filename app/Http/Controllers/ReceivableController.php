@@ -24,7 +24,41 @@ class ReceivableController extends Controller
      */
     public function dashboard()
     {
-        return view('receivables.dashboard');
+        // Calculate statistics for dashboard
+        $stats = [
+            'total_receivables' => Receivable::count(),
+            'total_amount' => Receivable::sum('amount'),
+            'outstanding_amount' => Receivable::where('status', '!=', 'paid')->sum('amount'),
+            'paid_amount' => Receivable::where('status', 'paid')->sum('amount'),
+            'overdue_count' => Receivable::where('due_date', '<', now())
+                ->where('status', '!=', 'paid')
+                ->count(),
+            'pending_count' => Receivable::where('status', 'pending')->count(),
+            'paid_count' => Receivable::where('status', 'paid')->count(),
+        ];
+
+        // Recent receivables
+        $recentReceivables = Receivable::with(['student', 'fee'])
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Overdue receivables
+        $overdueReceivables = Receivable::with(['student', 'fee'])
+            ->where('due_date', '<', now())
+            ->where('status', '!=', 'paid')
+            ->orderBy('due_date', 'asc')
+            ->limit(10)
+            ->get();
+
+        // Monthly data for charts
+        $monthlyData = Receivable::selectRaw('MONTH(created_at) as month, COUNT(*) as count, SUM(amount) as total')
+            ->whereYear('created_at', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        return view('receivables.dashboard', compact('stats', 'recentReceivables', 'overdueReceivables', 'monthlyData'));
     }
 
     /**
