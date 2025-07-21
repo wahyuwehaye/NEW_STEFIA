@@ -131,6 +131,11 @@
                             <span class="nk-menu-text">Manajemen Pembayaran</span>
                         </a>
                         <ul class="nk-menu-sub">
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.dashboard' ? 'active' : '' }}">
+                                <a href="{{ route('payments.dashboard') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Dashboard</span>
+                                </a>
+                            </li>
                             <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.index' ? 'active' : '' }}">
                                 <a href="{{ route('payments.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-text">Semua Pembayaran</span>
@@ -141,14 +146,54 @@
                                     <span class="nk-menu-text">Input Pembayaran</span>
                                 </a>
                             </li>
-                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.verification' ? 'active' : '' }}">
-                                <a href="{{ route('payments.verification') }}" class="nk-menu-link">
+                            <li class="nk-menu-item {{ in_array(Route::currentRouteName(), ['payments.pending', 'payments.verification']) ? 'active' : '' }}">
+                                <a href="{{ route('payments.pending') }}" class="nk-menu-link">
                                     <span class="nk-menu-text">Verifikasi Pembayaran</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ in_array(Route::currentRouteName(), ['payments.history']) ? 'active' : '' }}">
+                                <a href="{{ route('payments.history') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Riwayat Pembayaran</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.by-student' ? 'active' : '' }}">
+                                <a href="{{ route('payments.by-student') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Pembayaran Per Mahasiswa</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.by-method' ? 'active' : '' }}">
+                                <a href="{{ route('payments.by-method') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Pembayaran Per Metode</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.analytics' ? 'active' : '' }}">
+                                <a href="{{ route('payments.analytics') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Analytics Pembayaran</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.reconciliation' ? 'active' : '' }}">
+                                <a href="{{ route('payments.reconciliation') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Rekonsiliasi Pembayaran</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.bulk-operations' ? 'active' : '' }}">
+                                <a href="{{ route('payments.bulk-operations') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Operasi Massal</span>
                                 </a>
                             </li>
                             <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.integration' ? 'active' : '' }}">
                                 <a href="{{ route('payments.integration') }}" class="nk-menu-link">
                                     <span class="nk-menu-text">Integrasi iGracias</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.reports' ? 'active' : '' }}">
+                                <a href="{{ route('payments.reports') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Laporan Pembayaran</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item {{ Route::currentRouteName() === 'payments.export' ? 'active' : '' }}">
+                                <a href="{{ route('payments.export') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">Export Data</span>
                                 </a>
                             </li>
                         </ul>
@@ -239,7 +284,7 @@
                     </li>
                     
                     <!-- Manajemen Pengguna (Only for Admin) -->
-                    @if(auth()->user()->canManageUsers())
+@if(auth()->check() && auth()->user()->canManageUsers())
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon">

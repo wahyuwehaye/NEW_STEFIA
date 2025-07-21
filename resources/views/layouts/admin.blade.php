@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="STEFIA - Student Financial Information & Administration">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="session-lifetime" content="{{ config('session.lifetime') }}">
     
     <title>@yield('title', 'Dashboard') | STEFIA</title>
     
@@ -983,6 +984,12 @@
             background: rgba(255, 255, 255, 0.4) !important;
         }
     </style>
+    
+    <!-- Authentication Utilities -->
+    <script src="{{ asset('js/auth-utils.js') }}"></script>
+    
+    <!-- Session Timeout Handler -->
+    <script src="{{ asset('js/session-timeout.js') }}"></script>
     
     @stack('scripts')
 </body>

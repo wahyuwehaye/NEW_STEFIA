@@ -3,15 +3,26 @@
 @section('title', 'Input Pembayaran')
 
 @section('content')
-<x-page-header 
-    title="Input Pembayaran" 
-    subtitle="Formulir untuk menginput pembayaran mahasiswa">
-    <x-slot name="actions">
-        <ul class="nk-block-tools g-3">
-            <li><a href="{{ route('payments.index') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-arrow-left"></em><span>Kembali</span></a></li>
-        </ul>
-    </x-slot>
-</x-page-header>
+<div class="nk-content-body">
+    <div class="nk-block-head nk-block-head-sm">
+        <div class="nk-block-between">
+            <div class="nk-block-head-content">
+                <h3 class="nk-block-title page-title">Input Pembayaran</h3>
+                <div class="nk-block-des text-soft">
+                    <p>Formulir untuk menginput pembayaran mahasiswa</p>
+                </div>
+            </div>
+            <div class="nk-block-head-content">
+                <div class="toggle-wrap nk-block-tools-toggle">
+                    <div class="toggle-expand-content" data-content="pageMenu">
+                        <ul class="nk-block-tools g-3">
+                            <li><a href="{{ route('payments.index') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-arrow-left"></em><span>Kembali</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div class="nk-block">
     <div class="card card-bordered">
@@ -200,6 +211,7 @@
             </form>
         </div>
     </div>
+</div>
 </div>
 @endsection
 

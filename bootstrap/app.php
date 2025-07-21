@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'log.activity' => \App\Http\Middleware\LogUserActivity::class,
             'user.approved' => \App\Http\Middleware\CheckUserApproval::class,
             'user.permission' => \App\Http\Middleware\CheckUserPermission::class,
+            'session.timeout' => \App\Http\Middleware\SessionTimeout::class,
         ]);
         
         // Apply activity logging and user approval check to all authenticated routes
@@ -26,8 +27,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\LogUserActivity::class,
         ]);
         
-        // Apply user approval check to authenticated routes
+        // Apply user approval check and session timeout to authenticated routes
         $middleware->appendToGroup('auth', [
+            \App\Http\Middleware\SessionTimeout::class,
             \App\Http\Middleware\CheckUserApproval::class,
         ]);
     })

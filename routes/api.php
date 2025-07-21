@@ -19,6 +19,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Session management
+Route::middleware(['auth:sanctum'])->post('/extend-session', function (Request $request) {
+    // Update session activity
+    $request->session()->put('last_activity', time());
+    
+    return response()->json([
+        'success' => true,
+        'message' => 'Session extended successfully',
+        'expires_at' => now()->addMinutes(config('session.lifetime'))->toISOString()
+    ]);
+});
+
 // Health check endpoint
 Route::get('/health', function () {
     return response()->json([

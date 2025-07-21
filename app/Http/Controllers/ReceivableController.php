@@ -116,19 +116,65 @@ class ReceivableController extends Controller
      */
     public function byStudent($studentId = null)
     {
-        $student = null;
-        $receivables = collect();
+        // Get all students with receivables for navigation
+        $students = Student::has('receivables')
+                           ->with(['receivables' => function($query) {
+                               $query->select('student_id')->limit(1);
+                           }])
+                           ->get();
         
-        if ($studentId) {
-            $student = Student::find($studentId);
-            if ($student) {
-                $receivables = $student->receivables()->with('fee')->get();
-            }
+        // If no studentId provided, redirect to the first student with receivables
+        if (!$studentId && $students->count() > 0) {
+            return redirect()->route('receivables.by-student', $students->first()->id);
         }
         
-        $students = Student::has('receivables')->get();
+        // If no students have receivables, show empty state
+        if ($students->count() == 0) {
+            return view('receivables.by-student', [
+                'student' => null,
+                'receivables' => collect(),
+                'students' => collect(),
+                'otherStudents' => collect(),
+                'stats' => [
+                    'total_amount' => 0,
+                    'total_paid' => 0,
+                    'total_outstanding' => 0,
+                    'overdue_count' => 0,
+                ]
+            ]);
+        }
         
-        return view('receivables.by-student', compact('student', 'receivables', 'students'));
+        $student = Student::with(['receivables.fee', 'major'])->find($studentId);
+        
+        // If student not found, redirect to first student
+        if (!$student) {
+            return redirect()->route('receivables.by-student', $students->first()->id)
+                            ->with('warning', 'Mahasiswa tidak ditemukan. Menampilkan mahasiswa pertama.');
+        }
+        
+        $receivables = $student->receivables()->with('fee')->paginate(15);
+        
+        // Calculate stats for this student
+        $allReceivables = $student->receivables;
+        $stats = [
+            'total_amount' => $allReceivables->sum('amount'),
+            'total_paid' => $allReceivables->sum('paid_amount'),
+            'total_outstanding' => $allReceivables->sum('outstanding_amount'),
+            'overdue_count' => $allReceivables->where('due_date', '<', now())
+                                            ->where('status', '!=', 'paid')
+                                            ->count(),
+        ];
+        
+        // Get other students with receivables for navigation dropdown
+        $otherStudents = Student::has('receivables')
+                               ->where('id', '!=', $student->id)
+                               ->with(['receivables' => function($query) {
+                                   $query->select('student_id')->limit(1);
+                               }])
+                               ->limit(10)
+                               ->get();
+        
+        return view('receivables.by-student', compact('student', 'receivables', 'students', 'otherStudents', 'stats'));
     }
 
     /**

@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Piutang ' . $student->name)
+@section('title', $student ? 'Piutang ' . $student->name : 'Piutang Mahasiswa')
 
 @section('content')
 <x-page-header 
-    title="Piutang {{ $student->name }}" 
-    subtitle="Daftar piutang mahasiswa {{ $student->name }} [{{ $student->nim }}]">
+    title="{{ $student ? 'Piutang ' . $student->name : 'Piutang Mahasiswa' }}" 
+    subtitle="{{ $student ? 'Daftar piutang mahasiswa ' . $student->name . ' [' . $student->nim . ']' : 'Pilih mahasiswa untuk melihat daftar piutang' }}">
     <x-slot name="actions">
         <ul class="nk-block-tools g-3">
             <li>
@@ -18,26 +18,29 @@
                             <span class="text-title">Mahasiswa Lain</span>
                         </div>
                         <div class="dropdown-body dropdown-body-sm">
-                            @php
-                                $students = App\Models\Student::with('receivables')
-                                    ->whereHas('receivables')
-                                    ->where('id', '!=', $student->id)
-                                    ->limit(10)
-                                    ->get();
-                            @endphp
-                            @foreach($students as $otherStudent)
-                                <a href="{{ route('receivables.by-student', $otherStudent) }}" class="dropdown-item">
-                                    <div class="user-card">
-                                        <div class="user-avatar sm bg-primary">
-                                            <span>{{ strtoupper(substr($otherStudent->name, 0, 2)) }}</span>
+                            @if(isset($otherStudents) && $otherStudents->count() > 0)
+                                @foreach($otherStudents as $otherStudent)
+                                    <a href="{{ route('receivables.by-student', $otherStudent) }}" class="dropdown-item">
+                                        <div class="user-card">
+                                            <div class="user-avatar sm bg-primary">
+                                                @if($otherStudent->avatar && file_exists(public_path($otherStudent->avatar)))
+                                                    <img src="{{ asset($otherStudent->avatar) }}" alt="Avatar" class="rounded">
+                                                @else
+                                                    <span>{{ strtoupper(substr($otherStudent->name, 0, 2)) }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="user-info">
+                                                <span class="tb-lead">{{ $otherStudent->name }}</span>
+                                                <span class="sub-text">{{ $otherStudent->nim }}</span>
+                                            </div>
                                         </div>
-                                        <div class="user-info">
-                                            <span class="tb-lead">{{ $otherStudent->name }}</span>
-                                            <span class="sub-text">{{ $otherStudent->nim }}</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            @endforeach
+                                    </a>
+                                @endforeach
+                            @else
+                                <div class="text-center py-3">
+                                    <span class="text-muted">Tidak ada mahasiswa lain dengan piutang</span>
+                                </div>
+                            @endif
                             <div class="dropdown-foot center">
                                 <a href="{{ route('students.index') }}" class="btn btn-sm btn-outline-light">Lihat Semua</a>
                             </div>
@@ -51,6 +54,56 @@
     </x-slot>
 </x-page-header>
 
+@if(!$student && $students->count() == 0)
+    <!-- Empty State -->
+    <div class="nk-block nk-block-lg">
+        <div class="card card-bordered">
+            <div class="card-inner">
+                <div class="text-center py-5">
+                    <em class="icon ni ni-users" style="font-size: 64px; color: #c4c4c4;"></em>
+                    <h5 class="mt-3">Tidak Ada Mahasiswa dengan Piutang</h5>
+                    <p class="text-muted">Belum ada mahasiswa yang memiliki piutang dalam sistem.</p>
+                    <div class="mt-4">
+                        <a href="{{ route('receivables.create') }}" class="btn btn-primary">
+                            <em class="icon ni ni-plus"></em><span>Tambah Piutang</span>
+                        </a>
+                        <a href="{{ route('students.index') }}" class="btn btn-outline-light ms-2">
+                            <em class="icon ni ni-users"></em><span>Lihat Mahasiswa</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@elseif(!$student)
+    <!-- Student Selection -->
+    <div class="nk-block nk-block-lg">
+        <div class="card card-bordered">
+            <div class="card-inner">
+                <div class="text-center py-4">
+                    <h5>Pilih Mahasiswa</h5>
+                    <p class="text-muted">Pilih mahasiswa dari daftar berikut untuk melihat detail piutang:</p>
+                    <div class="row g-3 mt-3">
+                        @foreach($students->take(12) as $studentOption)
+                            <div class="col-md-3 col-sm-6">
+                                <a href="{{ route('receivables.by-student', $studentOption->id) }}" class="card card-bordered card-hover">
+                                    <div class="card-inner text-center py-3">
+                                        <div class="user-avatar sm bg-primary mb-2 mx-auto">
+                                            <span>{{ strtoupper(substr($studentOption->name, 0, 2)) }}</span>
+                                        </div>
+                                        <h6 class="title">{{ $studentOption->name }}</h6>
+                                        <span class="sub-text">{{ $studentOption->nim }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@else
+
 <!-- Student Info Card -->
 <div class="nk-block nk-block-lg">
     <div class="card card-bordered">
@@ -59,7 +112,11 @@
                 <div class="col-md-3">
                     <div class="profile-card">
                         <div class="profile-avatar">
-                            <img src="{{ $student->avatar ?? asset('images/default-avatar.png') }}" alt="Avatar" class="rounded">
+                            @if($student->avatar && file_exists(public_path($student->avatar)))
+                                <img src="{{ asset($student->avatar) }}" alt="Avatar" class="rounded" style="width: 80px; height: 80px; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('images/default-avatar.svg') }}" alt="Default Avatar" class="rounded" style="width: 80px; height: 80px;">
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -265,10 +322,13 @@
                     @endforelse
                 </div>
             </div>
+            @if($receivables instanceof \Illuminate\Contracts\Pagination\Paginator && $receivables->hasPages())
             <div class="card-inner">
                 {{ $receivables->links() }}
             </div>
+            @endif
         </div>
     </div>
 </div>
+@endif
 @endsection

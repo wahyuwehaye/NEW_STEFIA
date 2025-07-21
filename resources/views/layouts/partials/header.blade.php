@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="user-info d-none d-xl-block">
                                     <div class="user-status user-status-verified">Administrator</div>
-                                    <div class="user-name dropdown-indicator">{{ auth()->user()->name ?? 'Admin' }}</div>
+                                    <div class="user-name dropdown-indicator">{{ auth()->check() ? auth()->user()->name : 'Admin' }}</div>
                                 </div>
                             </div>
                         </a>
@@ -111,11 +111,11 @@
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                        <span>{{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}</span>
+                                        <span>{{ strtoupper(substr(auth()->check() ? auth()->user()->name : 'A', 0, 1)) }}</span>
                                     </div>
                                     <div class="user-info">
-                                        <span class="lead-text">{{ auth()->user()->name ?? 'Administrator' }}</span>
-                                        <span class="sub-text">{{ auth()->user()->email ?? 'admin@stefia.com' }}</span>
+                                        <span class="lead-text">{{ auth()->check() ? auth()->user()->name : 'Administrator' }}</span>
+                                        <span class="sub-text">{{ auth()->check() ? auth()->user()->email : 'admin@stefia.com' }}</span>
                                     </div>
                                 </div>
                             </div>

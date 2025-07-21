@@ -11,6 +11,7 @@ class Receivable extends Model
     use HasFactory;
 
     protected $fillable = [
+        'receivable_code',
         'student_id',
         'fee_id',
         'amount',
@@ -20,6 +21,12 @@ class Receivable extends Model
         'notes',
         'paid_amount',
         'outstanding_amount',
+        'priority',
+        'penalty_amount',
+        'penalty_date',
+        'metadata',
+        'created_by',
+        'last_reminder_sent',
     ];
 
     protected $casts = [
@@ -49,11 +56,37 @@ class Receivable extends Model
         return $query->where('due_date', '<', now())->where('status', '!=', 'paid');
     }
 
-    // Accessors for dashboard view
-    public function getReceivableCodeAttribute()
+    /**
+     * Generate a unique receivable code.
+     */
+    public static function generateReceivableCode()
     {
-        return 'RCV-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+        $lastReceivable = self::orderBy('id', 'desc')->first();
+        $nextId = $lastReceivable ? $lastReceivable->id + 1 : 1;
+        return 'RCV-' . str_pad($nextId, 6, '0', STR_PAD_LEFT);
     }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->receivable_code)) {
+                $model->receivable_code = self::generateReceivableCode();
+            }
+            if (empty($model->created_by)) {
+                $model->created_by = auth()->id() ?? 1;
+            }
+            if (empty($model->outstanding_amount)) {
+                $model->outstanding_amount = $model->amount;
+            }
+        });
+    }
+
+    // Accessors for dashboard view
 
     public function getStatusBadgeClassAttribute()
     {

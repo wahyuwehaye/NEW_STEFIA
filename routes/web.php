@@ -12,12 +12,18 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SyncController;
+use App\Http\Controllers\FollowUpController;
 use Illuminate\Support\Facades\Route;
 
 // Landing page
 Route::get('/', function () {
-    return view('landing');
-})->name('landing');
+    return view('welcome');
+});
+
+// CSRF token refresh endpoint
+Route::get('/csrf-token', function () {
+    return response()->json(['token' => csrf_token()]);
+});
 
 // Dashboard - protected by authentication
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -131,6 +137,28 @@ Route::middleware(['auth', 'user.permission:payments.view'])->group(function () 
     Route::get('/payments-integration', [PaymentController::class, 'integration'])->name('payments.integration');
     Route::get('/payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
     Route::get('/payments-export', [PaymentController::class, 'export'])->name('payments.export');
+    
+    // Additional routes that were referenced in views
+    Route::get('/payments-pending', [PaymentController::class, 'verification'])->name('payments.pending');
+    Route::get('/payments-history', [PaymentController::class, 'index'])->name('payments.history');
+    
+    // Additional comprehensive payment management routes
+    Route::get('/payments-analytics', [PaymentController::class, 'analytics'])->name('payments.analytics');
+    Route::get('/payments-bulk-operations', [PaymentController::class, 'bulkOperations'])->name('payments.bulk-operations');
+    Route::get('/payments-reports', [PaymentController::class, 'reports'])->name('payments.reports');
+    Route::get('/payments-by-student/{studentId?}', [PaymentController::class, 'byStudent'])->name('payments.by-student');
+    Route::get('/payments-by-method', [PaymentController::class, 'byMethod'])->name('payments.by-method');
+    Route::get('/payments-reconciliation', [PaymentController::class, 'reconciliation'])->name('payments.reconciliation');
+    
+    // API routes for DataTables
+    Route::get('/api/payments/data', [PaymentController::class, 'getData'])->name('api.payments.data');
+    Route::get('/api/payments/pending-data', [PaymentController::class, 'getPendingData'])->name('api.payments.pending-data');
+    Route::get('/api/payments/history-data', [PaymentController::class, 'getHistoryData'])->name('api.payments.history-data');
+    Route::get('/api/payments/analytics-data', [PaymentController::class, 'getAnalyticsData'])->name('api.payments.analytics-data');
+    Route::post('/api/payments/sync-igracias', [PaymentController::class, 'syncFromIgracias'])->name('api.payments.sync-igracias');
+    Route::post('/api/payments/bulk-verify', [PaymentController::class, 'bulkVerify'])->name('api.payments.bulk-verify');
+    Route::post('/api/payments/auto-reconcile', [PaymentController::class, 'autoReconcile'])->name('api.payments.auto-reconcile');
+    Route::post('/payments/bulk-process', [PaymentController::class, 'bulkProcess'])->name('payments.bulk-process');
 });
 
 Route::middleware(['auth', 'user.permission:payments.create'])->group(function () {
@@ -219,6 +247,7 @@ Route::middleware(['auth', 'user.permission:reports.view'])->group(function () {
 
 Route::middleware(['auth', 'user.permission:reports.export'])->group(function () {
     Route::get('/reports-export', [ReportController::class, 'export'])->name('reports.export');
+    Route::post('/reports/export/process', [ReportController::class, 'processExport'])->name('reports.export.process');
     Route::post('/reports/{report}/generate', [ReportController::class, 'generate'])->name('reports.generate');
 });
 
@@ -298,6 +327,11 @@ Route::middleware(['auth', 'user.permission:sync.manage'])->group(function () {
 // API routes for students
 Route::middleware(['auth', 'user.permission:students.view'])->group(function () {
     Route::get('/api/students', [StudentController::class, 'api'])->name('api.students');
+});
+
+// Follow Up management routes
+Route::middleware(['auth'])->group(function () {
+    Route::resource('followups', FollowUpController::class);
 });
 
 // Auth routes

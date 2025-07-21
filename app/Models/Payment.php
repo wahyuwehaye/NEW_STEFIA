@@ -15,6 +15,7 @@ class Payment extends Model
         'payment_code',
         'student_id',
         'user_id',
+        'receivable_id', // For linking to specific receivables
         'amount',
         'payment_date',
         'payment_method',
@@ -27,13 +28,19 @@ class Payment extends Model
         'metadata',
         'verified_at',
         'verified_by',
+        'source', // 'manual' or 'igracias'
+        'igracias_id', // ID from iGracias system
+        'igracias_data', // Raw data from iGracias
+        'auto_applied', // Whether payment was auto-applied to receivables
     ];
 
     protected $casts = [
         'payment_date' => 'date',
         'amount' => 'decimal:2',
         'metadata' => 'array',
+        'igracias_data' => 'array',
         'verified_at' => 'datetime',
+        'auto_applied' => 'boolean',
     ];
 
     // Relationships
@@ -50,6 +57,11 @@ class Payment extends Model
     public function verifiedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function receivable(): BelongsTo
+    {
+        return $this->belongsTo(Receivable::class);
     }
 
     // Scopes

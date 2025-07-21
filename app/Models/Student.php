@@ -68,7 +68,10 @@ class Student extends Model
         return $this->hasMany(Payment::class);
     }
 
-    // Removed receivables relationship - replaced with debts
+    public function receivables(): HasMany
+    {
+        return $this->hasMany(Receivable::class);
+    }
 
     public function studentFees(): HasMany
     {

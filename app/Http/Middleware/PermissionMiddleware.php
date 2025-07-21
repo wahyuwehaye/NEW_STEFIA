@@ -89,6 +89,32 @@ class PermissionMiddleware
                 'receivables.view',
                 'reports.view',
             ],
+            'finance' => [
+                'students.view', 'students.create', 'students.update',
+                'payments.view', 'payments.create', 'payments.update', 'payments.verify',
+                'fees.view', 'fees.create', 'fees.update',
+                'receivables.view', 'receivables.create', 'receivables.update',
+                'reports.view', 'reports.create', 'reports.generate',
+            ],
+            'staff' => [
+                'students.view', 'students.create', 'students.update',
+                'payments.view', 'payments.create', 'payments.update',
+                'receivables.view', 'receivables.create', 'receivables.update',
+                'reports.view',
+            ],
+            'user' => [
+                'students.view',
+                'payments.view',
+                'fees.view',
+                'receivables.view',
+                'reports.view',
+            ],
+            'student' => [
+                'students.view',
+                'payments.view',
+                'fees.view',
+                'receivables.view',
+            ],
         ];
         
         return $permissions[$role] ?? [];
