@@ -7,55 +7,81 @@
   * {
     font-family: 'Inter', sans-serif;
   }
-  
   .page-title {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
     font-weight: 800;
-    margin-bottom: 40px;
+    margin-bottom: 38px;
     text-align: center;
-    color: #333;
+    color: #e53935;
+    text-shadow: 0 4px 20px rgba(229,57,53,0.10);
+    letter-spacing: 1px;
   }
-  
   .filter-section {
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 8px 32px rgba(189,189,189,0.10);
+    margin-bottom: 32px;
+    border: 1.5px solid #d1d1d1;
   }
-
+  .form-control {
+    background: #fff;
+    border: 1.5px solid #bdbdbd;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #212121;
+    transition: all 0.3s ease;
+  }
+  .form-control:focus {
+    background: #fff;
+    border-color: #e53935;
+    box-shadow: 0 0 20px rgba(229,57,53,0.13);
+    transform: scale(1.02);
+  }
+  .btn-export {
+    background: linear-gradient(135deg, #e53935, #bdbdbd);
+    border: none;
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 30px;
+    transition: all 0.3s ease;
+  }
+  .btn-export:hover {
+    background: linear-gradient(135deg, #bdbdbd, #e53935);
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(229,57,53,0.13);
+    transform: translateY(-2px);
+  }
   .stats-section {
     margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
   }
-
   .stat-card {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    border-radius: 8px;
-    padding: 20px;
+    background: linear-gradient(135deg, #fff 60%, #f5f5f5 100%);
+    color: #e53935;
+    border-radius: 18px;
+    padding: 20px 0 18px 0;
     flex: 1 1 20%;
     margin: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(189,189,189,0.07);
     text-align: center;
+    border: 1.5px solid #e0e0e0;
   }
-
   .stat-value {
     font-size: 1.8rem;
     font-weight: 700;
+    color: #e53935;
   }
-
   .stat-label {
     margin-top: 10px;
     font-weight: 500;
-  }
-
-  .btn-export {
-    background-color: #3498db;
-    border-color: #3498db;
-    color: white;
+    color: #616161;
   }
 </style>
 
