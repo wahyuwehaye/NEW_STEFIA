@@ -109,6 +109,27 @@
 }
 </style>
 
+@if(session('success'))
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+  <div class="toast align-items-center text-bg-success border-0 show fade-in" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">{{ session('success') }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+@endif
+@if(session('error'))
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+  <div class="toast align-items-center text-bg-danger border-0 show fade-in" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">{{ session('error') }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+@endif
+
 <div class="nk-block">
     <!-- Statistics Cards -->
     <div class="row g-4 mb-4">
@@ -443,9 +464,26 @@
         </div>
     </div>
 </div>
+@endsection
 
 @push('scripts')
 <script>
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show fade-in`;
+    toast.style = 'min-width:260px; margin-bottom:8px;';
+    toast.innerHTML = `<div class='d-flex'><div class='toast-body'>${message}</div><button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button></div>`;
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container position-fixed top-0 end-0 p-3';
+        container.style.zIndex = 9999;
+        document.body.appendChild(container);
+    }
+    container.appendChild(toast);
+    setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3500);
+}
+
 function createSchedule() {
     document.getElementById('scheduleModalTitle').textContent = 'Create New Schedule';
     document.getElementById('scheduleForm').reset();
@@ -509,10 +547,10 @@ function pauseSchedule(scheduleId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Schedule paused successfully!');
-                location.reload();
+                showToast('Schedule paused successfully!', 'success');
+                setTimeout(() => location.reload(), 1200);
             } else {
-                alert('Failed to pause schedule: ' + data.message);
+                showToast('Failed to pause schedule: ' + data.message, 'danger');
             }
         });
     }
@@ -529,10 +567,10 @@ function activateSchedule(scheduleId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Schedule activated successfully!');
-                location.reload();
+                showToast('Schedule activated successfully!', 'success');
+                setTimeout(() => location.reload(), 1200);
             } else {
-                alert('Failed to activate schedule: ' + data.message);
+                showToast('Failed to activate schedule: ' + data.message, 'danger');
             }
         });
     }
@@ -549,10 +587,10 @@ function runNow(scheduleId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Schedule executed successfully!');
-                location.reload();
+                showToast('Schedule executed successfully!', 'success');
+                setTimeout(() => location.reload(), 1200);
             } else {
-                alert('Failed to run schedule: ' + data.message);
+                showToast('Failed to run schedule: ' + data.message, 'danger');
             }
         });
     }
@@ -569,10 +607,10 @@ function deleteSchedule(scheduleId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Schedule deleted successfully!');
-                location.reload();
+                showToast('Schedule deleted successfully!', 'success');
+                setTimeout(() => location.reload(), 1200);
             } else {
-                alert('Failed to delete schedule: ' + data.message);
+                showToast('Failed to delete schedule: ' + data.message, 'danger');
             }
         });
     }
@@ -588,10 +626,10 @@ function duplicateSchedule(scheduleId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Schedule duplicated successfully!');
-            location.reload();
+            showToast('Schedule duplicated successfully!', 'success');
+            setTimeout(() => location.reload(), 1200);
         } else {
-            alert('Failed to duplicate schedule: ' + data.message);
+            showToast('Failed to duplicate schedule: ' + data.message, 'danger');
         }
     });
 }
@@ -607,10 +645,10 @@ function runAllActive() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(`Executed ${data.count} schedules successfully!`);
-                location.reload();
+                showToast(`Executed ${data.count} schedules successfully!`, 'success');
+                setTimeout(() => location.reload(), 1200);
             } else {
-                alert('Failed to run schedules: ' + data.message);
+                showToast('Failed to run schedules: ' + data.message, 'danger');
             }
         });
     }
@@ -680,16 +718,21 @@ document.getElementById('scheduleForm').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Schedule saved successfully!');
-            location.reload();
+            showToast('Schedule saved successfully!', 'success');
+            setTimeout(() => location.reload(), 1200);
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'danger');
         }
     })
     .catch(error => {
-        alert('An error occurred while saving the schedule.');
+        showToast('An error occurred while saving the schedule.', 'danger');
     });
 });
 </script>
 @endpush
-@endsection
+@push('styles')
+<style>
+.toast-container { pointer-events: none; }
+.toast { pointer-events: auto; min-width: 260px; }
+</style>
+@endpush

@@ -2,6 +2,151 @@
 
 @section('title', 'Welcome')
 
+@push('styles')
+<style>
+/* Glassmorphism & Card Effect */
+.portal-card, .feature-card, .contact-card, .demo-card, .api-doc-card, .timeline, .flow-diagram {
+    background: rgba(255,255,255,0.13) !important;
+    box-shadow: 0 8px 40px rgba(225,29,72,0.10) !important;
+    border-radius: 24px !important;
+    border: 1.5px solid #f3f4f6 !important;
+    backdrop-filter: blur(8px);
+    color: #1e293b;
+    transition: box-shadow 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.8s cubic-bezier(.23,1.01,.32,1) both;
+}
+.portal-card:hover, .feature-card:hover, .contact-card:hover, .demo-card:hover {
+    box-shadow: 0 16px 48px rgba(225,29,72,0.14) !important;
+    transform: translateY(-2px) scale(1.015);
+}
+
+/* Animasi fade-in/slide */
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(40px); }
+    100% { opacity: 1; transform: none; }
+}
+.fade-in { animation: fadeInUp 1s both; }
+
+/* Text Gradient & Badge */
+.text-gradient {
+    background: linear-gradient(90deg, #f43f5e 0%, #f59e42 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+.badge-feature, .badge-stat {
+    display: inline-block;
+    background: linear-gradient(90deg, #f43f5e 0%, #f59e42 100%);
+    color: #fff;
+    border-radius: 8px;
+    padding: 0.25em 1em;
+    font-size: 0.95em;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px #f43f5e22;
+}
+
+/* CTA Button */
+.btn-lg.btn-white, .btn-lg.btn-outline-white {
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 16px;
+    padding: 0.85em 2.5em;
+    box-shadow: 0 2px 12px #f43f5e22;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.btn-lg.btn-white:hover, .btn-lg.btn-outline-white:hover {
+    background: linear-gradient(90deg, #f43f5e 0%, #f59e42 100%) !important;
+    color: #fff !important;
+    transform: scale(1.04);
+}
+
+/* Icon interaktif */
+.icon-circle {
+    background: linear-gradient(135deg, #f43f5e 0%, #f59e42 100%);
+    color: #fff;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1rem auto;
+    box-shadow: 0 2px 12px #f43f5e22;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.icon-circle:hover {
+    box-shadow: 0 4px 24px #f59e4288;
+    transform: scale(1.08) rotate(-6deg);
+}
+
+/* Section Title & Subtitle */
+.section-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 0.5em;
+}
+.section-subtitle {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #f3f4f6;
+    margin-bottom: 1.5em;
+}
+
+/* Timeline & Flow */
+.timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 600px;
+}
+.timeline li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5em;
+}
+.timeline-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #f43f5e 0%, #f59e42 100%);
+    margin-right: 1em;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px #f43f5e22;
+}
+.timeline-title {
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-right: 0.5em;
+}
+.timeline-desc {
+    font-size: 0.98em;
+    color: #64748b;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .portal-card, .feature-card, .contact-card, .demo-card, .api-doc-card {
+        padding: 1.5rem !important;
+    }
+    .section-title { font-size: 1.5rem; }
+}
+@media (max-width: 600px) {
+    .portal-card, .feature-card, .contact-card, .demo-card, .api-doc-card {
+        padding: 1rem !important;
+    }
+    .section-title { font-size: 1.2rem; }
+    .icon-circle { width: 48px; height: 48px; font-size: 1.3rem; }
+}
+</style>
+@endpush
+
 @section('content')
 <!-- Hero Section -->
 <section class="section section-hero min-vh-75" id="home">

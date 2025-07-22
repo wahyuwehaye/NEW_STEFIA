@@ -100,6 +100,26 @@
 @endpush
 
 @section('content')
+@if(session('success'))
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+  <div class="toast align-items-center text-bg-success border-0 show fade-in" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">{{ session('success') }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+@endif
+@if(session('error'))
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+  <div class="toast align-items-center text-bg-danger border-0 show fade-in" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">{{ session('error') }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+@endif
 <div class="portal-card fade-in mb-5">
     <h3 class="dashboard-title">STEFIA Dashboard</h3>
     <div class="dashboard-subtitle">Comprehensive Financial Management Overview</div>
@@ -436,6 +456,60 @@
     $paymentTrendMonths = $chartData['trend_months'] ?? ["Jul","Aug","Sep","Oct","Nov","Dec","Jan"];
 @endphp
 <script>
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show fade-in`;
+    toast.style = 'min-width:260px; margin-bottom:8px;';
+    toast.innerHTML = `<div class='d-flex'><div class='toast-body'>${message}</div><button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button></div>`;
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container position-fixed top-0 end-0 p-3';
+        container.style.zIndex = 9999;
+        document.body.appendChild(container);
+    }
+    container.appendChild(toast);
+    setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3500);
+}
+// Example: feedback ekspor
+function exportChart(chartId) {
+    showToast('Ekspor chart ' + chartId + ' berhasil (dummy)', 'success');
+    // TODO: Implement real export logic
+}
+// Example: feedback error
+function chartError(chartId) {
+    showToast('Gagal memuat chart ' + chartId, 'danger');
+}
+// Loading indicator for refresh
+function showLoadingDashboard() {
+    let loading = document.getElementById('dashboardLoading');
+    if (!loading) {
+        loading = document.createElement('div');
+        loading.id = 'dashboardLoading';
+        loading.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.6);z-index:9998;display:flex;align-items:center;justify-content:center;';
+        loading.innerHTML = '<div class="spinner-border text-danger" style="width:3rem;height:3rem;"></div>';
+        document.body.appendChild(loading);
+    }
+}
+function hideLoadingDashboard() {
+    let loading = document.getElementById('dashboardLoading');
+    if (loading) loading.remove();
+}
+// Simulasi refresh data dengan loading
+function refreshDashboardData() {
+    showLoadingDashboard();
+    setTimeout(() => {
+        hideLoadingDashboard();
+        showToast('Data dashboard berhasil diperbarui', 'success');
+    }, 1200);
+}
+// Feedback notifikasi sukses/gagal setelah aksi
+@if(session('success'))
+    window.setTimeout(() => { showToast(@json(session('success')), 'success'); }, 500);
+@endif
+@if(session('error'))
+    window.setTimeout(() => { showToast(@json(session('error')), 'danger'); }, 500);
+@endif
 var monthlyRevenueData = @json($chartData['monthly_revenue'] ?? []);
 var paymentTrendsData = @json($chartData['payment_trends'] ?? []);
 var receivableStatusData = @json($chartData['receivable_status'] ?? []);
@@ -890,4 +964,11 @@ $(document).ready(function() {
     
 });
 </script>
+@endpush
+@push('styles')
+<style>
+.toast-container { pointer-events: none; }
+.toast { pointer-events: auto; min-width: 260px; }
+#dashboardLoading { pointer-events: all; }
+</style>
 @endpush

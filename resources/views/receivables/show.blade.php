@@ -275,7 +275,7 @@
             <div class="row g-3">
                 <div class="col-lg-12">
                     <div class="btn-group" role="group">
-                        <a href="{{ route('payments.create', ['receivable_id' => $id]) }}" class="btn btn-success">
+                        <a href="{{ route('payments.create', ['debt_id' => $id]) }}" class="btn btn-success">
                             <em class="icon ni ni-wallet"></em>
                             <span>Input Pembayaran</span>
                         </a>

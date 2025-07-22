@@ -18,8 +18,9 @@ class PaymentFactory extends Factory
     {
         return [
             'student_id' => \App\Models\Student::factory(),
+            'user_id' => \App\Models\User::inRandomOrder()->first()?->id ?? \App\Models\User::factory(),
             'amount' => fake()->randomFloat(2, 100, 5000),
-            'payment_date' => fake()->dateTimeBetween('-1 years', 'now'),
+            'payment_date' => fake()->dateTimeBetween('first day of this month', 'last day of this month'),
             'status' => fake()->randomElement(['completed', 'pending', 'failed']),
         ];
     }

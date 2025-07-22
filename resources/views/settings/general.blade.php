@@ -17,6 +17,36 @@
                     <li><em class="icon ni ni-globe"></em> <span class="text-muted">Zona Waktu:</span> <span class="text-primary">{{ $settings['system']['timezone'] }}</span></li>
                     <li><em class="icon ni ni-flag"></em> <span class="text-muted">Bahasa:</span> <span class="text-primary">{{ $settings['system']['language'] }}</span></li>
                 </ul>
+                @if(session('success'))
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                  <div class="toast align-items-center text-bg-success border-0 show fade-in" role="alert">
+                    <div class="d-flex">
+                      <div class="toast-body">{{ session('success') }}</div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                  <div class="toast align-items-center text-bg-danger border-0 show fade-in" role="alert">
+                    <div class="d-flex">
+                      <div class="toast-body">{{ session('error') }}</div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                @foreach ([
+                    ['Informasi Institusi', $settings['system']['updated_by'] ?? null, $settings['system']['updated_at'] ?? null],
+                    ['Branding & Preferensi', $settings['system']['updated_by'] ?? null, $settings['system']['updated_at'] ?? null],
+                    ['Kontak & Email', $settings['email']['updated_by'] ?? null, $settings['email']['updated_at'] ?? null],
+                    ['Pengaturan Akademik & Pembayaran', $settings['academic']['updated_by'] ?? null, $settings['academic']['updated_at'] ?? null],
+                ] as $i => [$title, $by, $at])
+                    @if($by && $at)
+                        <div class="text-end small text-muted mt-2">Last updated by <b>{{ $by }}</b> at <b>{{ $at }}</b></div>
+                    @endif
+                @endforeach
             </div>
         </div>
         <div class="col-lg-6 col-12">
@@ -26,6 +56,36 @@
                     <li><em class="icon ni ni-palette"></em> <span class="text-muted">Mode Maintenance:</span> <span class="text-primary">{{ $settings['system']['maintenance_mode'] ? 'Aktif' : 'Nonaktif' }}</span></li>
                     <li><em class="icon ni ni-bug"></em> <span class="text-muted">Debug Mode:</span> <span class="text-primary">{{ $settings['system']['debug_mode'] ? 'Aktif' : 'Nonaktif' }}</span></li>
                 </ul>
+                @if(session('success'))
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                  <div class="toast align-items-center text-bg-success border-0 show fade-in" role="alert">
+                    <div class="d-flex">
+                      <div class="toast-body">{{ session('success') }}</div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                  <div class="toast align-items-center text-bg-danger border-0 show fade-in" role="alert">
+                    <div class="d-flex">
+                      <div class="toast-body">{{ session('error') }}</div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                @foreach ([
+                    ['Informasi Institusi', $settings['system']['updated_by'] ?? null, $settings['system']['updated_at'] ?? null],
+                    ['Branding & Preferensi', $settings['system']['updated_by'] ?? null, $settings['system']['updated_at'] ?? null],
+                    ['Kontak & Email', $settings['email']['updated_by'] ?? null, $settings['email']['updated_at'] ?? null],
+                    ['Pengaturan Akademik & Pembayaran', $settings['academic']['updated_by'] ?? null, $settings['academic']['updated_at'] ?? null],
+                ] as $i => [$title, $by, $at])
+                    @if($by && $at)
+                        <div class="text-end small text-muted mt-2">Last updated by <b>{{ $by }}</b> at <b>{{ $at }}</b></div>
+                    @endif
+                @endforeach
             </div>
         </div>
         <div class="col-lg-6 col-12">
@@ -37,6 +97,36 @@
                     <li><em class="icon ni ni-server"></em> <span class="text-muted">SMTP Host:</span> <span class="text-primary">{{ $settings['email']['mail_host'] }}</span></li>
                     <li><em class="icon ni ni-lock"></em> <span class="text-muted">Enkripsi:</span> <span class="text-primary">{{ $settings['email']['mail_encryption'] }}</span></li>
                 </ul>
+                @if(session('success'))
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                  <div class="toast align-items-center text-bg-success border-0 show fade-in" role="alert">
+                    <div class="d-flex">
+                      <div class="toast-body">{{ session('success') }}</div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                  <div class="toast align-items-center text-bg-danger border-0 show fade-in" role="alert">
+                    <div class="d-flex">
+                      <div class="toast-body">{{ session('error') }}</div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                @foreach ([
+                    ['Informasi Institusi', $settings['system']['updated_by'] ?? null, $settings['system']['updated_at'] ?? null],
+                    ['Branding & Preferensi', $settings['system']['updated_by'] ?? null, $settings['system']['updated_at'] ?? null],
+                    ['Kontak & Email', $settings['email']['updated_by'] ?? null, $settings['email']['updated_at'] ?? null],
+                    ['Pengaturan Akademik & Pembayaran', $settings['academic']['updated_by'] ?? null, $settings['academic']['updated_at'] ?? null],
+                ] as $i => [$title, $by, $at])
+                    @if($by && $at)
+                        <div class="text-end small text-muted mt-2">Last updated by <b>{{ $by }}</b> at <b>{{ $at }}</b></div>
+                    @endif
+                @endforeach
             </div>
         </div>
         <div class="col-lg-6 col-12">
@@ -49,6 +139,36 @@
                     <li><em class="icon ni ni-coins"></em> <span class="text-muted">Mata Uang:</span> <span class="text-primary">{{ $settings['payment']['currency'] }}</span></li>
                     <li><em class="icon ni ni-alert"></em> <span class="text-muted">Denda Keterlambatan:</span> <span class="text-primary">{{ $settings['payment']['late_fee_percentage'] }}%</span></li>
                 </ul>
+                @if(session('success'))
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                  <div class="toast align-items-center text-bg-success border-0 show fade-in" role="alert">
+                    <div class="d-flex">
+                      <div class="toast-body">{{ session('success') }}</div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                  <div class="toast align-items-center text-bg-danger border-0 show fade-in" role="alert">
+                    <div class="d-flex">
+                      <div class="toast-body">{{ session('error') }}</div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                @foreach ([
+                    ['Informasi Institusi', $settings['system']['updated_by'] ?? null, $settings['system']['updated_at'] ?? null],
+                    ['Branding & Preferensi', $settings['system']['updated_by'] ?? null, $settings['system']['updated_at'] ?? null],
+                    ['Kontak & Email', $settings['email']['updated_by'] ?? null, $settings['email']['updated_at'] ?? null],
+                    ['Pengaturan Akademik & Pembayaran', $settings['academic']['updated_by'] ?? null, $settings['academic']['updated_at'] ?? null],
+                ] as $i => [$title, $by, $at])
+                    @if($by && $at)
+                        <div class="text-end small text-muted mt-2">Last updated by <b>{{ $by }}</b> at <b>{{ $at }}</b></div>
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>
@@ -69,5 +189,7 @@
         box-shadow: 0 16px 48px rgba(255,0,0,0.10) !important;
         transform: translateY(-3px) scale(1.01);
     }
+    .toast-container { pointer-events: none; }
+    .toast { pointer-events: auto; min-width: 260px; }
 </style>
 @endpush

@@ -225,29 +225,29 @@
                             </div>
                         </div>
                     </div>
-                    @forelse($receivables as $receivable)
+                    @forelse($debts as $debt)
                     <div class="nk-tb-item">
                         <div class="nk-tb-col nk-tb-col-check">
                             <div class="custom-control custom-control-sm custom-checkbox notext">
-                                <input type="checkbox" class="custom-control-input" id="uid{{ $receivable->id }}">
-                                <label class="custom-control-label" for="uid{{ $receivable->id }}"></label>
+                                <input type="checkbox" class="custom-control-input" id="uid{{ $debt->id }}">
+                                <label class="custom-control-label" for="uid{{ $debt->id }}"></label>
                             </div>
                         </div>
                         <div class="nk-tb-col tb-col-mb">
-                            <span class="tb-amount">{{ $receivable->receivable_code ?? 'RC' . str_pad($receivable->id, 6, '0', STR_PAD_LEFT) }}</span>
-                            <span class="tb-amount-sm">{{ $receivable->description ?? 'N/A' }}</span>
+                            <span class="tb-amount">{{ $debt->receivable_code ?? 'RC' . str_pad($debt->id, 6, '0', STR_PAD_LEFT) }}</span>
+                            <span class="tb-amount-sm">{{ $debt->description ?? 'N/A' }}</span>
                         </div>
                         <div class="nk-tb-col tb-col-md">
-                            <span class="tb-amount">{{ ucfirst($receivable->category) }}</span>
+                            <span class="tb-amount">{{ ucfirst($debt->category) }}</span>
                         </div>
                         <div class="nk-tb-col tb-col-lg">
-                            <span class="tb-amount">{{ 'Rp ' . number_format($receivable->amount) }}</span>
+                            <span class="tb-amount">{{ 'Rp ' . number_format($debt->amount) }}</span>
                         </div>
                         <div class="nk-tb-col tb-col-lg">
-                            <span class="tb-amount">{{ 'Rp ' . number_format($receivable->outstanding_amount) }}</span>
+                            <span class="tb-amount">{{ 'Rp ' . number_format($debt->outstanding_amount) }}</span>
                         </div>
                         <div class="nk-tb-col tb-col-md">
-                            <span class="tb-date">{{ $receivable->due_date ? $receivable->due_date->format('d M Y') : 'N/A' }}</span>
+                            <span class="tb-date">{{ $debt->due_date ? $debt->due_date->format('d M Y') : 'N/A' }}</span>
                         </div>
                         <div class="nk-tb-col tb-col-md">
                             @php
@@ -257,9 +257,9 @@
                                     'paid' => 'success',
                                     'overdue' => 'danger',
                                     'cancelled' => 'dark'
-                                ][$receivable->status] ?? 'secondary';
+                                ][$debt->status] ?? 'secondary';
                             @endphp
-                            <span class="tb-status text-{{ $statusClass }}">{{ ucfirst($receivable->status) }}</span>
+                            <span class="tb-status text-{{ $statusClass }}">{{ ucfirst($debt->status) }}</span>
                         </div>
                         <div class="nk-tb-col tb-col-md">
                             @php
@@ -268,19 +268,19 @@
                                     'medium' => 'warning',
                                     'high' => 'danger',
                                     'urgent' => 'dark'
-                                ][$receivable->priority] ?? 'secondary';
+                                ][$debt->priority] ?? 'secondary';
                             @endphp
-                            <span class="badge badge-sm badge-dot has-bg bg-{{ $priorityClass }} d-none d-md-inline-flex">{{ ucfirst($receivable->priority) }}</span>
+                            <span class="badge badge-sm badge-dot has-bg bg-{{ $priorityClass }} d-none d-md-inline-flex">{{ ucfirst($debt->priority) }}</span>
                         </div>
                         <div class="nk-tb-col nk-tb-col-tools">
                             <ul class="nk-tb-actions gx-1">
                                 <li class="nk-tb-action-hidden">
-                                    <a href="{{ route('receivables.show', $receivable) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                    <a href="{{ route('receivables.show', $debt) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                         <em class="icon ni ni-eye"></em>
                                     </a>
                                 </li>
                                 <li class="nk-tb-action-hidden">
-                                    <a href="{{ route('receivables.edit', $receivable) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                    <a href="{{ route('receivables.edit', $debt) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                         <em class="icon ni ni-edit"></em>
                                     </a>
                                 </li>
@@ -289,11 +289,11 @@
                                         <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                         <div class="dropdown-menu dropdown-menu-end">
                                             <ul class="link-list-opt no-bdr">
-                                                <li><a href="{{ route('receivables.show', $receivable) }}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                <li><a href="{{ route('receivables.edit', $receivable) }}"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>
+                                                <li><a href="{{ route('receivables.show', $debt) }}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
+                                                <li><a href="{{ route('receivables.edit', $debt) }}"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>
                                                 <li class="divider"></li>
-                                                <li><a href="#" onclick="event.preventDefault(); document.getElementById('send-reminder-{{ $receivable->id }}').submit();"><em class="icon ni ni-mail"></em><span>Send Reminder</span></a></li>
-                                                <li><a href="#" class="text-danger" onclick="event.preventDefault(); document.getElementById('delete-{{ $receivable->id }}').submit();"><em class="icon ni ni-trash"></em><span>Delete</span></a></li>
+                                                <li><a href="#" onclick="event.preventDefault(); document.getElementById('send-reminder-{{ $debt->id }}').submit();"><em class="icon ni ni-mail"></em><span>Send Reminder</span></a></li>
+                                                <li><a href="#" class="text-danger" onclick="event.preventDefault(); document.getElementById('delete-{{ $debt->id }}').submit();"><em class="icon ni ni-trash"></em><span>Delete</span></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -303,10 +303,10 @@
                     </div>
                     
                     <!-- Hidden Forms -->
-                    <form id="send-reminder-{{ $receivable->id }}" action="{{ route('receivables.send-reminder', $receivable) }}" method="POST" class="d-none">
+                    <form id="send-reminder-{{ $debt->id }}" action="{{ route('receivables.send-reminder', $debt) }}" method="POST" class="d-none">
                         @csrf
                     </form>
-                    <form id="delete-{{ $receivable->id }}" action="{{ route('receivables.destroy', $receivable) }}" method="POST" class="d-none">
+                    <form id="delete-{{ $debt->id }}" action="{{ route('receivables.destroy', $debt) }}" method="POST" class="d-none">
                         @csrf
                         @method('DELETE')
                     </form>
@@ -322,9 +322,9 @@
                     @endforelse
                 </div>
             </div>
-            @if($receivables instanceof \Illuminate\Contracts\Pagination\Paginator && $receivables->hasPages())
+            @if($debts instanceof \Illuminate\Contracts\Pagination\Paginator && $debts->hasPages())
             <div class="card-inner">
-                {{ $receivables->links() }}
+                {{ $debts->links() }}
             </div>
             @endif
         </div>

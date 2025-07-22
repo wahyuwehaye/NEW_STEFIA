@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Receivable;
+use App\Models\Debt;
 use App\Models\Student;
 use App\Models\Fee;
 use Illuminate\Support\Facades\DB;
@@ -26,26 +26,26 @@ class ReceivableController extends Controller
     {
         // Calculate statistics for dashboard
         $stats = [
-            'total_receivables' => Receivable::count(),
-            'total_amount' => Receivable::sum('amount'),
-            'total_outstanding' => Receivable::where('status', '!=', 'paid')->sum('amount'),
-            'total_paid' => Receivable::where('status', 'paid')->sum('amount'),
-            'overdue_count' => Receivable::where('due_date', '<', now())
+            'total_receivables' => Debt::count(),
+            'total_amount' => Debt::sum('amount'),
+            'total_outstanding' => Debt::where('status', '!=', 'paid')->sum('amount'),
+            'total_paid' => Debt::where('status', 'paid')->sum('amount'),
+            'overdue_count' => Debt::where('due_date', '<', now())
                 ->where('status', '!=', 'paid')
                 ->count(),
-            'pending_count' => Receivable::where('status', 'pending')->count(),
-            'paid_count' => Receivable::where('status', 'paid')->count(),
+            'pending_count' => Debt::where('status', 'pending')->count(),
+            'paid_count' => Debt::where('status', 'paid')->count(),
             'partial_count' => 0, // For now, set to 0 since we don't have partial status
         ];
 
         // Recent receivables
-        $recent_receivables = Receivable::with(['student', 'fee'])
+        $recent_receivables = Debt::with(['student', 'fee'])
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
 
         // Overdue receivables
-        $overdue_receivables = Receivable::with(['student', 'fee'])
+        $overdue_receivables = Debt::with(['student', 'fee'])
             ->where('due_date', '<', now())
             ->where('status', '!=', 'paid')
             ->orderBy('due_date', 'asc')
@@ -53,7 +53,7 @@ class ReceivableController extends Controller
             ->get();
 
         // Due this week
-        $due_this_week = Receivable::with(['student', 'fee'])
+        $due_this_week = Debt::with(['student', 'fee'])
             ->where('due_date', '>=', now()->startOfWeek())
             ->where('due_date', '<=', now()->endOfWeek())
             ->where('status', '!=', 'paid')
@@ -62,7 +62,7 @@ class ReceivableController extends Controller
             ->get();
 
         // Monthly data for charts
-        $monthlyData = Receivable::selectRaw('MONTH(created_at) as month, COUNT(*) as count, SUM(amount) as total')
+        $monthlyData = Debt::selectRaw('MONTH(created_at) as month, COUNT(*) as count, SUM(amount) as total')
             ->whereYear('created_at', now()->year)
             ->groupBy('month')
             ->orderBy('month')
@@ -112,27 +112,42 @@ class ReceivableController extends Controller
     }
 
     /**
+     * Landing page daftar mahasiswa dengan piutang
+     */
+    public function landingPage()
+    {
+        $students = Student::withCount(['debts as total_debts' => function($q) {
+            $q->where('status', '!=', 'paid');
+        }])->withSum('debts as total_outstanding', 'outstanding_amount')
+        ->whereHas('debts', function($q) {
+            $q->where('status', '!=', 'paid');
+        })
+        ->orderByDesc('total_outstanding')
+        ->paginate(12);
+        return view('receivables.landing', compact('students'));
+    }
+
+    /**
      * Show by student page.
      */
     public function byStudent($studentId = null)
     {
-        // Get all students with receivables for navigation
-        $students = Student::has('receivables')
-                           ->with(['receivables' => function($query) {
+        // Get all students with debts for navigation
+        $students = Student::has('debts')
+                           ->with(['debts' => function($query) {
                                $query->select('student_id')->limit(1);
                            }])
                            ->get();
-        
-        // If no studentId provided, redirect to the first student with receivables
-        if (!$studentId && $students->count() > 0) {
-            return redirect()->route('receivables.by-student', $students->first()->id);
+        // Jika tidak ada studentId, tampilkan landing
+        if (!$studentId) {
+            return redirect()->route('receivables.landing');
         }
         
         // If no students have receivables, show empty state
         if ($students->count() == 0) {
             return view('receivables.by-student', [
                 'student' => null,
-                'receivables' => collect(),
+                'debts' => collect(),
                 'students' => collect(),
                 'otherStudents' => collect(),
                 'stats' => [
@@ -144,37 +159,37 @@ class ReceivableController extends Controller
             ]);
         }
         
-        $student = Student::with(['receivables.fee', 'major'])->find($studentId);
+        $student = Student::with(['debts.fee', 'major'])->find($studentId);
         
-        // If student not found, redirect to first student
+        // Jika student tidak ditemukan, redirect ke landing
         if (!$student) {
-            return redirect()->route('receivables.by-student', $students->first()->id)
-                            ->with('warning', 'Mahasiswa tidak ditemukan. Menampilkan mahasiswa pertama.');
+            return redirect()->route('receivables.landing')
+                            ->with('warning', 'Mahasiswa tidak ditemukan.');
         }
         
-        $receivables = $student->receivables()->with('fee')->paginate(15);
+        $debts = $student->debts()->with('fee')->paginate(15);
         
         // Calculate stats for this student
-        $allReceivables = $student->receivables;
+        $allDebts = $student->debts;
         $stats = [
-            'total_amount' => $allReceivables->sum('amount'),
-            'total_paid' => $allReceivables->sum('paid_amount'),
-            'total_outstanding' => $allReceivables->sum('outstanding_amount'),
-            'overdue_count' => $allReceivables->where('due_date', '<', now())
+            'total_amount' => $allDebts->sum('amount'),
+            'total_paid' => $allDebts->sum('paid_amount'),
+            'total_outstanding' => $allDebts->sum('outstanding_amount'),
+            'overdue_count' => $allDebts->where('due_date', '<', now())
                                             ->where('status', '!=', 'paid')
                                             ->count(),
         ];
         
         // Get other students with receivables for navigation dropdown
-        $otherStudents = Student::has('receivables')
+        $otherStudents = Student::has('debts')
                                ->where('id', '!=', $student->id)
-                               ->with(['receivables' => function($query) {
+                               ->with(['debts' => function($query) {
                                    $query->select('student_id')->limit(1);
                                }])
                                ->limit(10)
                                ->get();
         
-        return view('receivables.by-student', compact('student', 'receivables', 'students', 'otherStudents', 'stats'));
+        return view('receivables.by-student', compact('student', 'debts', 'students', 'otherStudents', 'stats'));
     }
 
     /**
@@ -182,34 +197,34 @@ class ReceivableController extends Controller
      */
     public function getData(Request $request)
     {
-        $query = Receivable::with(['student', 'fee'])
-            ->select('receivables.*');
+        $query = Debt::with(['student', 'fee'])
+            ->select('debts.*');
 
         return DataTables::of($query)
-            ->addColumn('student_name', function ($receivable) {
-                return $receivable->student ? $receivable->student->name : 'N/A';
+            ->addColumn('student_name', function ($debt) {
+                return $debt->student ? $debt->student->name : 'N/A';
             })
-            ->addColumn('student_nim', function ($receivable) {
-                return $receivable->student ? $receivable->student->nim : 'N/A';
+            ->addColumn('student_nim', function ($debt) {
+                return $debt->student ? $debt->student->nim : 'N/A';
             })
-            ->addColumn('fee_name', function ($receivable) {
-                return $receivable->fee ? $receivable->fee->name : 'N/A';
+            ->addColumn('fee_name', function ($debt) {
+                return $debt->fee ? $debt->fee->name : 'N/A';
             })
-            ->addColumn('formatted_amount', function ($receivable) {
-                return 'Rp ' . number_format($receivable->amount, 0, ',', '.');
+            ->addColumn('formatted_amount', function ($debt) {
+                return 'Rp ' . number_format($debt->amount, 0, ',', '.');
             })
-            ->addColumn('formatted_due_date', function ($receivable) {
-                return $receivable->due_date ? $receivable->due_date->format('d/m/Y') : 'N/A';
+            ->addColumn('formatted_due_date', function ($debt) {
+                return $debt->due_date ? $debt->due_date->format('d/m/Y') : 'N/A';
             })
-            ->addColumn('overdue_days', function ($receivable) {
-                if ($receivable->due_date && $receivable->due_date->isPast()) {
-                    return $receivable->due_date->diffInDays(now());
+            ->addColumn('overdue_days', function ($debt) {
+                if ($debt->due_date && $debt->due_date->isPast()) {
+                    return $debt->due_date->diffInDays(now());
                 }
                 return 0;
             })
-            ->addColumn('status_badge', function ($receivable) {
+            ->addColumn('status_badge', function ($debt) {
                 $statusClass = '';
-                switch ($receivable->status) {
+                switch ($debt->status) {
                     case 'paid':
                         $statusClass = 'badge-success';
                         break;
@@ -222,13 +237,13 @@ class ReceivableController extends Controller
                     default:
                         $statusClass = 'badge-secondary';
                 }
-                return '<span class=\"badge ' . $statusClass . '\">' . ucfirst($receivable->status) . '</span>';
+                return '<span class=\"badge ' . $statusClass . '\">' . ucfirst($debt->status) . '</span>';
             })
-            ->addColumn('action', function ($receivable) {
+            ->addColumn('action', function ($debt) {
                 $actions = '';
-                $actions .= '<a href=\"' . route('receivables.show', $receivable->id) . '\" class=\"btn btn-sm btn-info\" title=\"View\"><em class=\"icon ni ni-eye\"></em></a> ';
-                $actions .= '<a href=\"' . route('receivables.edit', $receivable->id) . '\" class=\"btn btn-sm btn-primary\" title=\"Edit\"><em class=\"icon ni ni-edit\"></em></a> ';
-                $actions .= '<button class=\"btn btn-sm btn-danger\" onclick=\"deleteReceivable(' . $receivable->id . ')\" title=\"Delete\"><em class=\"icon ni ni-trash\"></em></button>';
+                $actions .= '<a href=\"' . route('receivables.show', $debt->id) . '\" class=\"btn btn-sm btn-info\" title=\"View\"><em class=\"icon ni ni-eye\"></em></a> ';
+                $actions .= '<a href=\"' . route('receivables.edit', $debt->id) . '\" class=\"btn btn-sm btn-primary\" title=\"Edit\"><em class=\"icon ni ni-edit\"></em></a> ';
+                $actions .= '<button class=\"btn btn-sm btn-danger\" onclick=\"deleteReceivable(' . $debt->id . ')\" title=\"Delete\"><em class=\"icon ni ni-trash\"></em></button>';
                 return $actions;
             })
             ->rawColumns(['status_badge', 'action'])
@@ -240,35 +255,35 @@ class ReceivableController extends Controller
      */
     public function getOutstandingData(Request $request)
     {
-        $query = Receivable::with(['student', 'fee'])
+        $query = Debt::with(['student', 'fee'])
             ->where('status', '!=', 'paid')
-            ->select('receivables.*');
+            ->select('debts.*');
 
         return DataTables::of($query)
-            ->addColumn('student_name', function ($receivable) {
-                return $receivable->student ? $receivable->student->name : 'N/A';
+            ->addColumn('student_name', function ($debt) {
+                return $debt->student ? $debt->student->name : 'N/A';
             })
-            ->addColumn('student_nim', function ($receivable) {
-                return $receivable->student ? $receivable->student->nim : 'N/A';
+            ->addColumn('student_nim', function ($debt) {
+                return $debt->student ? $debt->student->nim : 'N/A';
             })
-            ->addColumn('fee_name', function ($receivable) {
-                return $receivable->fee ? $receivable->fee->name : 'N/A';
+            ->addColumn('fee_name', function ($debt) {
+                return $debt->fee ? $debt->fee->name : 'N/A';
             })
-            ->addColumn('formatted_amount', function ($receivable) {
-                return 'Rp ' . number_format($receivable->amount, 0, ',', '.');
+            ->addColumn('formatted_amount', function ($debt) {
+                return 'Rp ' . number_format($debt->amount, 0, ',', '.');
             })
-            ->addColumn('formatted_due_date', function ($receivable) {
-                return $receivable->due_date ? $receivable->due_date->format('d/m/Y') : 'N/A';
+            ->addColumn('formatted_due_date', function ($debt) {
+                return $debt->due_date ? $debt->due_date->format('d/m/Y') : 'N/A';
             })
-            ->addColumn('overdue_days', function ($receivable) {
-                if ($receivable->due_date && $receivable->due_date->isPast()) {
-                    return $receivable->due_date->diffInDays(now());
+            ->addColumn('overdue_days', function ($debt) {
+                if ($debt->due_date && $debt->due_date->isPast()) {
+                    return $debt->due_date->diffInDays(now());
                 }
                 return 0;
             })
-            ->addColumn('status_badge', function ($receivable) {
+            ->addColumn('status_badge', function ($debt) {
                 $statusClass = '';
-                switch ($receivable->status) {
+                switch ($debt->status) {
                     case 'paid':
                         $statusClass = 'badge-success';
                         break;
@@ -281,13 +296,13 @@ class ReceivableController extends Controller
                     default:
                         $statusClass = 'badge-secondary';
                 }
-                return '<span class=\"badge ' . $statusClass . '\">' . ucfirst($receivable->status) . '</span>';
+                return '<span class=\"badge ' . $statusClass . '\">' . ucfirst($debt->status) . '</span>';
             })
-            ->addColumn('action', function ($receivable) {
+            ->addColumn('action', function ($debt) {
                 $actions = '';
-                $actions .= '<a href=\"' . route('receivables.show', $receivable->id) . '\" class=\"btn btn-sm btn-info\" title=\"View\"><em class=\"icon ni ni-eye\"></em></a> ';
-                $actions .= '<button class=\"btn btn-sm btn-warning\" onclick=\"sendReminder(' . $receivable->id . ')\" title=\"Send Reminder\"><em class=\"icon ni ni-mail\"></em></button> ';
-                $actions .= '<button class=\"btn btn-sm btn-danger\" onclick=\"deleteReceivable(' . $receivable->id . ')\" title=\"Delete\"><em class=\"icon ni ni-trash\"></em></button>';
+                $actions .= '<a href=\"' . route('receivables.show', $debt->id) . '\" class=\"btn btn-sm btn-info\" title=\"View\"><em class=\"icon ni ni-eye\"></em></a> ';
+                $actions .= '<button class=\"btn btn-sm btn-warning\" onclick=\"sendReminder(' . $debt->id . ')\" title=\"Send Reminder\"><em class=\"icon ni ni-mail\"></em></button> ';
+                $actions .= '<button class=\"btn btn-sm btn-danger\" onclick=\"deleteReceivable(' . $debt->id . ')\" title=\"Delete\"><em class=\"icon ni ni-trash\"></em></button>';
                 return $actions;
             })
             ->rawColumns(['status_badge', 'action'])
@@ -299,28 +314,28 @@ class ReceivableController extends Controller
      */
     public function getHistoryData(Request $request)
     {
-        $query = Receivable::with(['student', 'fee'])
-            ->select('receivables.*');
+        $query = Debt::with(['student', 'fee'])
+            ->select('debts.*');
 
         return DataTables::of($query)
-            ->addColumn('student_name', function ($receivable) {
-                return $receivable->student ? $receivable->student->name : 'N/A';
+            ->addColumn('student_name', function ($debt) {
+                return $debt->student ? $debt->student->name : 'N/A';
             })
-            ->addColumn('student_nim', function ($receivable) {
-                return $receivable->student ? $receivable->student->nim : 'N/A';
+            ->addColumn('student_nim', function ($debt) {
+                return $debt->student ? $debt->student->nim : 'N/A';
             })
-            ->addColumn('fee_name', function ($receivable) {
-                return $receivable->fee ? $receivable->fee->name : 'N/A';
+            ->addColumn('fee_name', function ($debt) {
+                return $debt->fee ? $debt->fee->name : 'N/A';
             })
-            ->addColumn('formatted_amount', function ($receivable) {
-                return 'Rp ' . number_format($receivable->amount, 0, ',', '.');
+            ->addColumn('formatted_amount', function ($debt) {
+                return 'Rp ' . number_format($debt->amount, 0, ',', '.');
             })
-            ->addColumn('formatted_due_date', function ($receivable) {
-                return $receivable->due_date ? $receivable->due_date->format('d/m/Y') : 'N/A';
+            ->addColumn('formatted_due_date', function ($debt) {
+                return $debt->due_date ? $debt->due_date->format('d/m/Y') : 'N/A';
             })
-            ->addColumn('status_badge', function ($receivable) {
+            ->addColumn('status_badge', function ($debt) {
                 $statusClass = '';
-                switch ($receivable->status) {
+                switch ($debt->status) {
                     case 'paid':
                         $statusClass = 'badge-success';
                         break;
@@ -333,11 +348,11 @@ class ReceivableController extends Controller
                     default:
                         $statusClass = 'badge-secondary';
                 }
-                return '<span class=\"badge ' . $statusClass . '\">' . ucfirst($receivable->status) . '</span>';
+                return '<span class=\"badge ' . $statusClass . '\">' . ucfirst($debt->status) . '</span>';
             })
-            ->addColumn('action', function ($receivable) {
+            ->addColumn('action', function ($debt) {
                 $actions = '';
-                $actions .= '<a href=\"' . route('receivables.show', $receivable->id) . '\" class=\"btn btn-sm btn-info\" title=\"View\"><em class=\"icon ni ni-eye\"></em></a> ';
+                $actions .= '<a href=\"' . route('receivables.show', $debt->id) . '\" class=\"btn btn-sm btn-info\" title=\"View\"><em class=\"icon ni ni-eye\"></em></a> ';
                 return $actions;
             })
             ->rawColumns(['status_badge', 'action'])
@@ -368,7 +383,7 @@ class ReceivableController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        Receivable::create($validated);
+        Debt::create($validated);
 
         return redirect()->route('receivables.index')
             ->with('success', 'Receivable created successfully.');
@@ -379,8 +394,8 @@ class ReceivableController extends Controller
      */
     public function show(string $id)
     {
-        $receivable = Receivable::with(['student', 'fee'])->findOrFail($id);
-        return view('receivables.show', compact('receivable'));
+        $debt = Debt::with(['student', 'fee'])->findOrFail($id);
+        return view('receivables.show', compact('debt'));
     }
 
     /**
@@ -388,10 +403,10 @@ class ReceivableController extends Controller
      */
     public function edit(string $id)
     {
-        $receivable = Receivable::findOrFail($id);
+        $debt = Debt::findOrFail($id);
         $students = Student::all();
         $fees = Fee::all();
-        return view('receivables.edit', compact('receivable', 'students', 'fees'));
+        return view('receivables.edit', compact('debt', 'students', 'fees'));
     }
 
     /**
@@ -408,8 +423,8 @@ class ReceivableController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        $receivable = Receivable::findOrFail($id);
-        $receivable->update($validated);
+        $debt = Debt::findOrFail($id);
+        $debt->update($validated);
 
         return redirect()->route('receivables.index')
             ->with('success', 'Receivable updated successfully.');
@@ -420,8 +435,8 @@ class ReceivableController extends Controller
      */
     public function destroy(string $id)
     {
-        $receivable = Receivable::findOrFail($id);
-        $receivable->delete();
+        $debt = Debt::findOrFail($id);
+        $debt->delete();
 
         return redirect()->route('receivables.index')
             ->with('success', 'Receivable deleted successfully.');
@@ -432,7 +447,7 @@ class ReceivableController extends Controller
      */
     public function sendReminder(string $id)
     {
-        $receivable = Receivable::with(['student', 'fee'])->findOrFail($id);
+        $debt = Debt::with(['student', 'fee'])->findOrFail($id);
         
         // Logic to send reminder (email, SMS, etc.)
         
@@ -447,8 +462,8 @@ class ReceivableController extends Controller
      */
     public function markAsPaid(string $id)
     {
-        $receivable = Receivable::findOrFail($id);
-        $receivable->update(['status' => 'paid']);
+        $debt = Debt::findOrFail($id);
+        $debt->update(['status' => 'paid']);
 
         return response()->json([
             'success' => true,

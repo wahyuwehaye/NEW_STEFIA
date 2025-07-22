@@ -132,11 +132,29 @@
         </form>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-        <button class="btn-export" onclick="exportToExcel()">Export Excel</button>
-        <button class="btn-export" onclick="exportToPDF()">Export PDF</button>
-        <button class="btn-print" onclick="printReport()">Print</button>
+    <!-- Action Buttons & Filter Global -->
+    <div class="action-buttons d-flex align-items-center mb-3">
+        <input type="text" class="form-control me-2" id="searchStudent" placeholder="Cari nama/NIM/fakultas..." onkeyup="filterStudents()" style="width:220px;">
+        <select class="form-select me-2" id="filterFaculty" onchange="filterStudents()" style="width:auto;display:inline-block;">
+            <option value="">Semua Fakultas</option>
+            <option value="FTI">Faculty of Information Technology</option>
+            <option value="FE">Faculty of Economics</option>
+            <option value="FH">Faculty of Law</option>
+            <option value="FK">Faculty of Medicine</option>
+        </select>
+        <select class="form-select me-2" id="filterStatus" onchange="filterStudents()" style="width:auto;display:inline-block;">
+            <option value="">Semua Status</option>
+            <option value="active">Active</option>
+            <option value="graduated">Graduated</option>
+            <option value="dropped">Dropped Out</option>
+        </select>
+        <select class="form-select me-2" id="filterYear" onchange="filterStudents()" style="width:auto;display:inline-block;">
+            <option value="">Semua Tahun</option>
+            @for($year = date('Y'); $year >= 2020; $year--)
+                <option value="{{ $year }}">{{ $year }}/{{ $year + 1 }}</option>
+            @endfor
+        </select>
+        <button class="btn btn-secondary" onclick="resetStudentFilter()">Reset</button>
     </div>
 
     <!-- Student Data Table -->
@@ -189,25 +207,100 @@
     </div>
 </div>
 
+@push('styles')
+<style>
+/* Responsive filter bar */
+.filter-section, .action-buttons, .d-flex.align-items-center {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+@media (max-width: 600px) {
+    .filter-section, .action-buttons, .d-flex.align-items-center {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+/* Konsistensi badge */
+.badge, .badge-status, .badge-role-table {
+    font-size: 0.92rem;
+    border-radius: 8px;
+    padding: 0.32rem 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+/* Animasi hover tabel */
+.table-hover tbody tr:hover, .nk-tb-list .nk-tb-item:hover {
+    background: #f43f5e0d !important;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+/* Animasi tombol */
+.btn, .form-select, .form-control {
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+}
+.btn:hover, .form-select:focus, .form-control:focus {
+    box-shadow: 0 2px 8px rgba(225,29,72,0.08);
+}
+/* Padding tabel mobile */
+@media (max-width: 600px) {
+    .table, .table th, .table td {
+        padding: 0.5rem !important;
+        font-size: 0.95rem;
+    }
+}
+</style>
+@endpush
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// Placeholder functions for actions
+function filterStudents() {
+    const faculty = document.getElementById('filterFaculty').value;
+    const status = document.getElementById('filterStatus').value;
+    const year = document.getElementById('filterYear').value;
+    const search = document.getElementById('searchStudent').value.toLowerCase();
+    document.querySelectorAll('.table-responsive table tbody tr').forEach(row => {
+        const rowText = row.innerText.toLowerCase();
+        let show = true;
+        if (faculty && !rowText.includes(faculty.toLowerCase())) show = false;
+        if (status && !rowText.includes(status.toLowerCase())) show = false;
+        if (year && !rowText.includes(year)) show = false;
+        if (search && !rowText.includes(search)) show = false;
+        row.style.display = show ? '' : 'none';
+    });
+}
+function resetStudentFilter() {
+    document.getElementById('filterFaculty').value = '';
+    document.getElementById('filterStatus').value = '';
+    document.getElementById('filterYear').value = '';
+    document.getElementById('searchStudent').value = '';
+    filterStudents();
+}
 function exportToExcel() {
-    alert('Export to Excel functionality will be implemented');
+    window.location = '/reports/export?export_type=students&format=excel' + window.location.search;
 }
-
+function exportToCSV() {
+    window.location = '/reports/export?export_type=students&format=csv' + window.location.search;
+}
 function exportToPDF() {
-    alert('Export to PDF functionality will be implemented');
+    window.location = '/reports/export?export_type=students&format=pdf' + window.location.search;
 }
-
 function printReport() {
     window.print();
 }
-
 function viewDetail(studentId) {
     alert('Viewing details for student ID: ' + studentId);
 }
+// Feedback notifikasi sukses/gagal setelah aksi
+@if(session('success'))
+    window.setTimeout(() => { alert(@json(session('success'))); }, 500);
+@endif
+@if(session('error'))
+    window.setTimeout(() => { alert(@json(session('error'))); }, 500);
+@endif
 </script>
 @endpush
 @endsection

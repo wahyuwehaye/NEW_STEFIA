@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('follow_ups', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('receivable_id')->nullable();
+            $table->unsignedBigInteger('debt_id')->nullable();
             $table->enum('action_type', ['nde_fakultas', 'dosen_wali', 'surat_orangtua', 'telepon', 'home_visit', 'other']);
             $table->string('title');
             $table->text('description');
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
             
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->foreign('receivable_id')->references('id')->on('receivables')->onDelete('set null');
+            $table->foreign('debt_id')->references('id')->on('debts')->onDelete('set null');
             $table->foreign('performed_by')->references('id')->on('users')->onDelete('cascade');
             $table->index(['student_id', 'action_type']);
             $table->index(['action_date']);

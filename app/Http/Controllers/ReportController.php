@@ -8,6 +8,8 @@ use App\Models\Debt;
 use App\Models\FollowUp;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Exports\StudentsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -786,8 +788,13 @@ class ReportController extends Controller
      */
     private function generateExcelExport($data, $type)
     {
-        // Excel export implementation
-        return response()->json(['message' => 'Excel export not yet implemented']);
+        if ($type === 'students') {
+            $export = new StudentsExport();
+            $filename = 'students_export_' . now()->format('Ymd_His') . '.xlsx';
+            return Excel::download($export, $filename);
+        }
+        // Untuk type lain, bisa ditambahkan export class sesuai kebutuhan
+        return response()->json(['message' => 'Excel export for this type not yet implemented']);
     }
 
     /**
@@ -795,7 +802,6 @@ class ReportController extends Controller
      */
     private function generatePDFExport($data, $type)
     {
-        // PDF export implementation
         return response()->json(['message' => 'PDF export not yet implemented']);
     }
 
@@ -804,7 +810,6 @@ class ReportController extends Controller
      */
     private function generateCSVExport($data, $type)
     {
-        // CSV export implementation
         return response()->json(['message' => 'CSV export not yet implemented']);
     }
 }

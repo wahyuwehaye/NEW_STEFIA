@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Student;
 
 class StudentsController extends Controller
 {
@@ -11,58 +12,7 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        // Sample data mahasiswa untuk STEFIA
-        $students = [
-            [
-                'id' => 1,
-                'name' => 'Ahmad Fauzi',
-                'email' => 'ahmad.fauzi@student.ac.id',
-                'nim' => '2019001',
-                'class' => 'Teknik Informatika',
-                'angkatan' => '2019',
-                'semester' => 8,
-                'status' => 'Active',
-                'tunggakan' => 15000000,
-                'phone' => '+62 812-3456-7890'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Siti Nurhaliza',
-                'email' => 'siti.nurhaliza@student.ac.id',
-                'nim' => '2020002',
-                'class' => 'Sistem Informasi',
-                'angkatan' => '2020',
-                'semester' => 6,
-                'status' => 'Active',
-                'tunggakan' => 0,
-                'phone' => '+62 813-7890-1234'
-            ],
-            [
-                'id' => 3,
-                'name' => 'Budi Santoso',
-                'email' => 'budi.santoso@student.ac.id',
-                'nim' => '2018003',
-                'class' => 'Teknik Elektro',
-                'angkatan' => '2018',
-                'semester' => 9,
-                'status' => 'Active',
-                'tunggakan' => 7500000,
-                'phone' => '+62 814-5678-9012'
-            ],
-            [
-                'id' => 4,
-                'name' => 'Dewi Sartika',
-                'email' => 'dewi.sartika@student.ac.id',
-                'nim' => '2021004',
-                'class' => 'Teknik Mesin',
-                'angkatan' => '2021',
-                'semester' => 4,
-                'status' => 'Active',
-                'tunggakan' => 2500000,
-                'phone' => '+62 815-2345-6789'
-            ]
-        ];
-        
+        $students = Student::orderBy('created_at', 'desc')->get();
         return view('students.index', compact('students'));
     }
 
@@ -79,7 +29,26 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: Implement store logic
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'nim' => 'required|string|max:20|unique:students,nim',
+            'email' => 'nullable|email|unique:students,email',
+            'class' => 'nullable|string|max:100',
+            'angkatan' => 'nullable|integer|min:2000|max:' . (date('Y') + 1),
+            'semester' => 'nullable|integer|min:1|max:14',
+            'phone' => 'nullable|string|max:20',
+            'status' => 'nullable|string|max:50',
+        ]);
+        $student = new Student();
+        $student->name = $validated['name'];
+        $student->nim = $validated['nim'];
+        $student->email = $validated['email'] ?? null;
+        $student->class = $validated['class'] ?? null;
+        $student->cohort_year = $validated['angkatan'] ?? null;
+        $student->current_semester = $validated['semester'] ?? null;
+        $student->phone = $validated['phone'] ?? null;
+        $student->status = $validated['status'] ?? 'active';
+        $student->save();
         return redirect()->route('students.index')->with('success', 'Data mahasiswa berhasil ditambahkan');
     }
 
@@ -88,8 +57,8 @@ class StudentsController extends Controller
      */
     public function show(string $id)
     {
-        // TODO: Implement show logic
-        return view('students.show', compact('id'));
+        $student = Student::findOrFail($id);
+        return view('students.show', compact('student'));
     }
 
     /**
@@ -97,8 +66,8 @@ class StudentsController extends Controller
      */
     public function edit(string $id)
     {
-        // TODO: Implement edit logic
-        return view('students.edit', compact('id'));
+        $student = Student::findOrFail($id);
+        return view('students.edit', compact('student'));
     }
 
     /**
@@ -106,8 +75,27 @@ class StudentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // TODO: Implement update logic
-        return redirect()->route('students.index')->with('success', 'Student updated successfully');
+        $student = Student::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'nim' => 'required|string|max:20|unique:students,nim,' . $id,
+            'email' => 'nullable|email|unique:students,email,' . $id,
+            'class' => 'nullable|string|max:100',
+            'angkatan' => 'nullable|integer|min:2000|max:' . (date('Y') + 1),
+            'semester' => 'nullable|integer|min:1|max:14',
+            'phone' => 'nullable|string|max:20',
+            'status' => 'nullable|string|max:50',
+        ]);
+        $student->name = $validated['name'];
+        $student->nim = $validated['nim'];
+        $student->email = $validated['email'] ?? null;
+        $student->class = $validated['class'] ?? null;
+        $student->cohort_year = $validated['angkatan'] ?? null;
+        $student->current_semester = $validated['semester'] ?? null;
+        $student->phone = $validated['phone'] ?? null;
+        $student->status = $validated['status'] ?? 'active';
+        $student->save();
+        return redirect()->route('students.index')->with('success', 'Data mahasiswa berhasil diperbarui');
     }
 
     /**
@@ -115,7 +103,8 @@ class StudentsController extends Controller
      */
     public function destroy(string $id)
     {
-        // TODO: Implement destroy logic
+        $student = Student::findOrFail($id);
+        $student->delete();
         return redirect()->route('students.index')->with('success', 'Mahasiswa berhasil dihapus');
     }
     

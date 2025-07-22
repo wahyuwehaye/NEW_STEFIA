@@ -508,73 +508,66 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-$(document).ready(function() {
-    // Payment Trend Chart
-    const trendCtx = document.getElementById('paymentTrendChart').getContext('2d');
-    const trendChart = new Chart(trendCtx, {
-        type: 'line',
-        data: {
-            labels: ['1 Nov', '2 Nov', '3 Nov', '4 Nov', '5 Nov', '6 Nov', '7 Nov'],
-            datasets: [{
-                label: 'Total Pembayaran',
-                data: [65000000, 59000000, 80000000, 81000000, 56000000, 55000000, 125750000],
-                borderColor: '#0066cc',
-                backgroundColor: 'rgba(0, 102, 204, 0.1)',
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return 'Rp ' + (value / 1000000).toFixed(0) + 'M';
-                        }
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        }
-    });
-
-    // Payment Method Chart
-    const methodCtx = document.getElementById('paymentMethodChart').getContext('2d');
-    const methodChart = new Chart(methodCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Transfer Bank', 'Credit Card', 'E-Wallet', 'Cash', 'Debit Card'],
-            datasets: [{
-                data: [45, 20, 15, 12, 8],
-                backgroundColor: [
-                    '#0066cc',
-                    '#28a745',
-                    '#ffc107',
-                    '#dc3545',
-                    '#6c757d'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true
-                    }
-                }
-            }
-        }
-    });
-});
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show fade-in`;
+    toast.style = 'min-width:260px; margin-bottom:8px;';
+    toast.innerHTML = `<div class='d-flex'><div class='toast-body'>${message}</div><button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button></div>`;
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container position-fixed top-0 end-0 p-3';
+        container.style.zIndex = 9999;
+        document.body.appendChild(container);
+    }
+    container.appendChild(toast);
+    setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3500);
+}
+// Example: feedback ekspor
+function exportChart(chartId) {
+    showToast('Ekspor chart ' + chartId + ' berhasil (dummy)', 'success');
+    // TODO: Implement real export logic
+}
+// Example: feedback error
+function chartError(chartId) {
+    showToast('Gagal memuat chart ' + chartId, 'danger');
+}
+// Loading indicator for refresh
+function showLoadingDashboard() {
+    let loading = document.getElementById('dashboardLoading');
+    if (!loading) {
+        loading = document.createElement('div');
+        loading.id = 'dashboardLoading';
+        loading.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.6);z-index:9998;display:flex;align-items:center;justify-content:center;';
+        loading.innerHTML = '<div class="spinner-border text-danger" style="width:3rem;height:3rem;"></div>';
+        document.body.appendChild(loading);
+    }
+}
+function hideLoadingDashboard() {
+    let loading = document.getElementById('dashboardLoading');
+    if (loading) loading.remove();
+}
+// Simulasi refresh data dengan loading
+function refreshDashboardData() {
+    showLoadingDashboard();
+    setTimeout(() => {
+        hideLoadingDashboard();
+        showToast('Data dashboard berhasil diperbarui', 'success');
+    }, 1200);
+}
+// Feedback notifikasi sukses/gagal setelah aksi
+@if(session('success'))
+    window.setTimeout(() => { showToast(@json(session('success')), 'success'); }, 500);
+@endif
+@if(session('error'))
+    window.setTimeout(() => { showToast(@json(session('error')), 'danger'); }, 500);
+@endif
 </script>
+@endpush
+@push('styles')
+<style>
+.toast-container { pointer-events: none; }
+.toast { pointer-events: auto; min-width: 260px; }
+#dashboardLoading { pointer-events: all; }
+</style>
 @endpush

@@ -20,7 +20,11 @@ class DatabaseSeeder extends Seeder
             MajorSeeder::class,
             UserSeeder::class,
             StudentSeeder::class,
+            StudentsSeeder::class,
             SuperAdminSeeder::class,
+            NotificationSeeder::class,
+            ReceivableSeeder::class,
+            TunggakanSeeder::class,
         ]);
     }
 }

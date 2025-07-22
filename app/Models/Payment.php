@@ -15,7 +15,7 @@ class Payment extends Model
         'payment_code',
         'student_id',
         'user_id',
-        'receivable_id', // For linking to specific receivables
+        'debt_id', // For linking to specific receivables
         'amount',
         'payment_date',
         'payment_method',
@@ -59,9 +59,9 @@ class Payment extends Model
         return $this->belongsTo(User::class, 'verified_by');
     }
 
-    public function receivable(): BelongsTo
+    public function debt(): BelongsTo
     {
-        return $this->belongsTo(Receivable::class);
+        return $this->belongsTo(Debt::class);
     }
 
     // Scopes

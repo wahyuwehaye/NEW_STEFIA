@@ -14,6 +14,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SyncController;
 use App\Http\Controllers\FollowUpController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\IGraciasDummyController;
 
 // Landing page
 Route::get('/', function () {
@@ -108,6 +109,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/receivables-bulk-operations', [ReceivableController::class, 'bulkOperations'])->name('receivables.bulk-operations');
     Route::get('/receivables-export', [ReceivableController::class, 'export'])->name('receivables.export');
     Route::get('/receivables-sync-igracias', [ReceivableController::class, 'syncIgracias'])->name('receivables.sync-igracias');
+    Route::get('/receivables-by-student', [ReceivableController::class, 'landingPage'])->name('receivables.landing');
     Route::get('/receivables-by-student/{studentId?}', [ReceivableController::class, 'byStudent'])->name('receivables.by-student');
     
     // API routes for DataTables
@@ -336,3 +338,12 @@ Route::middleware(['auth'])->group(function () {
 
 // Auth routes
 require __DIR__.'/auth.php';
+
+Route::prefix('dummy')->group(function () {
+    Route::get('/students', [IGraciasDummyController::class, 'students']);
+    Route::get('/students/{nim}', [IGraciasDummyController::class, 'studentDetail']);
+    Route::get('/payments', [IGraciasDummyController::class, 'payments']);
+    Route::get('/payments/{paymentId}', [IGraciasDummyController::class, 'paymentDetail']);
+    Route::get('/receivables', [IGraciasDummyController::class, 'receivables']);
+    Route::get('/receivables/{receivableId}', [IGraciasDummyController::class, 'receivableDetail']);
+});

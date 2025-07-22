@@ -2,6 +2,53 @@
 
 @section('title', 'Manajemen Pembayaran')
 
+@push('styles')
+<style>
+/* Responsive filter bar */
+.filter-section, .action-buttons, .d-flex.align-items-center {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+@media (max-width: 600px) {
+    .filter-section, .action-buttons, .d-flex.align-items-center {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+/* Konsistensi badge */
+.badge, .badge-status, .badge-role-table {
+    font-size: 0.92rem;
+    border-radius: 8px;
+    padding: 0.32rem 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+/* Animasi hover tabel */
+.table-hover tbody tr:hover, .nk-tb-list .nk-tb-item:hover {
+    background: #f43f5e0d !important;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+/* Animasi tombol */
+.btn, .form-select, .form-control {
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+}
+.btn:hover, .form-select:focus, .form-control:focus {
+    box-shadow: 0 2px 8px rgba(225,29,72,0.08);
+}
+/* Padding tabel mobile */
+@media (max-width: 600px) {
+    .table, .table th, .table td {
+        padding: 0.5rem !important;
+        font-size: 0.95rem;
+    }
+}
+</style>
+@endpush
+
 @section('content')
 <x-page-header 
     title="Manajemen Pembayaran" 
@@ -127,15 +174,31 @@
 <div class="nk-block">
     <div class="card card-bordered">
         <div class="card-inner">
-            <div class="card-title-group">
-                <div class="card-title">
-                    <h6 class="title">Daftar Pembayaran</h6>
-                </div>
-                <div class="card-tools">
-                    <ul class="card-tools-nav">
-                        <li><a href="#"><span>Export Excel</span></a></li>
-                        <li><a href="#"><span>Export PDF</span></a></li>
-                    </ul>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="title mb-0">Daftar Pembayaran</h6>
+                <div class="d-flex align-items-center">
+                    <input type="text" class="form-control me-2" id="searchPayment" placeholder="Cari nama/NIM/metode..." onkeyup="filterPayments()" style="width:200px;">
+                    <select class="form-select me-2" id="filterStatus" onchange="filterPayments()" style="width:auto;display:inline-block;">
+                        <option value="">Semua Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="verified">Verified</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <select class="form-select me-2" id="filterMetode" onchange="filterPayments()" style="width:auto;display:inline-block;">
+                        <option value="">Semua Metode</option>
+                        <option value="bank">Transfer Bank</option>
+                        <option value="cash">Cash</option>
+                        <option value="virtual">Virtual Account</option>
+                        <option value="e-wallet">E-Wallet</option>
+                    </select>
+                    <select class="form-select me-2" id="filterJurusan" onchange="filterPayments()" style="width:auto;display:inline-block;">
+                        <option value="">Semua Jurusan</option>
+                        <option value="TI">Teknik Informatika</option>
+                        <option value="SI">Sistem Informasi</option>
+                        <option value="TE">Teknik Elektro</option>
+                        <option value="TM">Teknik Mesin</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="resetPaymentFilter()">Reset</button>
                 </div>
             </div>
         </div>
@@ -416,5 +479,28 @@ $(document).ready(function() {
         }
     }, 30000);
 });
+
+function filterPayments() {
+    const status = document.getElementById('filterStatus').value.toLowerCase();
+    const metode = document.getElementById('filterMetode').value.toLowerCase();
+    const jurusan = document.getElementById('filterJurusan').value.toLowerCase();
+    const search = document.getElementById('searchPayment').value.toLowerCase();
+    document.querySelectorAll('.nk-tb-list .nk-tb-item').forEach(row => {
+        const rowText = row.innerText.toLowerCase();
+        let show = true;
+        if (status && !rowText.includes(status)) show = false;
+        if (metode && !rowText.includes(metode)) show = false;
+        if (jurusan && !rowText.includes(jurusan)) show = false;
+        if (search && !rowText.includes(search)) show = false;
+        row.style.display = show ? '' : 'none';
+    });
+}
+function resetPaymentFilter() {
+    document.getElementById('filterStatus').value = '';
+    document.getElementById('filterMetode').value = '';
+    document.getElementById('filterJurusan').value = '';
+    document.getElementById('searchPayment').value = '';
+    filterPayments();
+}
 </script>
 @endpush

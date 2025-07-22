@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->unsignedBigInteger('receivable_id')->nullable()->after('user_id');
+            $table->unsignedBigInteger('debt_id')->nullable()->after('user_id');
             $table->enum('source', ['manual', 'igracias'])->default('manual')->after('verified_by');
             $table->string('igracias_id')->nullable()->after('source');
             $table->json('igracias_data')->nullable()->after('igracias_id');
             $table->boolean('auto_applied')->default(false)->after('igracias_data');
             
-            $table->foreign('receivable_id')->references('id')->on('receivables')->onDelete('set null');
+            $table->foreign('debt_id')->references('id')->on('debts')->onDelete('set null');
         });
     }
 
@@ -28,9 +28,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->dropForeign(['receivable_id']);
+            $table->dropForeign(['debt_id']);
             $table->dropColumn([
-                'receivable_id',
+                'debt_id',
                 'source',
                 'igracias_id', 
                 'igracias_data',

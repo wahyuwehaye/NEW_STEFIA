@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Receivable;
+use App\Models\Debt;
 use App\Models\Student;
 use App\Models\Fee;
 use App\Models\User;
@@ -32,11 +32,11 @@ class ReceivableSeeder extends Seeder
             }
             
             $basicFees = [
-                ['name' => 'Biaya Kuliah Semester 1', 'type' => 'tuition', 'amount' => 2500000],
-                ['name' => 'Biaya Laboratorium', 'type' => 'laboratory', 'amount' => 500000],
-                ['name' => 'Biaya Perpustakaan', 'type' => 'library', 'amount' => 200000],
-                ['name' => 'Biaya Pendaftaran', 'type' => 'registration', 'amount' => 300000],
-                ['name' => 'Biaya Ujian', 'type' => 'exam', 'amount' => 150000],
+                ['fee_code' => 'FEE001', 'name' => 'Biaya Kuliah Semester 1', 'type' => 'tuition', 'amount' => 2500000],
+                ['fee_code' => 'FEE002', 'name' => 'Biaya Laboratorium', 'type' => 'laboratory', 'amount' => 500000],
+                ['fee_code' => 'FEE003', 'name' => 'Biaya Perpustakaan', 'type' => 'library', 'amount' => 200000],
+                ['fee_code' => 'FEE004', 'name' => 'Biaya Pendaftaran', 'type' => 'registration', 'amount' => 300000],
+                ['fee_code' => 'FEE005', 'name' => 'Biaya Ujian', 'type' => 'exam', 'amount' => 150000],
             ];
             
             foreach ($basicFees as $feeData) {
@@ -95,30 +95,23 @@ class ReceivableSeeder extends Seeder
                 
                 $receivableCode = 'RCV' . date('y') . str_pad(($student->id * 1000 + $i), 6, '0', STR_PAD_LEFT);
                 
-                $receivable = Receivable::create([
+                Debt::create([
                     'receivable_code' => $receivableCode,
                     'student_id' => $student->id,
                     'fee_id' => $fees->random()->id,
-                    'type' => $types[array_rand($types)],
-                    'category' => $categories[array_rand($categories)],
                     'amount' => $amount,
                     'paid_amount' => $paidAmount,
                     'outstanding_amount' => $amount - $paidAmount,
                     'penalty_amount' => $status === 'overdue' ? rand(50000, 200000) : 0,
-                    'penalty_percentage' => 2.5,
                     'due_date' => $dueDate,
                     'penalty_date' => $dueDate->copy()->addDays(7),
                     'status' => $status,
                     'priority' => $priorities[array_rand($priorities)],
-                    'academic_year' => '2024/2025',
                     'semester' => rand(1, 8),
                     'description' => 'Pembayaran ' . ucfirst($categories[array_rand($categories)]) . ' semester ' . rand(1, 8),
                     'notes' => 'Catatan untuk receivable ' . $i,
                     'created_by' => $creator->id,
                     'last_reminder_sent' => rand(0, 1) ? Carbon::now()->subDays(rand(1, 10)) : null,
-                    'reminder_count' => rand(0, 3),
-                    'auto_penalty' => rand(0, 1),
-                    'igracias_id' => $types[array_rand($types)] === 'igracias' ? 'IGR' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT) : null,
                     'created_at' => Carbon::now()->subDays(rand(1, 180)),
                     'updated_at' => Carbon::now()->subDays(rand(0, 30)),
                 ]);

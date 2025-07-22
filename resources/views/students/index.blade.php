@@ -20,7 +20,7 @@
                             <ul class="nk-block-tools g-3">
                                 <li><a href="{{ route('students.import-form') }}" class="btn btn-white btn-outline-light"><em class="icon ni ni-upload"></em><span>Import</span></a></li>
                                 <li><a href="#" class="btn btn-white btn-outline-light" id="export-btn"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-                                <li class="nk-block-tools-opt"><a href="{{ route('students.create') }}" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Tambah Mahasiswa</span></a></li>
+                                <li class="nk-block-tools-opt"><a href="{{ route('students.create') }}" class="btn btn-primary" dusk="add-student"><em class="icon ni ni-plus"></em><span>Tambah Mahasiswa</span></a></li>
                             </ul>
                         </div>
                     </div>

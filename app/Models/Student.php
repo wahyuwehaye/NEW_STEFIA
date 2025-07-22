@@ -68,9 +68,9 @@ class Student extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function receivables(): HasMany
+    public function debts(): HasMany
     {
-        return $this->hasMany(Receivable::class);
+        return $this->hasMany(Debt::class);
     }
 
     public function studentFees(): HasMany
@@ -114,11 +114,6 @@ class Student extends Model
         return $this->belongsToMany(ParentModel::class, 'student_parents', 'student_id', 'parent_id')
                     ->withPivot('relationship')
                     ->withTimestamps();
-    }
-
-    public function debts(): HasMany
-    {
-        return $this->hasMany(Debt::class);
     }
 
     public function studentParents(): HasMany

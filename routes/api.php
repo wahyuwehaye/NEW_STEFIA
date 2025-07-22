@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BasicStudentController;
+use App\Http\Controllers\Api\IGraciasDummyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,3 +67,10 @@ Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
         ]);
     });
 });
+
+Route::get('/students', [IGraciasDummyController::class, 'students']);
+Route::get('/students/{nim}', [IGraciasDummyController::class, 'studentDetail']);
+Route::get('/payments', [IGraciasDummyController::class, 'payments']);
+Route::get('/payments/{paymentId}', [IGraciasDummyController::class, 'paymentDetail']);
+Route::get('/receivables', [IGraciasDummyController::class, 'receivables']);
+Route::get('/receivables/{receivableId}', [IGraciasDummyController::class, 'receivableDetail']);

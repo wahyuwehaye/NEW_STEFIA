@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Payment;
+use App\Models\Student;
 
 class PaymentsController extends Controller
 {
@@ -11,7 +13,8 @@ class PaymentsController extends Controller
      */
     public function index()
     {
-        return view('payments.index');
+        $payments = Payment::with('student')->orderBy('payment_date', 'desc')->get();
+        return view('payments.index', compact('payments'));
     }
 
     /**
@@ -19,7 +22,8 @@ class PaymentsController extends Controller
      */
     public function create()
     {
-        return view('payments.create');
+        $students = Student::orderBy('name')->get();
+        return view('payments.create', compact('students'));
     }
 
     /**
@@ -27,7 +31,25 @@ class PaymentsController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: Implement store logic
+        $validated = $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'amount' => 'required|numeric|min:1',
+            'payment_date' => 'required|date',
+            'payment_method' => 'required|string|max:50',
+            'payment_type' => 'nullable|string|max:50',
+            'description' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:255',
+        ]);
+        $payment = new Payment();
+        $payment->student_id = $validated['student_id'];
+        $payment->amount = $validated['amount'];
+        $payment->payment_date = $validated['payment_date'];
+        $payment->payment_method = $validated['payment_method'];
+        $payment->payment_type = $validated['payment_type'] ?? null;
+        $payment->description = $validated['description'] ?? null;
+        $payment->notes = $validated['notes'] ?? null;
+        $payment->status = 'completed';
+        $payment->save();
         return redirect()->route('payments.index')->with('success', 'Pembayaran berhasil ditambahkan');
     }
 
@@ -36,8 +58,8 @@ class PaymentsController extends Controller
      */
     public function show(string $id)
     {
-        // TODO: Implement show logic
-        return view('payments.show', compact('id'));
+        $payment = Payment::with('student')->findOrFail($id);
+        return view('payments.show', compact('payment'));
     }
 
     /**
@@ -45,8 +67,9 @@ class PaymentsController extends Controller
      */
     public function edit(string $id)
     {
-        // TODO: Implement edit logic
-        return view('payments.edit', compact('id'));
+        $payment = Payment::findOrFail($id);
+        $students = Student::orderBy('name')->get();
+        return view('payments.edit', compact('payment', 'students'));
     }
 
     /**
@@ -54,7 +77,24 @@ class PaymentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // TODO: Implement update logic
+        $payment = Payment::findOrFail($id);
+        $validated = $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'amount' => 'required|numeric|min:1',
+            'payment_date' => 'required|date',
+            'payment_method' => 'required|string|max:50',
+            'payment_type' => 'nullable|string|max:50',
+            'description' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:255',
+        ]);
+        $payment->student_id = $validated['student_id'];
+        $payment->amount = $validated['amount'];
+        $payment->payment_date = $validated['payment_date'];
+        $payment->payment_method = $validated['payment_method'];
+        $payment->payment_type = $validated['payment_type'] ?? null;
+        $payment->description = $validated['description'] ?? null;
+        $payment->notes = $validated['notes'] ?? null;
+        $payment->save();
         return redirect()->route('payments.index')->with('success', 'Pembayaran berhasil diperbarui');
     }
 
@@ -63,7 +103,8 @@ class PaymentsController extends Controller
      */
     public function destroy(string $id)
     {
-        // TODO: Implement destroy logic
+        $payment = Payment::findOrFail($id);
+        $payment->delete();
         return redirect()->route('payments.index')->with('success', 'Pembayaran berhasil dihapus');
     }
 
@@ -72,8 +113,8 @@ class PaymentsController extends Controller
      */
     public function pending()
     {
-        // TODO: Implement pending logic
-        return view('payments.pending');
+        $payments = Payment::pending()->with('student')->orderBy('payment_date', 'desc')->get();
+        return view('payments.pending', compact('payments'));
     }
 
     /**
@@ -81,8 +122,8 @@ class PaymentsController extends Controller
      */
     public function history()
     {
-        // TODO: Implement history logic
-        return view('payments.history');
+        $payments = Payment::with('student')->orderBy('payment_date', 'desc')->get();
+        return view('payments.history', compact('payments'));
     }
 
     /**

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dokumentasi API iGracias untuk STEFIA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f9fafb; color: #222; margin: 0; padding: 0; }
+    .container { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #0001; padding: 2rem; }
+    h1, h2, h3 { color: #b91c1c; }
+    code, pre { background: #f3f4f6; color: #1e293b; border-radius: 6px; padding: 2px 6px; }
+    pre { padding: 1rem; overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+    th, td { border: 1px solid #e5e7eb; padding: 8px 12px; }
+    th { background: #fef2f2; }
+    .badge { display: inline-block; background: #f43f5e; color: #fff; border-radius: 6px; padding: 2px 10px; font-size: 0.95em; }
+    .section { margin-bottom: 2.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dokumentasi API iGracias untuk STEFIA</h1>
+    <div class="section">
+      <h2>Autentikasi</h2>
+      <b>Endpoint:</b> <code>POST /auth/login</code>
+      <pre>{
+  "username": "string",
+  "password": "string",
+  "client_id": "string",
+  "client_secret": "string"
+}</pre>
+      <b>Response:</b>
+      <pre>{
+  "data": {
+    "access_token": "string"
+  }
+}</pre>
+    </div>
+    <div class="section">
+      <h2>Mahasiswa (Students)</h2>
+      <h3>List Mahasiswa</h3>
+      <b>Endpoint:</b> <code>GET /students</code><br>
+      <b>Query Params:</b> <code>page</code>, <code>per_page</code>, filter lain sesuai kebutuhan<br>
+      <b>Headers:</b> <code>Authorization: Bearer {access_token}</code>
+      <pre>{
+  "data": {
+    "students": [
+      {
+        "nim": "DUMMY001",
+        "name": "Dummy Student",
+        "email": "dummy@student.ac.id",
+        "faculty": "Dummy Faculty",
+        "status": "active"
+      }
+    ],
+    "pagination": {
+      "current_page": 1,
+      "last_page": 1
+    }
+  }
+}</pre>
+      <h3>Detail Mahasiswa</h3>
+      <b>Endpoint:</b> <code>GET /students/{nim}</code>
+      <pre>{
+  "data": {
+    "nim": "DUMMY001",
+    "name": "Dummy Student",
+    "email": "dummy@student.ac.id",
+    "phone": "08123456789",
+    "birth_place": "Bandung",
+    "birth_date": "2000-01-01",
+    "faculty": "Dummy Faculty",
+    "department": "Teknik Informatika",
+    "cohort_year": 2019,
+    "current_semester": 8,
+    "status": "active",
+    "total_outstanding": 5000000,
+    "outstanding_semesters": 1,
+    "last_payment_date": "2024-01-01",
+    "is_reminded": false,
+    "external_id": "igracias-001"
+  }
+}</pre>
+    </div>
+    <div class="section">
+      <h2>Pembayaran (Payments)</h2>
+      <h3>List Pembayaran</h3>
+      <b>Endpoint:</b> <code>GET /payments</code><br>
+      <b>Query Params:</b> <code>page</code>, <code>per_page</code>, <code>nim</code>, <code>status</code>, <code>date_from</code>, <code>date_to</code>
+      <pre>{
+  "data": {
+    "payments": [
+      {
+        "payment_id": "PAY001",
+        "nim": "2019001",
+        "name": "Ahmad Fauzi",
+        "amount": 2500000,
+        "payment_date": "2024-01-10",
+        "payment_method": "bank_transfer",
+        "payment_type": "SPP",
+        "status": "completed",
+        "description": "Pembayaran SPP Semester 8",
+        "reference_number": "INV-20240110-001"
+      }
+    ],
+    "pagination": {
+      "current_page": 1,
+      "last_page": 1
+    }
+  }
+}</pre>
+      <h3>Detail Pembayaran</h3>
+      <b>Endpoint:</b> <code>GET /payments/{payment_id}</code>
+      <pre>{
+  "data": {
+    "payment_id": "PAY001",
+    "nim": "2019001",
+    "name": "Ahmad Fauzi",
+    "amount": 2500000,
+    "payment_date": "2024-01-10",
+    "payment_method": "bank_transfer",
+    "payment_type": "SPP",
+    "status": "completed",
+    "description": "Pembayaran SPP Semester 8",
+    "reference_number": "INV-20240110-001"
+  }
+}</pre>
+    </div>
+    <div class="section">
+      <h2>Piutang (Receivables)</h2>
+      <h3>List Piutang</h3>
+      <b>Endpoint:</b> <code>GET /receivables</code><br>
+      <b>Query Params:</b> <code>page</code>, <code>per_page</code>, <code>nim</code>, <code>status</code>, <code>due_date_from</code>, <code>due_date_to</code>
+      <pre>{
+  "data": {
+    "receivables": [
+      {
+        "receivable_id": "RCV001",
+        "nim": "2019001",
+        "name": "Ahmad Fauzi",
+        "fee_type": "SPP",
+        "amount": 2500000,
+        "paid_amount": 1000000,
+        "outstanding_amount": 1500000,
+        "due_date": "2024-02-01",
+        "status": "partial",
+        "description": "SPP Semester 8"
+      }
+    ],
+    "pagination": {
+      "current_page": 1,
+      "last_page": 1
+    }
+  }
+}</pre>
+      <h3>Detail Piutang</h3>
+      <b>Endpoint:</b> <code>GET /receivables/{receivable_id}</code>
+      <pre>{
+  "data": {
+    "receivable_id": "RCV001",
+    "nim": "2019001",
+    "name": "Ahmad Fauzi",
+    "fee_type": "SPP",
+    "amount": 2500000,
+    "paid_amount": 1000000,
+    "outstanding_amount": 1500000,
+    "due_date": "2024-02-01",
+    "status": "partial",
+    "description": "SPP Semester 8"
+  }
+}</pre>
+    </div>
+    <div class="section">
+      <h2>Dummy Endpoint (local/testing)</h2>
+      <p>Jika environment <code>local</code> atau <code>testing</code>, seluruh endpoint di atas akan mengembalikan data dummy seperti contoh di atas.</p>
+    </div>
+    <div class="section">
+      <h2>Error Handling & Retry</h2>
+      <ul>
+        <li>Jika gagal, response error akan dicatat ke model <code>SyncLog</code> (status, body, filters).</li>
+        <li>Retry otomatis hingga 3x dengan backoff 1, 2, 4 detik.</li>
+      </ul>
+    </div>
+    <div class="section">
+      <h2>Penjelasan Field</h2>
+      <ul>
+        <li><b>payment_id</b>, <b>receivable_id</b>: ID unik transaksi/piutang</li>
+        <li><b>nim</b>: Nomor Induk Mahasiswa</li>
+        <li><b>name</b>: Nama mahasiswa</li>
+        <li><b>amount</b>: Nominal total</li>
+        <li><b>paid_amount</b>: Nominal yang sudah dibayar (piutang)</li>
+        <li><b>outstanding_amount</b>: Sisa yang belum dibayar (piutang)</li>
+        <li><b>payment_date</b>: Tanggal pembayaran</li>
+        <li><b>due_date</b>: Jatuh tempo piutang</li>
+        <li><b>payment_method</b>: Metode pembayaran (bank_transfer, cash, dsb)</li>
+        <li><b>payment_type</b>/<b>fee_type</b>: Jenis pembayaran/biaya (SPP, SKS, dsb)</li>
+        <li><b>status</b>: Status (<span class="badge">completed</span>, <span class="badge">pending</span>, <span class="badge">failed</span>, <span class="badge">paid</span>, <span class="badge">overdue</span>, <span class="badge">partial</span>)</li>
+        <li><b>description</b>: Keterangan tambahan</li>
+        <li><b>reference_number</b>: Nomor referensi pembayaran</li>
+      </ul>
+    </div>
+    <div class="section">
+      <h2>Sinkronisasi Bulk</h2>
+      <p>Untuk sinkronisasi massal, lakukan paginasi pada <code>/students</code>, <code>/payments</code>, dan <code>/receivables</code> hingga <code>last_page</code>.</p>
+    </div>
+    <div class="section">
+      <h2>Endpoint Sinkronisasi via Controller (STEFIA)</h2>
+      <ul>
+        <li>POST <code>/sync/start</code> body: <code>{ sync_type: students|payments|receivables|all, batch_size: int }</code></li>
+        <li>GET <code>/sync/status/{syncLog}</code> → status, progress, error log, dsb.</li>
+      </ul>
+    </div>
+    <div class="section">
+      <h2>Contoh Implementasi Dummy di Laravel</h2>
+      <pre>if (App::environment(['local', 'testing'])) {
+    return [
+        'data' => [
+            'payments' => [
+                [
+                    'payment_id' => 'DUMMY-PAY-001',
+                    'nim' => 'DUMMY001',
+                    'name' => 'Dummy Student',
+                    'amount' => 1000000,
+                    'payment_date' => '2024-01-01',
+                    'payment_method' => 'bank_transfer',
+                    'payment_type' => 'SPP',
+                    'status' => 'completed',
+                    'description' => 'Dummy payment',
+                    'reference_number' => 'DUMMY-REF-001'
+                ]
+            ],
+            'receivables' => [
+                [
+                    'receivable_id' => 'DUMMY-RCV-001',
+                    'nim' => 'DUMMY001',
+                    'name' => 'Dummy Student',
+                    'fee_type' => 'SPP',
+                    'amount' => 2000000,
+                    'paid_amount' => 500000,
+                    'outstanding_amount' => 1500000,
+                    'due_date' => '2024-02-01',
+                    'status' => 'partial',
+                    'description' => 'Dummy receivable'
+                ]
+            ],
+            'pagination' => [
+                'current_page' => 1,
+                'last_page' => 1
+            ]
+        ]
+    ];
+}</pre>
+    </div>
+  </div>
+</body>
+</html> 

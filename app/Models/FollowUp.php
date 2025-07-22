@@ -13,7 +13,7 @@ class FollowUp extends Model
 
     protected $fillable = [
         'student_id',
-        'receivable_id',
+        'debt_id',
         'action_type',
         'title',
         'description',
@@ -36,9 +36,9 @@ class FollowUp extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function receivable(): BelongsTo
+    public function debt(): BelongsTo
     {
-        return $this->belongsTo(Receivable::class);
+        return $this->belongsTo(Debt::class);
     }
 
     public function performedBy(): BelongsTo

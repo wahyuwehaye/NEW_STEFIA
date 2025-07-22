@@ -1,6 +1,26 @@
 @extends('layouts.admin')
 @section('title', 'Integrasi Sistem')
 @section('content')
+@if(session('success'))
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+  <div class="toast align-items-center text-bg-success border-0 show fade-in" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">{{ session('success') }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+@endif
+@if(session('error'))
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+  <div class="toast align-items-center text-bg-danger border-0 show fade-in" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">{{ session('error') }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+@endif
 <x-page-header title="Integrasi Sistem" subtitle="Kelola integrasi dengan sistem eksternal, payment gateway, WhatsApp, dan email.">
     <x-slot name="actions">
         <a href="{{ route('settings.general') }}" class="btn btn-light btn-modern"><em class="icon ni ni-arrow-left"></em> Kembali</a>
@@ -79,6 +99,32 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show fade-in`;
+    toast.style = 'min-width:260px; margin-bottom:8px;';
+    toast.innerHTML = `<div class='d-flex'><div class='toast-body'>${message}</div><button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button></div>`;
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container position-fixed top-0 end-0 p-3';
+        container.style.zIndex = 9999;
+        document.body.appendChild(container);
+    }
+    container.appendChild(toast);
+    setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3500);
+}
+// Feedback notifikasi sukses/gagal setelah aksi
+@if(session('success'))
+    window.setTimeout(() => { showToast(@json(session('success')), 'success'); }, 500);
+@endif
+@if(session('error'))
+    window.setTimeout(() => { showToast(@json(session('error')), 'danger'); }, 500);
+@endif
+</script>
+@endpush
 @push('styles')
 <style>
     .integration-card {
@@ -124,5 +170,7 @@
     }
     .badge-active { background: #e8f5e9 !important; color: #43a047 !important; }
     .badge-inactive { background: #ffebee !important; color: #e53935 !important; }
+.toast-container { pointer-events: none; }
+.toast { pointer-events: auto; min-width: 260px; }
 </style>
 @endpush 

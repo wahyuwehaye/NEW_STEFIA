@@ -13,7 +13,7 @@ class Reminder extends Model
 
     protected $fillable = [
         'student_id',
-        'receivable_id',
+        'debt_id',
         'type',
         'recipient',
         'subject',
@@ -37,9 +37,9 @@ class Reminder extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function receivable(): BelongsTo
+    public function debt(): BelongsTo
     {
-        return $this->belongsTo(Receivable::class);
+        return $this->belongsTo(Debt::class);
     }
 
     // Scopes

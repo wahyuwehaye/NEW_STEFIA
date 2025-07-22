@@ -404,6 +404,58 @@
 
 @push('scripts')
 <script>
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show fade-in`;
+    toast.style = 'min-width:260px; margin-bottom:8px;';
+    toast.innerHTML = `<div class='d-flex'><div class='toast-body'>${message}</div><button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button></div>`;
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container position-fixed top-0 end-0 p-3';
+        container.style.zIndex = 9999;
+        document.body.appendChild(container);
+    }
+    container.appendChild(toast);
+    setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3500);
+}
+// Loading indicator for export
+function showLoadingReport() {
+    let loading = document.getElementById('reportLoading');
+    if (!loading) {
+        loading = document.createElement('div');
+        loading.id = 'reportLoading';
+        loading.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.6);z-index:9998;display:flex;align-items:center;justify-content:center;';
+        loading.innerHTML = '<div class="spinner-border text-danger" style="width:3rem;height:3rem;"></div>';
+        document.body.appendChild(loading);
+    }
+}
+function hideLoadingReport() {
+    let loading = document.getElementById('reportLoading');
+    if (loading) loading.remove();
+}
+// Simulasi aksi ekspor
+function exportExcel() {
+    showLoadingReport();
+    setTimeout(() => {
+        hideLoadingReport();
+        showToast('Export Excel berhasil (dummy)', 'success');
+    }, 1200);
+}
+function exportPDF() {
+    showLoadingReport();
+    setTimeout(() => {
+        hideLoadingReport();
+        showToast('Export PDF berhasil (dummy)', 'success');
+    }, 1200);
+}
+// Feedback notifikasi sukses/gagal setelah aksi
+@if(session('success'))
+    window.setTimeout(() => { showToast(@json(session('success')), 'success'); }, 500);
+@endif
+@if(session('error'))
+    window.setTimeout(() => { showToast(@json(session('error')), 'danger'); }, 500);
+@endif
 $(document).ready(function() {
     // Handle follow up modal
     $('#followUpModal').on('show.bs.modal', function (event) {
@@ -426,7 +478,7 @@ $(document).ready(function() {
             data: formData,
             success: function(response) {
                 $('#followUpModal').modal('hide');
-                toastr.success('Follow up berhasil disimpan!');
+                showToast('Follow up berhasil disimpan!', 'success');
                 location.reload();
             },
             error: function(xhr) {
@@ -439,11 +491,18 @@ $(document).ready(function() {
                     }
                 }
                 
-                toastr.error(errorMsg);
+                showToast(errorMsg, 'danger');
             }
         });
     });
 });
 </script>
+@endpush
+@push('styles')
+<style>
+.toast-container { pointer-events: none; }
+.toast { pointer-events: auto; min-width: 260px; }
+#reportLoading { pointer-events: all; }
+</style>
 @endpush
 

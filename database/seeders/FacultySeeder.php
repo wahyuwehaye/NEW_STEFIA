@@ -23,7 +23,10 @@ class FacultySeeder extends Seeder
         ];
 
         foreach ($faculties as $faculty) {
-            \App\Models\Faculty::create($faculty);
+            \App\Models\Faculty::updateOrCreate(
+                ['code' => $faculty['code']],
+                ['name' => $faculty['name']]
+            );
         }
     }
 }

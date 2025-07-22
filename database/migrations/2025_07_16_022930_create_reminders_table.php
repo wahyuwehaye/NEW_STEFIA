@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reminders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('receivable_id')->nullable();
+            $table->unsignedBigInteger('debt_id')->nullable();
             $table->enum('type', ['email', 'whatsapp', 'sms']);
             $table->string('recipient');
             $table->string('subject')->nullable();
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
             
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->foreign('receivable_id')->references('id')->on('receivables')->onDelete('set null');
+            $table->foreign('debt_id')->references('id')->on('debts')->onDelete('set null');
             $table->index(['student_id', 'status']);
             $table->index(['scheduled_at']);
         });

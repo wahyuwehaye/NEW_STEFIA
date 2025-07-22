@@ -295,6 +295,129 @@
             </div>
         </div>
     </div>
+
+    <!-- Reminder List & Actions -->
+    <div class="nk-block mt-4">
+        <div class="card card-bordered">
+            <div class="card-inner">
+                <div class="nk-block-head nk-block-head-sm mb-3">
+                    <div class="nk-block-head-content">
+                        <h6 class="nk-block-title">Recent Reminders</h6>
+                        <div class="form-inline mt-2">
+                            <select class="form-select me-2" id="filterStatus" onchange="filterReminders()">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="sent">Sent</option>
+                                <option value="failed">Failed</option>
+                                <option value="overdue">Overdue</option>
+                            </select>
+                            <select class="form-select me-2" id="filterType" onchange="filterReminders()">
+                                <option value="">All Type</option>
+                                <option value="email">Email</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="system">System</option>
+                            </select>
+                            <input type="text" class="form-control" id="searchReminder" placeholder="Search..." onkeyup="filterReminders()" style="max-width:200px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="reminderTable">
+                        <thead>
+                            <tr>
+                                <th>Recipient</th>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Scheduled</th>
+                                <th>Sent At</th>
+                                <th>Error</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            // Dummy data jika belum ada $reminders
+                            $reminders = $reminders ?? [
+                                [
+                                    'recipient' => 'John Doe',
+                                    'type' => 'email',
+                                    'title' => 'Payment Reminder',
+                                    'status' => 'pending',
+                                    'scheduled_at' => '2025-01-15 08:00:00',
+                                    'sent_at' => null,
+                                    'error_message' => null
+                                ],
+                                [
+                                    'recipient' => 'Jane Smith',
+                                    'type' => 'whatsapp',
+                                    'title' => 'Overdue Notice',
+                                    'status' => 'failed',
+                                    'scheduled_at' => '2025-01-10 08:00:00',
+                                    'sent_at' => null,
+                                    'error_message' => 'WhatsApp API error: number not registered.'
+                                ],
+                                [
+                                    'recipient' => 'Bob Johnson',
+                                    'type' => 'system',
+                                    'title' => 'System Alert',
+                                    'status' => 'sent',
+                                    'scheduled_at' => '2025-01-11 09:00:00',
+                                    'sent_at' => '2025-01-11 09:01:00',
+                                    'error_message' => null
+                                ],
+                                [
+                                    'recipient' => 'Maria Anderson',
+                                    'type' => 'email',
+                                    'title' => 'Payment Reminder',
+                                    'status' => 'overdue',
+                                    'scheduled_at' => '2025-01-09 08:00:00',
+                                    'sent_at' => null,
+                                    'error_message' => null
+                                ],
+                            ];
+                            @endphp
+                            @foreach($reminders as $reminder)
+                            <tr data-status="{{ $reminder['status'] }}" data-type="{{ $reminder['type'] }}" data-title="{{ strtolower($reminder['title']) }}" data-recipient="{{ strtolower($reminder['recipient']) }}">
+                                <td>{{ $reminder['recipient'] }}</td>
+                                <td><span class="badge bg-outline-{{ $reminder['type'] == 'email' ? 'info' : ($reminder['type'] == 'whatsapp' ? 'success' : 'secondary') }}">{{ ucfirst($reminder['type']) }}</span></td>
+                                <td>{{ $reminder['title'] }}</td>
+                                <td>
+                                    @php
+                                        $badge = [
+                                            'pending' => 'warning',
+                                            'sent' => 'success',
+                                            'failed' => 'danger',
+                                            'overdue' => 'info',
+                                        ][$reminder['status']] ?? 'secondary';
+                                    @endphp
+                                    <span class="badge bg-{{ $badge }}">{{ ucfirst($reminder['status']) }}</span>
+                                </td>
+                                <td>{{ $reminder['scheduled_at'] }}</td>
+                                <td>{{ $reminder['sent_at'] ?? '-' }}</td>
+                                <td>
+                                    @if($reminder['error_message'])
+                                        <span class="text-danger" title="{{ $reminder['error_message'] }}">{{ Str::limit($reminder['error_message'], 24) }}</span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($reminder['status'] == 'failed' || $reminder['status'] == 'overdue')
+                                        <button class="btn btn-sm btn-warning" onclick="retryReminder(this)"><em class="icon ni ni-repeat"></em> Retry</button>
+                                        <button class="btn btn-sm btn-info" onclick="rescheduleReminder(this)"><em class="icon ni ni-clock"></em> Reschedule</button>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Payment Reminder Modal -->
@@ -359,19 +482,33 @@
 <script>
 let studentRowIndex = 1;
 
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show fade-in`;
+    toast.style = 'min-width:260px; margin-bottom:8px;';
+    toast.innerHTML = `<div class='d-flex'><div class='toast-body'>${message}</div><button type='button' class='btn-close btn-close-white me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button></div>`;
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container position-fixed top-0 end-0 p-3';
+        container.style.zIndex = 9999;
+        document.body.appendChild(container);
+    }
+    container.appendChild(toast);
+    setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3500);
+}
+
 function openPaymentReminderModal() {
     $('#paymentReminderModal').modal('show');
     loadUsers();
 }
 
 function openOverdueNoticeModal() {
-    // Implementation for overdue notice modal
-    alert('Overdue Notice modal - to be implemented');
+    showToast('Overdue Notice modal - to be implemented', 'info');
 }
 
 function openSystemAlertModal() {
-    // Implementation for system alert modal
-    alert('System Alert modal - to be implemented');
+    showToast('System Alert modal - to be implemented', 'info');
 }
 
 function addStudentRow() {
@@ -457,14 +594,15 @@ function sendPaymentReminders() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(data.message);
+            showToast(data.message, 'success');
             $('#paymentReminderModal').modal('hide');
-            location.reload();
+            setTimeout(() => location.reload(), 1200);
+        } else {
+            showToast(data.message || 'Failed to send reminders', 'danger');
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while sending reminders');
+        showToast('An error occurred while sending reminders', 'danger');
     });
 }
 
@@ -478,10 +616,8 @@ function processScheduled() {
     })
     .then(response => response.json())
     .then(data => {
-        alert(data.message);
-        if (data.processed > 0) {
-            location.reload();
-        }
+        showToast(data.message, data.processed > 0 ? 'success' : 'info');
+        if (data.processed > 0) setTimeout(() => location.reload(), 1200);
     });
 }
 
@@ -495,10 +631,8 @@ function retryFailed() {
     })
     .then(response => response.json())
     .then(data => {
-        alert(data.message);
-        if (data.retried > 0) {
-            location.reload();
-        }
+        showToast(data.message, data.retried > 0 ? 'success' : 'danger');
+        if (data.retried > 0) setTimeout(() => location.reload(), 1200);
     });
 }
 
@@ -506,10 +640,47 @@ function loadTemplates() {
     fetch('/reminders/templates')
     .then(response => response.json())
     .then(data => {
+        showToast('Templates loaded - check console for details', 'info');
         console.log('Templates:', data);
-        alert('Templates loaded - check console for details');
     });
 }
+
+function filterReminders() {
+    const status = document.getElementById('filterStatus').value;
+    const type = document.getElementById('filterType').value;
+    const search = document.getElementById('searchReminder').value.toLowerCase();
+    document.querySelectorAll('#reminderTable tbody tr').forEach(row => {
+        const rowStatus = row.getAttribute('data-status');
+        const rowType = row.getAttribute('data-type');
+        const rowTitle = row.getAttribute('data-title');
+        const rowRecipient = row.getAttribute('data-recipient');
+        let show = true;
+        if (status && rowStatus !== status) show = false;
+        if (type && rowType !== type) show = false;
+        if (search && !(rowTitle.includes(search) || rowRecipient.includes(search))) show = false;
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+function retryReminder(btn) {
+    showToast('Retry reminder - to be implemented (AJAX call to retry)', 'info');
+}
+function rescheduleReminder(btn) {
+    showToast('Reschedule reminder - to be implemented (show modal for new schedule)', 'info');
+}
+// Feedback notifikasi sukses/gagal setelah aksi
+@if(session('success'))
+    window.setTimeout(() => { showToast(@json(session('success')), 'success'); }, 500);
+@endif
+@if(session('error'))
+    window.setTimeout(() => { showToast(@json(session('error')), 'danger'); }, 500);
+@endif
 </script>
+@endpush
+@push('styles')
+<style>
+.toast-container { pointer-events: none; }
+.toast { pointer-events: auto; min-width: 260px; }
+</style>
 @endpush
 @endsection
