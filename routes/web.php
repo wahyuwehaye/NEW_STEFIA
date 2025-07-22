@@ -129,6 +129,11 @@ Route::middleware(['auth', 'user.permission:receivables.delete'])->group(functio
 });
 
 // Payments management
+Route::middleware(['auth', 'user.permission:payments.create'])->group(function () {
+    Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
+    Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
+});
+
 Route::middleware(['auth', 'user.permission:payments.view'])->group(function () {
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
@@ -159,11 +164,6 @@ Route::middleware(['auth', 'user.permission:payments.view'])->group(function () 
     Route::post('/api/payments/bulk-verify', [PaymentController::class, 'bulkVerify'])->name('api.payments.bulk-verify');
     Route::post('/api/payments/auto-reconcile', [PaymentController::class, 'autoReconcile'])->name('api.payments.auto-reconcile');
     Route::post('/payments/bulk-process', [PaymentController::class, 'bulkProcess'])->name('payments.bulk-process');
-});
-
-Route::middleware(['auth', 'user.permission:payments.create'])->group(function () {
-    Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
-    Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
 });
 
 Route::middleware(['auth', 'user.permission:payments.edit'])->group(function () {
