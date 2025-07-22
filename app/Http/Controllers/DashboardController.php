@@ -29,13 +29,99 @@ class DashboardController extends Controller
         
         // Get chart data
         $chartData = $this->getChartData();
-        
+
+        // Payment method composition
+        $paymentMethodData = Payment::selectRaw('payment_method, COUNT(*) as count')
+            ->groupBy('payment_method')
+            ->pluck('count', 'payment_method')->toArray();
+
+        // Student trend per month
+        $studentTrendMonths = [];
+        $studentTrendData = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $studentTrendMonths[] = $date->format('M Y');
+            $studentTrendData[] = Student::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+        }
+
+        // Transaction count per month
+        $transactionTrendData = [];
+        foreach ($studentTrendMonths as $idx => $label) {
+            $date = now()->subMonths(11 - $idx);
+            $transactionTrendData[] = Payment::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+        }
+
+        // Top 10 payers
+        $topPayers = Student::withSum(['payments as total_paid' => function($q) {
+            $q->where('status', 'completed');
+        }], 'amount')
+        ->orderByDesc('total_paid')
+        ->limit(10)
+        ->get();
+
+        // Reminder stats (dummy)
+        $reminderStats = [
+            'sent' => 120,
+            'failed' => 3,
+            'wa_sent' => 80,
+            'email_sent' => 40
+        ];
+
+        // Beasiswa stats (dummy)
+        $beasiswaStats = [
+            'akademik' => 12,
+            'non_akademik' => 7,
+            'lainnya' => 4
+        ];
+
+        // Outstanding ratio
+        $outstanding = $stats['active_receivables'] ?? 0;
+        $lunas = $stats['paid_receivables'] ?? 0;
+        $outstandingRatio = ($outstanding + $lunas) > 0 ? round($outstanding / ($outstanding + $lunas) * 100, 1) : 0;
+
+        // Insight otomatis
+        $insights = [
+            [
+                'icon' => 'ni-trend-up',
+                'color' => 'success',
+                'text' => 'Pembayaran bulan ini naik '.($stats['today_growth'] ?? 0).'% dibanding bulan lalu.'
+            ],
+            [
+                'icon' => 'ni-alert',
+                'color' => 'danger',
+                'text' => 'Ada '.$highDebtors->count().' mahasiswa dengan tunggakan > 10 juta.'
+            ],
+            [
+                'icon' => 'ni-pie',
+                'color' => 'info',
+                'text' => 'Rasio outstanding: '.$outstandingRatio.'%.'
+            ],
+        ];
+
+        // Tambahkan data baru ke chartData
+        $chartData['payment_method'] = $paymentMethodData;
+        $chartData['student_trend'] = $studentTrendData;
+        $chartData['student_trend_months'] = $studentTrendMonths;
+        $chartData['transaction_trend'] = $transactionTrendData;
+        $chartData['top_payers'] = $topPayers;
+        $chartData['reminder_stats'] = $reminderStats;
+        $chartData['beasiswa_stats'] = $beasiswaStats;
+        $chartData['outstanding_ratio'] = $outstandingRatio;
+
         return view('dashboard', compact(
             'stats',
             'recentActivities',
             'highDebtors',
             'recentTransactions',
-            'chartData'
+            'chartData',
+            'insights',
+            'topPayers',
+            'reminderStats',
+            'beasiswaStats'
         ));
     }
     
