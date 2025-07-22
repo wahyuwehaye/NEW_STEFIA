@@ -5,35 +5,65 @@
 
 @push('styles')
 <style>
-    .stats-card, .modern-card {
-        background: rgba(255,255,255,0.97) !important;
+    /* Konsistensi dengan landing page */
+    .portal-card, .glass-card, .modern-card {
+        background: rgba(255,255,255,0.92) !important;
         color: #1e293b !important;
-        border-radius: 20px !important;
-        box-shadow: 0 6px 32px rgba(0,0,0,0.06) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 8px 40px rgba(225,29,72,0.10) !important;
         border: 1.5px solid #f3f4f6 !important;
+        padding: 2.5rem 2rem !important;
+        margin-bottom: 2.5rem;
         transition: box-shadow 0.3s, transform 0.3s;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.8s cubic-bezier(.23,1.01,.32,1) both;
     }
-    .stats-card:hover, .modern-card:hover {
-        box-shadow: 0 16px 48px rgba(225,29,72,0.08) !important;
-        transform: translateY(-2px) scale(1.01);
+    .portal-card:hover, .glass-card:hover, .modern-card:hover {
+        box-shadow: 0 16px 48px rgba(225,29,72,0.14) !important;
+        transform: translateY(-2px) scale(1.015);
     }
-    .stats-card .stats-icon {
-        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
-        color: #fff !important;
+    @keyframes fadeInUp {
+        0% { opacity: 0; transform: translateY(40px); }
+        100% { opacity: 1; transform: none; }
+    }
+    .dashboard-title {
         font-size: 2.2rem;
-        border-radius: 16px;
-        box-shadow: 0 2px 8px rgba(225,29,72,0.08);
-    }
-    .text-gradient {
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 0.5rem;
         background: linear-gradient(90deg, #e11d48, #ff4d4d, #f43f5e);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-weight: 700;
     }
-    .gradient-text { color: #e11d48; font-weight: 700; }
-    .card-title .stats-icon { font-size: 2.2rem; }
-    .card-title .title { font-size: 1.1rem; font-weight: 700; }
+    .dashboard-subtitle {
+        color: #64748b;
+        font-size: 1.15rem;
+        margin-bottom: 2rem;
+    }
+    .stats-card .stats-icon, .icon-circle {
+        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
+        color: #fff !important;
+        font-size: 2.2rem;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(225,29,72,0.08);
+        width: 54px;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.7rem;
+    }
+    .stats-card .amount, .stats-card .data-group .amount {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+    .stats-card .info .change { font-size: 1.05rem; font-weight: 600; }
+    .stats-card .info .sub { font-size: 0.95rem; color: #64748b; }
+    .stats-card .data-group { margin-bottom: 0.5rem; }
+    .stats-card .card-title .title { color: #1e293b; }
     .badge-dot.badge-danger { background: #e11d48 !important; color: #fff !important; }
     .badge-dot.badge-warning { background: #f59e0b !important; color: #fff !important; }
     .badge-dot.badge-success { background: #22c55e !important; color: #fff !important; }
@@ -58,31 +88,235 @@
     .high-debtors-table tr:hover { background: #f43f5e0d; }
     .chart-export-btn { background: linear-gradient(90deg, #e11d48, #ff4d4d); color: #fff; border: none; border-radius: 8px; padding: 0.45rem 1.1rem; font-weight: 600; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(225,29,72,0.08); transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
     .chart-export-btn:hover { background: linear-gradient(90deg, #f43f5e, #e11d48); color: #fff; box-shadow: 0 4px 16px rgba(225,29,72,0.12); transform: translateY(-2px) scale(1.04); }
-    .stats-card .amount, .stats-card .data-group .amount { font-size: 2.1rem; font-weight: 700; color: #1e293b; }
-    .stats-card .info .change { font-size: 1.05rem; font-weight: 600; }
-    .stats-card .info .sub { font-size: 0.95rem; color: #64748b; }
-    .stats-card .data-group { margin-bottom: 0.5rem; }
-    .stats-card .card-title .title { color: #1e293b; }
+    /* Animasi fade-in untuk section utama */
+    .fade-in { opacity: 0; transform: translateY(40px); transition: all 0.7s cubic-bezier(.23,1.01,.32,1); }
+    .fade-in.visible { opacity: 1; transform: none; }
+    /* Responsive tweaks */
+    @media (max-width: 991px) {
+        .portal-card, .glass-card, .modern-card { padding: 1.5rem 0.7rem !important; }
+        .dashboard-title { font-size: 1.5rem; }
+    }
 </style>
 @endpush
 
 @section('content')
-<div class="nk-block-head nk-block-head-sm">
-    <div class="nk-block-between">
-        <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title text-gradient">STEFIA Dashboard</h3>
-            <div class="nk-block-des text-soft">
-                <p>Comprehensive Financial Management Overview</p>
+<div class="portal-card fade-in mb-5">
+    <h3 class="dashboard-title">STEFIA Dashboard</h3>
+    <div class="dashboard-subtitle">Comprehensive Financial Management Overview</div>
+    <div class="row g-gs">
+        <!-- Statistik Cards dibungkus satu card besar -->
+        @foreach ([
+            ['icon' => 'ni-users', 'title' => 'Total Mahasiswa', 'amount' => number_format($stats['total_students']), 'growth' => $stats['students_growth'], 'id' => 'totalStudents', 'hint' => 'Total mahasiswa terdaftar dalam sistem', 'color' => 'primary'],
+            ['icon' => 'ni-wallet', 'title' => 'Piutang Aktif', 'amount' => 'Rp '.number_format($stats['active_receivables']), 'growth' => $stats['receivables_growth'], 'id' => 'activeReceivables', 'hint' => 'Total piutang yang masih aktif', 'color' => 'success'],
+            ['icon' => 'ni-check-circle', 'title' => 'Piutang Lunas', 'amount' => 'Rp 1.456.780.000', 'growth' => 8.45, 'id' => 'paidReceivables', 'hint' => 'Total piutang yang sudah lunas', 'color' => 'success'],
+            ['icon' => 'ni-alert', 'title' => 'Tunggakan Kritis', 'amount' => 23, 'growth' => -2.45, 'id' => 'highDebtors', 'hint' => 'Mahasiswa dengan tunggakan >10 juta', 'color' => 'danger'],
+            ['icon' => 'ni-credit-card', 'title' => 'Pembayaran Hari Ini', 'amount' => 'Rp 89.240.000', 'growth' => 7.28, 'id' => 'todayPayments', 'hint' => 'Pembayaran yang diterima hari ini', 'color' => 'warning'],
+            ['icon' => 'ni-calendar', 'title' => 'Piutang Semester Ini', 'amount' => 'Rp 456.780.000', 'growth' => 15.67, 'id' => 'semesterReceivables', 'hint' => 'Piutang semester tahun akademik berjalan', 'color' => 'info'],
+            ['icon' => 'ni-calendar', 'title' => 'Piutang Tahun Ini', 'amount' => 'Rp 1.234.567.000', 'growth' => 18.23, 'id' => 'yearlyReceivables', 'hint' => 'Total piutang tahun 2025', 'color' => 'info'],
+            ['icon' => 'ni-bar-chart', 'title' => 'Collection Rate', 'amount' => '94.2%', 'growth' => 2.1, 'id' => 'collectionRate', 'hint' => 'Tingkat keberhasilan penagihan', 'color' => 'primary'],
+        ] as $i => $stat)
+        <div class="col-xxl-3 col-md-6 mb-4">
+            <div class="glass-card stats-card h-100 fade-in">
+                <div class="d-flex align-items-center mb-2">
+                    <div class="icon-circle bg-{{ $stat['color'] }} me-3"><em class="icon ni {{ $stat['icon'] }}"></em></div>
+                    <div>
+                        <h6 class="mb-0 text-gradient">{{ $stat['title'] }}</h6>
+                        <small class="text-muted">{{ $stat['hint'] }}</small>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between">
+                    <div class="amount gradient-text">{{ $stat['amount'] }}</div>
+                    <div style="width: 80px; height: 40px;">
+                        <canvas class="ecommerce-line-chart-s3" id="{{ $stat['id'] }}"></canvas>
+                    </div>
+                </div>
+                <div class="info mt-2">
+                    <span class="change {{ $stat['growth'] >= 0 ? 'up text-success' : 'down text-danger' }}">
+                        <em class="icon ni ni-arrow-long-{{ $stat['growth'] >= 0 ? 'up' : 'down' }}"></em>{{ abs($stat['growth']) }}%
+                    </span>
+                    <span class="sub">vs last month</span>
+                </div>
             </div>
         </div>
-        <div class="nk-block-head-content">
-            <div class="toggle-wrap nk-block-tools-toggle">
-                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                <div class="toggle-expand-content" data-content="pageMenu">
-                    <ul class="nk-block-tools g-3">
-                        <li><a href="#" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export Report</span></a></li>
-                        <li><a href="#" class="btn btn-success"><em class="icon ni ni-user-add"></em><span>Add Student</span></a></li>
-                        <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Record Payment</span></a></li>
+        @endforeach
+    </div>
+</div>
+
+<!-- Chart Section -->
+<div class="portal-card fade-in mb-5">
+    <div class="row g-gs">
+        <div class="col-xxl-8 mb-4">
+            <div class="glass-card h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle bg-primary me-3"><em class="icon ni ni-bar-chart"></em></div>
+                    <h6 class="mb-0 dashboard-title">Monthly Revenue</h6>
+                </div>
+                <div id="monthlyRevenue" style="height:320px"></div>
+            </div>
+        </div>
+        <div class="col-xxl-4 mb-4">
+            <div class="glass-card h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle bg-info me-3"><em class="icon ni ni-pie-chart"></em></div>
+                    <h6 class="mb-0 dashboard-title">Status Piutang</h6>
+                </div>
+                <div id="receivableStatus" style="height:350px"></div>
+                <ul class="nk-ecwg3-legends mt-3">
+                    <li><span class="dot dot-lg sq" style="background:#22c55e"></span> Lunas <span class="ms-2">68.5%</span></li>
+                    <li><span class="dot dot-lg sq" style="background:#f59e0b"></span> Aktif <span class="ms-2">28.8%</span></li>
+                    <li><span class="dot dot-lg sq" style="background:#ef4444"></span> Tunggakan <span class="ms-2">2.7%</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- High Debtors and Payment Trends -->
+<div class="portal-card fade-in mb-5">
+    <div class="row g-gs">
+        <div class="col-xxl-6 mb-4">
+            <div class="glass-card h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle bg-danger me-3"><em class="icon ni ni-alert"></em></div>
+                    <h6 class="mb-0 dashboard-title">Mahasiswa Tunggakan Kritis (&gt;10 Juta)</h6>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-gradient-primary text-white">
+                            <tr>
+                                <th>Mahasiswa</th>
+                                <th>Tunggakan</th>
+                                <th>Terakhir Bayar</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tb-lead">Ahmad Nurdin</span><br><small class="tb-sub">2019001234</small></td>
+                                <td class="tb-sub text-danger">Rp 15.750.000</td>
+                                <td class="tb-sub">Nov 15, 2024</td>
+                                <td><span class="badge badge-dot badge-danger">Kritis</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="tb-lead">Siti Rahayu</span><br><small class="tb-sub">2019005678</small></td>
+                                <td class="tb-sub text-warning">Rp 12.500.000</td>
+                                <td class="tb-sub">Dec 20, 2024</td>
+                                <td><span class="badge badge-dot badge-warning">Tinggi</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="tb-lead">Budi Hartono</span><br><small class="tb-sub">2020001987</small></td>
+                                <td class="tb-sub text-danger">Rp 18.200.000</td>
+                                <td class="tb-sub">Oct 10, 2024</td>
+                                <td><span class="badge badge-dot badge-danger">Kritis</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xxl-6 mb-4">
+            <div class="glass-card h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle bg-success me-3"><em class="icon ni ni-bar-chart"></em></div>
+                    <h6 class="mb-0 dashboard-title">Tren Pembayaran Bulanan</h6>
+                </div>
+                <div id="paymentTrends" style="height:280px"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activities -->
+<div class="portal-card fade-in mb-5">
+    <div class="row g-gs">
+        <div class="col-xxl-8 mb-4">
+            <div class="glass-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle bg-primary me-3"><em class="icon ni ni-list"></em></div>
+                    <h6 class="mb-0 dashboard-title">Recent Transactions</h6>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-gradient-primary text-white">
+                            <tr>
+                                <th>Student</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tb-lead">John Smith</span><br><small class="tb-sub">john.smith@example.com</small></td>
+                                <td class="tb-sub">$2,500</td>
+                                <td class="tb-sub">Jan 15, 2025</td>
+                                <td><span class="badge badge-dot badge-success">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="tb-lead">Maria Anderson</span><br><small class="tb-sub">maria.anderson@example.com</small></td>
+                                <td class="tb-sub">$1,850</td>
+                                <td class="tb-sub">Jan 12, 2025</td>
+                                <td><span class="badge badge-dot badge-warning">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="tb-lead">David Lee</span><br><small class="tb-sub">david.lee@example.com</small></td>
+                                <td class="tb-sub">$3,200</td>
+                                <td class="tb-sub">Jan 10, 2025</td>
+                                <td><span class="badge badge-dot badge-success">Paid</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xxl-4 mb-4">
+            <div class="glass-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle bg-info me-3"><em class="icon ni ni-bell"></em></div>
+                    <h6 class="mb-0 dashboard-title">Recent Activities</h6>
+                </div>
+                <div class="timeline">
+                    <ul class="timeline-list">
+                        <li class="timeline-item">
+                            <div class="timeline-status bg-primary is-outline"></div>
+                            <div class="timeline-date">Just now</div>
+                            <div class="timeline-data">
+                                <h6 class="timeline-title">New student registration</h6>
+                                <div class="timeline-des">
+                                    <p>Sarah Johnson has successfully registered for the Computer Science program.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="timeline-item">
+                            <div class="timeline-status bg-success is-outline"></div>
+                            <div class="timeline-date">2 hours ago</div>
+                            <div class="timeline-data">
+                                <h6 class="timeline-title">Payment received</h6>
+                                <div class="timeline-des">
+                                    <p>$2,500 tuition payment received from John Smith.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="timeline-item">
+                            <div class="timeline-status bg-warning is-outline"></div>
+                            <div class="timeline-date">5 hours ago</div>
+                            <div class="timeline-data">
+                                <h6 class="timeline-title">Scholarship application</h6>
+                                <div class="timeline-des">
+                                    <p>New scholarship application submitted by Maria Anderson.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="timeline-item">
+                            <div class="timeline-status bg-info is-outline"></div>
+                            <div class="timeline-date">1 day ago</div>
+                            <div class="timeline-data">
+                                <h6 class="timeline-title">Report generated</h6>
+                                <div class="timeline-des">
+                                    <p>Monthly financial report has been generated and is ready for review.</p>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -90,638 +324,13 @@
     </div>
 </div>
 
-<!-- Statistics Cards -->
-<div class="nk-block">
-    <div class="row g-gs">
-        <!-- Total Mahasiswa -->
-        <div class="col-xxl-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="card glass-card stats-card modern-card">
-                <div class="card-inner">
-                    <div class="card-title-group">
-                        <div class="card-title">
-                            <div class="stats-icon bg-primary">
-                                <em class="icon ni ni-users"></em>
-                            </div>
-                            <h6 class="title text-gradient">Total Mahasiswa</h6>
-                        </div>
-                        <div class="card-tools">
-                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total mahasiswa terdaftar dalam sistem"></em>
-                        </div>
-                    </div>
-                    <div class="data">
-                        <div class="data-group">
-                            <div class="amount gradient-text">{{ number_format($stats['total_students']) }}</div>
-                            <div class="nk-ecwg6-ck">
-                                <canvas class="ecommerce-line-chart-s3" id="totalStudents"></canvas>
-                            </div>
-                        </div>
-                        <div class="info">
-                            <span class="change {{ $stats['students_growth'] >= 0 ? 'up text-success' : 'down text-danger' }}">
-                                <em class="icon ni ni-arrow-long-{{ $stats['students_growth'] >= 0 ? 'up' : 'down' }}"></em>{{ abs($stats['students_growth']) }}%
-                            </span>
-                            <span class="sub">vs last month</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Piutang Aktif -->
-        <div class="col-xxl-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="card glass-card stats-card">
-                <div class="nk-ecwg nk-ecwg6">
-                    <div class="card-inner">
-                        <div class="card-title-group">
-                            <div class="card-title">
-                                <h6 class="title">Piutang Aktif</h6>
-                            </div>
-                            <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total piutang yang masih aktif"></em>
-                            </div>
-                        </div>
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">Rp {{ number_format($stats['active_receivables']) }}</div>
-                                <div class="nk-ecwg6-ck">
-                                    <canvas class="ecommerce-line-chart-s3" id="activeReceivables"></canvas>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <span class="change {{ $stats['receivables_growth'] >= 0 ? 'up text-success' : 'down text-danger' }}">
-                                    <em class="icon ni ni-arrow-long-{{ $stats['receivables_growth'] >= 0 ? 'up' : 'down' }}"></em>{{ abs($stats['receivables_growth']) }}%
-                                </span>
-                                <span class="sub">vs last month</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Piutang Lunas -->
-        <div class="col-xxl-3 col-md-6">
-            <div class="card glass-card stats-card">
-                <div class="nk-ecwg nk-ecwg6">
-                    <div class="card-inner">
-                        <div class="card-title-group">
-                            <div class="card-title">
-                                <h6 class="title">Piutang Lunas</h6>
-                            </div>
-                            <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total piutang yang sudah lunas"></em>
-                            </div>
-                        </div>
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">Rp 1.456.780.000</div>
-                                <div class="nk-ecwg6-ck">
-                                    <canvas class="ecommerce-line-chart-s3" id="paidReceivables"></canvas>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <span class="change up text-success">
-                                    <em class="icon ni ni-arrow-long-up"></em>8.45%
-                                </span>
-                                <span class="sub">vs last month</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Tunggakan Kritis -->
-        <div class="col-xxl-3 col-md-6">
-            <div class="card glass-card stats-card">
-                <div class="nk-ecwg nk-ecwg6">
-                    <div class="card-inner">
-                        <div class="card-title-group">
-                            <div class="card-title">
-                                <h6 class="title">Tunggakan Kritis</h6>
-                            </div>
-                            <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Mahasiswa dengan tunggakan >10 juta"></em>
-                            </div>
-                        </div>
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">23</div>
-                                <div class="nk-ecwg6-ck">
-                                    <canvas class="ecommerce-line-chart-s3" id="highDebtors"></canvas>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <span class="change down text-warning">
-                                    <em class="icon ni ni-arrow-long-down"></em>2.45%
-                                </span>
-                                <span class="sub">vs last month</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Pembayaran Hari Ini -->
-        <div class="col-xxl-3 col-md-6">
-            <div class="card glass-card stats-card">
-                <div class="nk-ecwg nk-ecwg6">
-                    <div class="card-inner">
-                        <div class="card-title-group">
-                            <div class="card-title">
-                                <h6 class="title">Pembayaran Hari Ini</h6>
-                            </div>
-                            <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Pembayaran yang diterima hari ini"></em>
-                            </div>
-                        </div>
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">Rp 89.240.000</div>
-                                <div class="nk-ecwg6-ck">
-                                    <canvas class="ecommerce-line-chart-s3" id="todayPayments"></canvas>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <span class="change up text-success">
-                                    <em class="icon ni ni-arrow-long-up"></em>7.28%
-                                </span>
-                                <span class="sub">vs last month</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Piutang Semester Ini -->
-        <div class="col-xxl-3 col-md-6">
-            <div class="card glass-card stats-card">
-                <div class="nk-ecwg nk-ecwg6">
-                    <div class="card-inner">
-                        <div class="card-title-group">
-                            <div class="card-title">
-                                <h6 class="title">Piutang Semester Ini</h6>
-                            </div>
-                            <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Piutang semester tahun akademik berjalan"></em>
-                            </div>
-                        </div>
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">Rp 456.780.000</div>
-                                <div class="nk-ecwg6-ck">
-                                    <canvas class="ecommerce-line-chart-s3" id="semesterReceivables"></canvas>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <span class="change up text-success">
-                                    <em class="icon ni ni-arrow-long-up"></em>15.67%
-                                </span>
-                                <span class="sub">vs last month</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Piutang Tahun Ini -->
-        <div class="col-xxl-3 col-md-6">
-            <div class="card glass-card stats-card">
-                <div class="nk-ecwg nk-ecwg6">
-                    <div class="card-inner">
-                        <div class="card-title-group">
-                            <div class="card-title">
-                                <h6 class="title">Piutang Tahun Ini</h6>
-                            </div>
-                            <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total piutang tahun 2025"></em>
-                            </div>
-                        </div>
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">Rp 1.234.567.000</div>
-                                <div class="nk-ecwg6-ck">
-                                    <canvas class="ecommerce-line-chart-s3" id="yearlyReceivables"></canvas>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <span class="change up text-success">
-                                    <em class="icon ni ni-arrow-long-up"></em>18.23%
-                                </span>
-                                <span class="sub">vs last month</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Collection Rate -->
-        <div class="col-xxl-3 col-md-6">
-            <div class="card glass-card stats-card">
-                <div class="nk-ecwg nk-ecwg6">
-                    <div class="card-inner">
-                        <div class="card-title-group">
-                            <div class="card-title">
-                                <h6 class="title">Collection Rate</h6>
-                            </div>
-                            <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Tingkat keberhasilan penagihan"></em>
-                            </div>
-                        </div>
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">94.2%</div>
-                                <div class="nk-ecwg6-ck">
-                                    <canvas class="ecommerce-line-chart-s3" id="collectionRate"></canvas>
-                                </div>
-                            </div>
-                            <div class="info">
-                                <span class="change up text-success">
-                                    <em class="icon ni ni-arrow-long-up"></em>2.1%
-                                </span>
-                                <span class="sub">vs last month</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Chart Section -->
-<div class="nk-block">
-    <div class="row g-gs">
-        <div class="col-xxl-8">
-            <div class="card card-bordered glass-card h-100">
-                <div class="card-inner">
-                    <div class="card-title-group align-start mb-2">
-                        <div class="card-title">
-                            <h6 class="title text-gradient">Monthly Revenue</h6>
-                            <p>In last 12 months revenue of STEFIA.</p>
-                        </div>
-                        <div class="card-tools">
-                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Monthly revenue overview"></em>
-                        </div>
-                    </div>
-                    <div class="nk-ecwg nk-ecwg1">
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">$2,847,950</div>
-                                <div class="info text-right">
-                                    <span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>12.38%</span>
-                                    <span class="sub">vs last month</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="nk-ecwg1-ck">
-                            <div id="monthlyRevenue" style="height:320px"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-4">
-            <div class="card card-bordered glass-card h-100">
-                <div class="card-inner">
-                    <div class="card-title-group align-start mb-2">
-                        <div class="card-title">
-                            <h6 class="title text-gradient">Status Piutang</h6>
-                        </div>
-                        <div class="card-tools">
-                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Distribusi status piutang mahasiswa"></em>
-                        </div>
-                    </div>
-                    <div class="nk-ecwg nk-ecwg3">
-                        <div class="nk-ecwg3-ck">
-                            <div id="receivableStatus" style="height:350px"></div>
-                        </div>
-                        <ul class="nk-ecwg3-legends">
-                            <li>
-                                <div class="title">
-                                    <span class="dot dot-lg sq" data-bg="#22c55e"></span>
-                                    <span>Lunas</span>
-                                </div>
-                                <div class="amount">68.5%</div>
-                            </li>
-                            <li>
-                                <div class="title">
-                                    <span class="dot dot-lg sq" data-bg="#f59e0b"></span>
-                                    <span>Aktif</span>
-                                </div>
-                                <div class="amount">28.8%</div>
-                            </li>
-                            <li>
-                                <div class="title">
-                                    <span class="dot dot-lg sq" data-bg="#ef4444"></span>
-                                    <span>Tunggakan</span>
-                                </div>
-                                <div class="amount">2.7%</div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- High Debtors and Payment Trends -->
-<div class="nk-block">
-    <div class="row g-gs">
-        <div class="col-xxl-6">
-            <div class="card card-bordered glass-card h-100">
-                <div class="card-inner">
-                    <div class="card-title-group">
-                        <div class="card-title">
-                            <h6 class="title text-gradient">Mahasiswa Tunggakan Kritis (>10 Juta)</h6>
-                        </div>
-                        <div class="card-tools">
-                            <ul class="card-tools-nav">
-                                <li><a href="#"><span>View All</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-inner p-0">
-                    <div class="nk-tb-list">
-                        <div class="nk-tb-item nk-tb-head">
-                            <div class="nk-tb-col"><span>Mahasiswa</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span>Tunggakan</span></div>
-                            <div class="nk-tb-col tb-col-md"><span>Terakhir Bayar</span></div>
-                            <div class="nk-tb-col"><span>Status</span></div>
-                        </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-danger">
-                                        <span>AN</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">Ahmad Nurdin</span>
-                                        <span class="tb-sub">2019001234</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub text-danger">Rp 15.750.000</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-md">
-                                <span class="tb-sub">Nov 15, 2024</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="badge badge-dot badge-danger">Kritis</span>
-                            </div>
-                        </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-warning">
-                                        <span>SR</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">Siti Rahayu</span>
-                                        <span class="tb-sub">2019005678</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub text-warning">Rp 12.500.000</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-md">
-                                <span class="tb-sub">Dec 20, 2024</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="badge badge-dot badge-warning">Tinggi</span>
-                            </div>
-                        </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-danger">
-                                        <span>BH</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">Budi Hartono</span>
-                                        <span class="tb-sub">2020001987</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub text-danger">Rp 18.200.000</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-md">
-                                <span class="tb-sub">Oct 10, 2024</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="badge badge-dot badge-danger">Kritis</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-6">
-            <div class="card card-bordered glass-card h-100">
-                <div class="card-inner">
-                    <div class="card-title-group align-start mb-2">
-                        <div class="card-title">
-                            <h6 class="title text-gradient">Tren Pembayaran Bulanan</h6>
-                        </div>
-                        <div class="card-tools">
-                            <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Tren pembayaran 6 bulan terakhir"></em>
-                        </div>
-                    </div>
-                    <div class="nk-ecwg nk-ecwg1">
-                        <div class="data">
-                            <div class="data-group">
-                                <div class="amount">Rp 89.240.000</div>
-                                <div class="info text-right">
-                                    <span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>7.28%</span>
-                                    <span class="sub">vs bulan lalu</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="nk-ecwg1-ck">
-                            <div id="paymentTrends" style="height:280px"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Activities -->
-<div class="nk-block">
-    <div class="row g-gs">
-        <div class="col-xxl-8">
-            <div class="card card-bordered glass-card">
-                <div class="card-inner">
-                    <div class="card-title-group">
-                        <div class="card-title">
-                            <h6 class="title text-gradient">Recent Transactions</h6>
-                        </div>
-                        <div class="card-tools">
-                            <ul class="card-tools-nav">
-                                <li><a href="#"><span>View All</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-inner p-0">
-                    <div class="nk-tb-list">
-                        <div class="nk-tb-item nk-tb-head">
-                            <div class="nk-tb-col"><span>Student</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span>Amount</span></div>
-                            <div class="nk-tb-col tb-col-md"><span>Date</span></div>
-                            <div class="nk-tb-col"><span>Status</span></div>
-                        </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-danger">
-                                        <span>JS</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">John Smith</span>
-                                        <span class="tb-sub">john.smith@example.com</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub">$2,500</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-md">
-                                <span class="tb-sub">Jan 15, 2025</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="badge badge-dot badge-success">Paid</span>
-                            </div>
-                        </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-danger">
-                                        <span>MA</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">Maria Anderson</span>
-                                        <span class="tb-sub">maria.anderson@example.com</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub">$1,850</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-md">
-                                <span class="tb-sub">Jan 12, 2025</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="badge badge-dot badge-warning">Pending</span>
-                            </div>
-                        </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-sm bg-danger">
-                                        <span>DL</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">David Lee</span>
-                                        <span class="tb-sub">david.lee@example.com</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub">$3,200</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-md">
-                                <span class="tb-sub">Jan 10, 2025</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="badge badge-dot badge-success">Paid</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-4">
-            <div class="card card-bordered glass-card">
-                <div class="card-inner">
-                    <div class="card-title-group mb-2">
-                        <div class="card-title">
-                            <h6 class="title text-gradient">Recent Activities</h6>
-                        </div>
-                        <div class="card-tools">
-                            <ul class="card-tools-nav">
-                                <li><a href="#"><span>View All</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-inner">
-                    <div class="timeline">
-                        <ul class="timeline-list">
-                            <li class="timeline-item">
-                                <div class="timeline-status bg-primary is-outline"></div>
-                                <div class="timeline-date">Just now</div>
-                                <div class="timeline-data">
-                                    <h6 class="timeline-title">New student registration</h6>
-                                    <div class="timeline-des">
-                                        <p>Sarah Johnson has successfully registered for the Computer Science program.</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="timeline-item">
-                                <div class="timeline-status bg-success is-outline"></div>
-                                <div class="timeline-date">2 hours ago</div>
-                                <div class="timeline-data">
-                                    <h6 class="timeline-title">Payment received</h6>
-                                    <div class="timeline-des">
-                                        <p>$2,500 tuition payment received from John Smith.</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="timeline-item">
-                                <div class="timeline-status bg-warning is-outline"></div>
-                                <div class="timeline-date">5 hours ago</div>
-                                <div class="timeline-data">
-                                    <h6 class="timeline-title">Scholarship application</h6>
-                                    <div class="timeline-des">
-                                        <p>New scholarship application submitted by Maria Anderson.</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="timeline-item">
-                                <div class="timeline-status bg-info is-outline"></div>
-                                <div class="timeline-date">1 day ago</div>
-                                <div class="timeline-data">
-                                    <h6 class="timeline-title">Report generated</h6>
-                                    <div class="timeline-des">
-                                        <p>Monthly financial report has been generated and is ready for review.</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Insight Cards -->
-<div class="nk-block mb-4">
+<div class="portal-card fade-in mb-5">
     <div class="row g-3">
         @foreach($insights ?? [] as $insight)
-            <div class="col-md-4 col-12">
-                <div class="glass-card stats-card d-flex align-items-center p-3" style="min-height:90px;">
-                    <div class="stats-icon me-3 bg-{{ $insight['color'] ?? 'primary' }}" style="font-size:1.7rem;"><em class="icon ni {{ $insight['icon'] }}"></em></div>
+            <div class="col-md-4 col-12 mb-3">
+                <div class="glass-card stats-card d-flex align-items-center p-3 h-100 fade-in">
+                    <div class="icon-circle me-3 bg-{{ $insight['color'] ?? 'primary' }}" style="font-size:1.7rem;"><em class="icon ni {{ $insight['icon'] }}"></em></div>
                     <div class="flex-fill">
                         <span class="fw-semibold">{{ $insight['text'] }}</span>
                     </div>
@@ -732,97 +341,83 @@
 </div>
 
 <!-- Grafik Tambahan -->
-<div class="nk-block">
+<div class="portal-card fade-in mb-5">
     <div class="row g-gs">
-        <div class="col-xxl-4 col-md-6">
-            <div class="card glass-card h-100">
-                <div class="card-inner">
-                    <h6 class="title text-gradient">Komposisi Metode Pembayaran</h6>
-                    <div id="paymentMethodPie" style="height:320px"></div>
-                </div>
+        <div class="col-xxl-4 col-md-6 mb-4">
+            <div class="glass-card h-100">
+                <h6 class="dashboard-title mb-3">Komposisi Metode Pembayaran</h6>
+                <div id="paymentMethodPie" style="height:320px"></div>
             </div>
         </div>
-        <div class="col-xxl-4 col-md-6">
-            <div class="card glass-card h-100">
-                <div class="card-inner">
-                    <h6 class="title text-gradient">Tren Mahasiswa Baru per Bulan</h6>
-                    <div id="studentTrendLine" style="height:320px"></div>
-                </div>
+        <div class="col-xxl-4 col-md-6 mb-4">
+            <div class="glass-card h-100">
+                <h6 class="dashboard-title mb-3">Tren Mahasiswa Baru per Bulan</h6>
+                <div id="studentTrendLine" style="height:320px"></div>
             </div>
         </div>
-        <div class="col-xxl-4 col-md-12">
-            <div class="card glass-card h-100">
-                <div class="card-inner">
-                    <h6 class="title text-gradient">Jumlah Transaksi Pembayaran per Bulan</h6>
-                    <div id="transactionTrendBar" style="height:320px"></div>
-                </div>
+        <div class="col-xxl-4 col-md-12 mb-4">
+            <div class="glass-card h-100">
+                <h6 class="dashboard-title mb-3">Jumlah Transaksi Pembayaran per Bulan</h6>
+                <div id="transactionTrendBar" style="height:320px"></div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Outstanding Ratio & Beasiswa -->
-<div class="nk-block mt-4">
+<div class="portal-card fade-in mb-5">
     <div class="row g-gs">
-        <div class="col-xxl-4 col-md-6">
-            <div class="card glass-card h-100">
-                <div class="card-inner">
-                    <h6 class="title text-gradient">Rasio Piutang Outstanding</h6>
-                    <div id="outstandingRatioDonut" style="height:320px"></div>
-                </div>
+        <div class="col-xxl-4 col-md-6 mb-4">
+            <div class="glass-card h-100">
+                <h6 class="dashboard-title mb-3">Rasio Piutang Outstanding</h6>
+                <div id="outstandingRatioDonut" style="height:320px"></div>
             </div>
         </div>
-        <div class="col-xxl-4 col-md-6">
-            <div class="card glass-card h-100">
-                <div class="card-inner">
-                    <h6 class="title text-gradient">Statistik Reminder & Notifikasi</h6>
-                    <ul class="list-unstyled small mb-2">
-                        <li><em class="icon ni ni-send"></em> <span class="text-muted">Reminder Terkirim:</span> <span class="text-primary">{{ $reminderStats['sent'] ?? 0 }}</span></li>
-                        <li><em class="icon ni ni-cross"></em> <span class="text-muted">Reminder Gagal:</span> <span class="text-danger">{{ $reminderStats['failed'] ?? 0 }}</span></li>
-                        <li><em class="icon ni ni-whatsapp"></em> <span class="text-muted">WA Terkirim:</span> <span class="text-success">{{ $reminderStats['wa_sent'] ?? 0 }}</span></li>
-                        <li><em class="icon ni ni-mail"></em> <span class="text-muted">Email Terkirim:</span> <span class="text-info">{{ $reminderStats['email_sent'] ?? 0 }}</span></li>
-                    </ul>
-                </div>
+        <div class="col-xxl-4 col-md-6 mb-4">
+            <div class="glass-card h-100">
+                <h6 class="dashboard-title mb-3">Statistik Reminder & Notifikasi</h6>
+                <ul class="list-unstyled small mb-2">
+                    <li><em class="icon ni ni-send"></em> <span class="text-muted">Reminder Terkirim:</span> <span class="text-primary">{{ $reminderStats['sent'] ?? 0 }}</span></li>
+                    <li><em class="icon ni ni-cross"></em> <span class="text-muted">Reminder Gagal:</span> <span class="text-danger">{{ $reminderStats['failed'] ?? 0 }}</span></li>
+                    <li><em class="icon ni ni-whatsapp"></em> <span class="text-muted">WA Terkirim:</span> <span class="text-success">{{ $reminderStats['wa_sent'] ?? 0 }}</span></li>
+                    <li><em class="icon ni ni-mail"></em> <span class="text-muted">Email Terkirim:</span> <span class="text-info">{{ $reminderStats['email_sent'] ?? 0 }}</span></li>
+                </ul>
             </div>
         </div>
-        <div class="col-xxl-4 col-md-12">
-            <div class="card glass-card h-100">
-                <div class="card-inner">
-                    <h6 class="title text-gradient">Statistik Beasiswa Aktif</h6>
-                    <div id="beasiswaBar" style="height:320px"></div>
-                </div>
+        <div class="col-xxl-4 col-md-12 mb-4">
+            <div class="glass-card h-100">
+                <h6 class="dashboard-title mb-3">Statistik Beasiswa Aktif</h6>
+                <div id="beasiswaBar" style="height:320px"></div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Top 10 Mahasiswa Pembayar Terbesar -->
-<div class="nk-block mt-4">
-    <div class="card glass-card">
-        <div class="card-inner">
-            <h5 class="mb-4 text-gradient">Top 10 Mahasiswa Pembayar Terbesar</h5>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-gradient-primary text-white">
+<div class="portal-card fade-in mb-5">
+    <div class="glass-card">
+        <h5 class="dashboard-title mb-4">Top 10 Mahasiswa Pembayar Terbesar</h5>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-gradient-primary text-white">
+                    <tr>
+                        <th>Nama</th>
+                        <th>NIM</th>
+                        <th>Program Studi</th>
+                        <th>Total Pembayaran</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($topPayers as $student)
                         <tr>
-                            <th>Nama</th>
-                            <th>NIM</th>
-                            <th>Program Studi</th>
-                            <th>Total Pembayaran</th>
+                            <td>{{ $student->name }}</td>
+                            <td>{{ $student->nim ?? '-' }}</td>
+                            <td>{{ $student->study_program ?? '-' }}</td>
+                            <td>Rp {{ number_format($student->total_paid ?? 0) }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($topPayers as $student)
-                            <tr>
-                                <td>{{ $student->name }}</td>
-                                <td>{{ $student->nim ?? '-' }}</td>
-                                <td>{{ $student->study_program ?? '-' }}</td>
-                                <td>Rp {{ number_format($student->total_paid ?? 0) }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
