@@ -19,6 +19,7 @@ class UserManagementService
         DB::beginTransaction();
         
         try {
+            $isSuperAdmin = \Illuminate\Support\Facades\Auth::check() && (\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->role === 'super_admin');
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -26,11 +27,14 @@ class UserManagementService
                 'role' => $data['role'] ?? 'user',
                 'phone' => $data['phone'] ?? null,
                 'address' => $data['address'] ?? null,
-                'is_active' => $data['is_active'] ?? false, // Default inactive, needs approval
+                'is_active' => $isSuperAdmin ? true : ($data['is_active'] ?? false),
+                'is_approved' => $isSuperAdmin ? true : false,
+                'approved_by' => $isSuperAdmin ? (\Illuminate\Support\Facades\Auth::user() ? \Illuminate\Support\Facades\Auth::user()->id : null) : null,
+                'approved_at' => $isSuperAdmin ? now() : null,
             ]);
 
-            // Create approval request for new user
-            if (!$user->is_active) {
+            // Create approval request for new user (if not auto-approved)
+            if (!$user->is_approved) {
                 $this->createApprovalRequest($user, 'registration', [
                     'user_data' => $data,
                     'requested_role' => $data['role'] ?? 'user',
@@ -38,8 +42,8 @@ class UserManagementService
             }
 
             // Log activity
-            if (auth()->check()) {
-                $this->logActivity(auth()->user(), 'create', 'User', $user->id, null, $user->toArray(), 'Created new user: ' . $user->name);
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                $this->logActivity(\Illuminate\Support\Facades\Auth::user(), 'create', 'User', $user->id, null, $user->toArray(), 'Created new user: ' . $user->name);
             }
 
             DB::commit();
@@ -75,8 +79,8 @@ class UserManagementService
             $user->update($data);
 
             // Log activity
-            if (auth()->check()) {
-                $this->logActivity(auth()->user(), 'update', 'User', $user->id, $oldData, $user->toArray(), 'Updated user: ' . $user->name);
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                $this->logActivity(\Illuminate\Support\Facades\Auth::user(), 'update', 'User', $user->id, $oldData, $user->toArray(), 'Updated user: ' . $user->name);
             }
 
             DB::commit();
@@ -101,8 +105,8 @@ class UserManagementService
             $user->delete();
 
             // Log activity
-            if (auth()->check()) {
-                $this->logActivity(auth()->user(), 'delete', 'User', $user->id, $userData, null, 'Deleted user: ' . $userName);
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                $this->logActivity(\Illuminate\Support\Facades\Auth::user(), 'delete', 'User', $user->id, $userData, null, 'Deleted user: ' . $userName);
             }
 
             DB::commit();
@@ -121,7 +125,7 @@ class UserManagementService
         DB::beginTransaction();
         
         try {
-            $user->update(['is_active' => true]);
+            $user->update(['is_active' => true, 'is_approved' => true, 'approved_by' => (\Illuminate\Support\Facades\Auth::user() ? \Illuminate\Support\Facades\Auth::user()->id : null), 'approved_at' => now()]);
 
             // Find and update approval request
             $approvalRequest = UserApprovalRequest::where('user_id', $user->id)
@@ -131,14 +135,29 @@ class UserManagementService
             if ($approvalRequest) {
                 $approvalRequest->update([
                     'status' => 'approved',
-                    'approved_by' => auth()->id(),
+                    'approved_by' => (\Illuminate\Support\Facades\Auth::user() ? \Illuminate\Support\Facades\Auth::user()->id : null),
                     'approval_notes' => $notes,
                     'approved_at' => now(),
                 ]);
             }
 
             // Log activity
-            $this->logActivity(auth()->user(), 'approve', 'User', $user->id, null, null, 'Approved user: ' . $user->name);
+            $this->logActivity(\Illuminate\Support\Facades\Auth::user(), 'approve', 'User', $user->id, null, null, 'Approved user: ' . $user->name);
+
+            // Send notification to user
+            if (class_exists('App\\Services\\NotificationService')) {
+                try {
+                    app(\App\Services\NotificationService::class)->createNotification([
+                        'type' => 'system',
+                        'title' => 'Akun Anda telah disetujui',
+                        'message' => 'Akun Anda telah diapprove dan sekarang dapat login ke sistem.',
+                        'user_id' => $user->id,
+                        'category' => 'user_approval',
+                        'priority' => 'high',
+                        'status' => 'pending',
+                    ]);
+                } catch (\Exception $e) {}
+            }
 
             DB::commit();
             return true;
@@ -164,14 +183,29 @@ class UserManagementService
             if ($approvalRequest) {
                 $approvalRequest->update([
                     'status' => 'rejected',
-                    'approved_by' => auth()->id(),
+                    'approved_by' => (\Illuminate\Support\Facades\Auth::user() ? \Illuminate\Support\Facades\Auth::user()->id : null),
                     'approval_notes' => $notes,
                     'approved_at' => now(),
                 ]);
             }
 
             // Log activity
-            $this->logActivity(auth()->user(), 'reject', 'User', $user->id, null, null, 'Rejected user: ' . $user->name);
+            $this->logActivity(\Illuminate\Support\Facades\Auth::user(), 'reject', 'User', $user->id, null, null, 'Rejected user: ' . $user->name);
+
+            // Send notification to user
+            if (class_exists('App\\Services\\NotificationService')) {
+                try {
+                    app(\App\Services\NotificationService::class)->createNotification([
+                        'type' => 'system',
+                        'title' => 'Akun Anda ditolak',
+                        'message' => 'Akun Anda tidak disetujui. Silakan hubungi admin untuk informasi lebih lanjut.',
+                        'user_id' => $user->id,
+                        'category' => 'user_approval',
+                        'priority' => 'high',
+                        'status' => 'pending',
+                    ]);
+                } catch (\Exception $e) {}
+            }
 
             DB::commit();
             return true;

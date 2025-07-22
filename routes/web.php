@@ -274,17 +274,22 @@ Route::middleware(['auth', 'user.permission:reminders.view'])->group(function ()
     Route::get('/reminders/templates', [NotificationController::class, 'templates'])->name('reminders.templates');
 });
 
+// Super Admin only routes
+Route::middleware(['auth', 'role:super_admin'])->group(function () {
+    Route::get('/users/roles', [UsersController::class, 'roles'])->name('users.roles');
+});
+
 // Users management - Admin only
+Route::middleware(['auth', 'user.permission:users.create'])->group(function () {
+    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+    Route::post('/users', [UsersController::class, 'store'])->name('users.store');
+});
+
 Route::middleware(['auth', 'user.permission:users.view'])->group(function () {
     Route::get('/users', [UsersController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [UsersController::class, 'show'])->name('users.show');
     Route::get('/users-approval', [UsersController::class, 'approval'])->name('users.approval');
     Route::get('/users-audit', [UsersController::class, 'audit'])->name('users.audit');
-});
-
-Route::middleware(['auth', 'user.permission:users.create'])->group(function () {
-    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
-    Route::post('/users', [UsersController::class, 'store'])->name('users.store');
 });
 
 Route::middleware(['auth', 'user.permission:users.edit'])->group(function () {
@@ -298,11 +303,6 @@ Route::middleware(['auth', 'user.permission:users.edit'])->group(function () {
 
 Route::middleware(['auth', 'user.permission:users.delete'])->group(function () {
     Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
-});
-
-// Super Admin only routes
-Route::middleware(['auth', 'role:super_admin'])->group(function () {
-    Route::get('/users/roles', [UsersController::class, 'roles'])->name('users.roles');
 });
 
 // Settings routes - Admin only
